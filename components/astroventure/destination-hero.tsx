@@ -22,12 +22,15 @@ export default function DestinationHero({ destination: d }: { destination: Desti
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-[var(--av-deep)]">
       <div className="absolute inset-0">
-        <img
-          src={d.heroImage}
-          alt={`${d.name}, ${d.valley}`}
-          fetchPriority="high"
-          className="animate-kenburns h-full w-full object-cover"
-        />
+        <picture className="block h-full w-full">
+          <source srcSet={d.imageMobile} media="(max-width: 1024px)" />
+          <img
+            src={d.heroImage}
+            alt={`${d.name}, ${d.valley}`}
+            fetchPriority="high"
+            className="animate-kenburns h-full w-full object-cover object-center"
+          />
+        </picture>
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--av-deep)] via-black/40 to-black/70" />
       <Starfield count={50} aurora={false} />

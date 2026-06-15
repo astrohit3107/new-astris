@@ -9,13 +9,16 @@ export default function FinalCta() {
   return (
     <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-[var(--av-deep)]">
       <div className="absolute inset-0">
-        <img
-          src={IMAGES.heroFallback}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="animate-kenburns h-full w-full object-cover opacity-60"
-        />
+        <picture className="block h-full w-full">
+          <source srcSet={IMAGES.footerNebulaMobile} media="(max-width: 1024px)" />
+          <img
+            src={IMAGES.footerNebula}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="animate-kenburns h-full w-full object-cover object-center opacity-70"
+          />
+        </picture>
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--av-deep)] via-black/60 to-[var(--av-deep)]" />
       <Starfield count={60} shootingStars />
