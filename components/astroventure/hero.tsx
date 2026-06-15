@@ -8,14 +8,17 @@ import TelescopeSilhouette from './telescope-silhouette'
 export default function AstroHero() {
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-[var(--av-deep)]">
-      {/* Slow-moving Milky Way background */}
+      {/* Slow-moving Milky Way background (responsive sources) */}
       <div className="absolute inset-0">
-        <img
-          src={IMAGES.milkyWay}
-          alt="The Milky Way over the Himalayas"
-          fetchPriority="high"
-          className="animate-drift h-full w-full object-cover"
-        />
+        <picture className="block h-full w-full">
+          <source srcSet={IMAGES.milkyWayMobile} media="(max-width: 1024px)" />
+          <img
+            src={IMAGES.milkyWay}
+            alt="The Milky Way over the Himalayas"
+            fetchPriority="high"
+            className="animate-drift h-full w-full object-cover object-center"
+          />
+        </picture>
       </div>
 
       {/* Cinematic overlays */}

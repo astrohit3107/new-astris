@@ -43,12 +43,15 @@ export default function DestinationShowcase() {
               >
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={d.image}
-                    alt={`${d.name}, ${d.valley}`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
-                  />
+                  <picture className="block h-full w-full">
+                    <source srcSet={d.imageMobile} media="(max-width: 1024px)" />
+                    <img
+                      src={d.image}
+                      alt={`${d.name}, ${d.valley}`}
+                      loading="lazy"
+                      className="h-full w-full object-cover object-center transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--av-deep)] via-black/30 to-transparent" />
 
                   {/* Dark sky badge */}

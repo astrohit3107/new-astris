@@ -36,28 +36,39 @@ export const SITE = {
 /* ---------------------------------------------------------------------------
  * 2. IMAGE ASSETS  (replace these with the photos you provide)
  * ------------------------------------------------------------------------- */
+/** Base path for the Astroventure Nights image library (lives in /public). */
+const A = '/astroventure-assets'
+
 export const IMAGES = {
-  // Hero / Milky Way
-  milkyWay: '/hero-space.jpg',
-  heroFallback:
-    'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hero-bg-XqVMusmTrzk3gwpYLMFbVJW6dmL0yA.jpeg',
+  // Hero / Milky Way (desktop + mobile for responsive <picture>)
+  milkyWay: `${A}/hero/hero-himalayan-milkyway.webp`,
+  milkyWayMobile: `${A}/hero/hero-himalayan-milkyway-mobile.webp`,
+  milkyWayArch: `${A}/milky-way/milkyway-panoramic-arch.webp`,
+
+  // Backgrounds
+  footerNebula: `${A}/backgrounds/footer-nebula.webp`,
+  footerNebulaMobile: `${A}/backgrounds/footer-nebula-mobile.webp`,
+  starfieldBg: `${A}/backgrounds/background-starfield.webp`,
 
   // Telescopes & equipment
-  telescopeHero:
-    'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-06-07%20at%2002.05.08-Ux2PkgtPcAVtoyCuDeyrI2oheSMzkj.jpeg',
-  telescope1: '/telescopes.jpg',
-  telescope2: '/observatory.jpg',
+  telescopeHero: `${A}/telescopes/telescope-setup-general.webp`,
+  telescopeDobsonian: `${A}/telescopes/telescope-dobsonian.webp`,
+  telescopeApochromatic: `${A}/telescopes/telescope-apochromatic.webp`,
+  telescopeGoto: `${A}/telescopes/telescope-goto-mount.webp`,
 
-  // Destinations
-  solang: '/resort-astronomy.jpg',
-  chitkul: '/observatory.jpg',
-  kasol: '/school-astronomy.jpg',
+  // Destinations (desktop + mobile)
+  solang: `${A}/solang-valley/solang-valley-night.webp`,
+  solangMobile: `${A}/solang-valley/solang-valley-night-mobile.webp`,
+  chitkul: `${A}/chitkul/chitkul-village-stars.webp`,
+  chitkulMobile: `${A}/chitkul/chitkul-village-stars-mobile.webp`,
+  kasol: `${A}/kasol/kasol-riverside-dusk.webp`,
+  kasolMobile: `${A}/kasol/kasol-riverside-dusk-mobile.webp`,
 
-  // Generic stargazing / activity imagery (reused across gallery)
-  stargazing: '/hero-space.jpg',
-  observatory: '/observatory.jpg',
-  participants: '/resort-astronomy.jpg',
-  landscape: '/school-astronomy.jpg',
+  // Activities / stargazing
+  starTrails: `${A}/activities/star-trails-mountains.webp`,
+  astrophotography: `${A}/activities/astrophotography-setup.webp`,
+  laserPointing: `${A}/stargazing/stargazing-pointing-laser.webp`,
+  stargazingGroup: `${A}/stargazing/stargazing-group-01.webp`,
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -114,6 +125,7 @@ export interface Destination {
   bestSeason: string
   observationConditions: string
   image: string
+  imageMobile: string
   heroImage: string
   overview: string
   highlights: string[]
@@ -138,6 +150,7 @@ export const destinations: Destination[] = [
     observationConditions:
       'Crisp, stable air above the valley fog with low horizon obstruction — ideal for planetary detail and deep-sky imaging.',
     image: IMAGES.solang,
+    imageMobile: IMAGES.solangMobile,
     heroImage: IMAGES.solang,
     overview:
       'Cradled beneath the Dhauladhar peaks just beyond Manali, Solang Valley trades its daytime adventure-sports buzz for a profound silence after dark. We set up camp on a high meadow where the light of Manali falls away behind the ridgeline, leaving a horizon-to-horizon canopy of stars reflected in the season’s first snow.',
@@ -196,6 +209,7 @@ export const destinations: Destination[] = [
     observationConditions:
       'Exceptionally dark, dry, high-altitude air near the Indo-Tibetan border. The Milky Way casts visible shadows on a moonless night.',
     image: IMAGES.chitkul,
+    imageMobile: IMAGES.chitkulMobile,
     heroImage: IMAGES.chitkul,
     overview:
       'Chitkul, the last inhabited village before the Tibetan border, sits at 3,450 m in the breathtaking Baspa Valley. With almost no artificial light for tens of kilometres, it offers some of the most pristine night skies accessible in India. Here the Milky Way is not a faint smudge but a luminous river bright enough to read by.',
@@ -254,6 +268,7 @@ export const destinations: Destination[] = [
     observationConditions:
       'Sheltered riverside skies framed by pine forest and steep valley walls, keeping stray light low and the air fragrant and calm.',
     image: IMAGES.kasol,
+    imageMobile: IMAGES.kasolMobile,
     heroImage: IMAGES.kasol,
     overview:
       'Set along the rushing Parvati river and surrounded by deodar pines, Kasol blends a relaxed mountain-town charm with surprisingly dark valley skies. Our observing site sits just beyond the village, where the steep valley walls block stray light and frame a ribbon of stars between the ridgelines — perfect for first-time stargazers and families.',
@@ -419,19 +434,19 @@ export const telescopeEquipment: {
     name: 'Dobsonian 8" Reflector',
     spec: '203mm aperture · f/6',
     capability: 'Bright deep-sky objects, galaxies & nebulae',
-    image: IMAGES.telescope1,
+    image: IMAGES.telescopeDobsonian,
   },
   {
     name: 'Apochromatic Refractor',
     spec: '102mm ED triplet',
     capability: 'Razor-sharp planetary & lunar detail',
-    image: IMAGES.telescopeHero,
+    image: IMAGES.telescopeApochromatic,
   },
   {
     name: 'Computerised GoTo Mount',
     spec: 'SkyAlign tracking',
     capability: 'Automated tracking for astrophotography',
-    image: IMAGES.telescope2,
+    image: IMAGES.telescopeGoto,
   },
 ]
 
@@ -448,16 +463,16 @@ export const celestialTargets: { name: string; type: string }[] = [
  * 7. PHOTO GALLERY  (masonry + lightbox)
  * ------------------------------------------------------------------------- */
 export const galleryImages: GalleryImage[] = [
-  { src: IMAGES.milkyWay, alt: 'The Milky Way arching over the Himalayas', category: 'Milky Way', span: 'tall' },
-  { src: IMAGES.telescope1, alt: 'A telescope pointed at the night sky', category: 'Telescopes', span: 'normal' },
-  { src: IMAGES.stargazing, alt: 'Stargazers beneath a star-filled sky', category: 'Stargazing', span: 'wide' },
-  { src: IMAGES.observatory, alt: 'Observation setup under the stars', category: 'Telescopes', span: 'normal' },
-  { src: IMAGES.participants, alt: 'Participants enjoying the night sky', category: 'Participants', span: 'normal' },
-  { src: IMAGES.landscape, alt: 'Himalayan landscape at twilight', category: 'Landscapes', span: 'tall' },
-  { src: IMAGES.heroFallback, alt: 'Deep night sky over the mountains', category: 'Milky Way', span: 'wide' },
-  { src: IMAGES.telescopeHero, alt: 'Premium telescope under the stars', category: 'Telescopes', span: 'normal' },
-  { src: IMAGES.kasol, alt: 'Astronomy activity at dusk', category: 'Activities', span: 'normal' },
-  { src: IMAGES.solang, alt: 'Camp beneath the cosmos', category: 'Stargazing', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-01.webp`, alt: 'The Milky Way arching over the Himalayas', category: 'Milky Way', span: 'tall' },
+  { src: `${A}/gallery/gallery-image-02.webp`, alt: 'A telescope pointed at the night sky', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-03.webp`, alt: 'Stargazers beneath a star-filled sky', category: 'Stargazing', span: 'wide' },
+  { src: `${A}/gallery/gallery-image-04.webp`, alt: 'Observation setup under the stars', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-05.webp`, alt: 'Participants enjoying the night sky', category: 'Participants', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-06.webp`, alt: 'Himalayan landscape at twilight', category: 'Landscapes', span: 'tall' },
+  { src: `${A}/gallery/gallery-image-07.webp`, alt: 'Deep night sky over the mountains', category: 'Milky Way', span: 'wide' },
+  { src: `${A}/gallery/gallery-image-08.webp`, alt: 'Premium telescope under the stars', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-09.webp`, alt: 'Astronomy activity at dusk', category: 'Activities', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-10.webp`, alt: 'Camp beneath the cosmos', category: 'Stargazing', span: 'normal' },
 ]
 
 export const galleryCategories = [
@@ -577,7 +592,7 @@ export const testimonials: {
       'I have never seen so many stars in my life. Watching Saturn’s rings with my own eyes from a Himalayan meadow was pure magic.',
     name: 'Ananya Sharma',
     role: 'Bengaluru · Chitkul Expedition',
-    avatar: '/placeholder-user.jpg',
+    avatar: `${A}/icons/avatar-ananya-thumb.webp`,
     rating: 5,
   },
   {
@@ -585,7 +600,7 @@ export const testimonials: {
       'The astrophotography session was worth the trip alone. The guides were patient, knowledgeable and genuinely passionate.',
     name: 'Rohan Mehta',
     role: 'Mumbai · Solang Valley',
-    avatar: '/placeholder-user.jpg',
+    avatar: `${A}/icons/avatar-rohan-thumb.webp`,
     rating: 5,
   },
   {
@@ -593,7 +608,7 @@ export const testimonials: {
       'Perfect for our family. The kids were glued to the telescope and the storytelling around the fire was unforgettable.',
     name: 'Priya & Family',
     role: 'Delhi · Kasol Nights',
-    avatar: '/placeholder-user.jpg',
+    avatar: `${A}/icons/avatar-priya-thumb.webp`,
     rating: 5,
   },
   {
@@ -601,7 +616,7 @@ export const testimonials: {
       'A genuinely premium, well-organised experience. The dark skies of Chitkul are something every Indian should witness once.',
     name: 'Vikram Nair',
     role: 'Pune · Chitkul Expedition',
-    avatar: '/placeholder-user.jpg',
+    avatar: `${A}/icons/avatar-vikram-thumb.webp`,
     rating: 5,
   },
 ]

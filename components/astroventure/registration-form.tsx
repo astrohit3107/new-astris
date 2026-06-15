@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Check, ShieldCheck, Send, AlertCircle } from 'lucide-react'
-import { destinations, upcomingEvents, type DestinationSlug } from '@/lib/astroventure-data'
+import { destinations, upcomingEvents, IMAGES, type DestinationSlug } from '@/lib/astroventure-data'
 import SectionHeading from './section-heading'
 import ScrollReveal from './scroll-reveal'
 import { cn } from '@/lib/utils'
@@ -82,8 +82,19 @@ export default function RegistrationForm({ defaultDestination }: Props) {
       id="register"
       className="relative scroll-mt-20 overflow-hidden bg-gradient-to-b from-[var(--av-deep)] via-black to-[var(--av-deep)] py-24 sm:py-32"
     >
+      {/* Starfield backdrop */}
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-20 mix-blend-screen">
+        <img
+          src={IMAGES.starfieldBg}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[var(--av-deep)] via-transparent to-[var(--av-deep)]" />
       <div className="pointer-events-none absolute right-0 top-1/4 h-80 w-80 rounded-full bg-[var(--av-nebula)] opacity-10 blur-[130px]" />
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Reserve your spot"
           title="Begin Your Astroventure"
