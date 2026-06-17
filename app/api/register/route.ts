@@ -8,18 +8,22 @@ import { z } from 'zod'
  *  Receives the Astroventure Nights registration form, validates it, screens
  *  for spam, and emails the enquiry to your team.
  *
- *  EMAIL SETUP (placeholders for you to fill in)
- *  ---------------------------------------------
- *  Set these environment variables (see .env.example):
- *    RESEND_API_KEY   – API key from https://resend.com (free tier available)
- *    NOTIFY_EMAIL_1   – defaults to astriseducation@gmail.com (override via env)
- *    NOTIFY_EMAIL_2   – second recipient (set this once you have it)
- *    NOTIFY_FROM      – verified "From" address, e.g. bookings@yourdomain.com
+ *  EMAIL SETUP — pick ONE option (see .env.example)
+ *  -------------------------------------------------
+ *  Enquiries are delivered to astriseducation@gmail.com and
+ *  eeshumtravels@gmail.com (override via NOTIFY_EMAIL_1 / NOTIFY_EMAIL_2).
  *
- *  If RESEND_API_KEY / recipients are not configured, the submission is still
- *  accepted and logged to the server console so the form works in development.
- *  Swap Resend for any provider (SendGrid, SES, Postmark, SMTP) by editing
- *  `sendEmail()` below.
+ *  Option A — Web3Forms (easiest, no domain to verify):
+ *    WEB3FORMS_ACCESS_KEY  – free key from https://web3forms.com
+ *
+ *  Option B — Resend:
+ *    RESEND_API_KEY   – API key from https://resend.com
+ *    NOTIFY_FROM      – verified "From" address (until a domain is verified,
+ *                       leave unset to use onboarding@resend.dev)
+ *
+ *  If neither is configured the submission is still accepted and logged to the
+ *  server console (so the form works in development) but NO email is sent —
+ *  set one of the keys above in your hosting env (e.g. Vercel) to receive mail.
  * ============================================================================
  */
 
@@ -62,18 +66,13 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 }
 
+/** Booking enquiries are emailed to both of these inboxes. */
+const RECIPIENTS = [
+  process.env.NOTIFY_EMAIL_1 || 'astriseducation@gmail.com',
+  process.env.NOTIFY_EMAIL_2 || 'eeshumtravels@gmail.com',
+].filter((e): e is string => !!e && /.+@.+\..+/.test(e))
+
 async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean; reason?: string }> {
-  const apiKey = process.env.RESEND_API_KEY
-  const recipients = [
-    process.env.NOTIFY_EMAIL_1 || 'astriseducation@gmail.com', // primary recipient
-    process.env.NOTIFY_EMAIL_2, // second recipient — set NOTIFY_EMAIL_2 when ready
-  ].filter((e): e is string => !!e && /.+@.+\..+/.test(e))
-  const from = process.env.NOTIFY_FROM || 'Astroventure Nights <onboarding@resend.dev>'
-
-  if (!apiKey || recipients.length === 0) {
-    return { sent: false, reason: 'email-not-configured' }
-  }
-
   const rows: [string, string][] = [
     ['Full Name', data.fullName],
     ['Phone', data.phone],
@@ -86,6 +85,8 @@ async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean;
     ['Notes', data.notes || '—'],
   ]
 
+  const subject = `New Astroventure Nights enquiry — ${data.fullName}`
+  const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n')
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;color:#0b0b14">
       <h2 style="margin:0 0 4px">🌌 New Astroventure Nights enquiry</h2>
@@ -102,29 +103,64 @@ async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean;
       </table>
     </div>`
 
-  const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n')
-
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: recipients,
-      reply_to: data.email,
-      subject: `New Astroventure Nights enquiry — ${data.fullName}`,
-      html,
-      text,
-    }),
-  })
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => '')
-    return { sent: false, reason: `email-provider-error: ${res.status} ${detail.slice(0, 200)}` }
+  // --- Option A: Web3Forms ---------------------------------------------------
+  // Easiest setup: create a free access key at https://web3forms.com (just
+  // enter astriseducation@gmail.com — no domain to verify) and set
+  // WEB3FORMS_ACCESS_KEY in your environment. Add eeshumtravels@gmail.com as a
+  // second recipient from the Web3Forms dashboard.
+  const web3Key = process.env.WEB3FORMS_ACCESS_KEY
+  if (web3Key) {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: web3Key,
+        subject,
+        from_name: 'Astroventure Nights',
+        replyto: data.email,
+        // include the second inbox if the plan allows multiple recipients
+        cc: RECIPIENTS.join(','),
+        message: text,
+        ...Object.fromEntries(rows),
+      }),
+    })
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '')
+      return { sent: false, reason: `web3forms-error: ${res.status} ${detail.slice(0, 200)}` }
+    }
+    return { sent: true }
   }
-  return { sent: true }
+
+  // --- Option B: Resend ------------------------------------------------------
+  // Requires RESEND_API_KEY and a verified sender domain (NOTIFY_FROM). The
+  // shared onboarding@resend.dev sender only delivers to your own Resend
+  // account email until you verify a domain.
+  const apiKey = process.env.RESEND_API_KEY
+  if (apiKey && RECIPIENTS.length > 0) {
+    const from = process.env.NOTIFY_FROM || 'Astroventure Nights <onboarding@resend.dev>'
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: RECIPIENTS,
+        reply_to: data.email,
+        subject,
+        html,
+        text,
+      }),
+    })
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '')
+      return { sent: false, reason: `resend-error: ${res.status} ${detail.slice(0, 200)}` }
+    }
+    return { sent: true }
+  }
+
+  return { sent: false, reason: 'email-not-configured' }
 }
 
 export async function POST(req: Request) {
