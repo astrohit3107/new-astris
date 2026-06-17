@@ -8,22 +8,20 @@ import { z } from 'zod'
  *  Receives the Astroventure Nights registration form, validates it, screens
  *  for spam, and emails the enquiry to your team.
  *
- *  EMAIL SETUP — pick ONE option (see .env.example)
- *  -------------------------------------------------
+ *  EMAIL SETUP
+ *  -----------
  *  Enquiries are delivered to astriseducation@gmail.com and
  *  eeshumtravels@gmail.com (override via NOTIFY_EMAIL_1 / NOTIFY_EMAIL_2).
  *
- *  Option A — Web3Forms (easiest, no domain to verify):
- *    WEB3FORMS_ACCESS_KEY  – free key from https://web3forms.com
+ *  Works out of the box via FormSubmit (https://formsubmit.co) — no account,
+ *  API key or env var required. IMPORTANT one-time step: the FIRST time the
+ *  form is submitted, FormSubmit emails an activation link to the primary
+ *  address (astriseducation@gmail.com). Click it once; after that every
+ *  enquiry is delivered automatically (with the second address CC'd).
  *
- *  Option B — Resend:
- *    RESEND_API_KEY   – API key from https://resend.com
- *    NOTIFY_FROM      – verified "From" address (until a domain is verified,
- *                       leave unset to use onboarding@resend.dev)
- *
- *  If neither is configured the submission is still accepted and logged to the
- *  server console (so the form works in development) but NO email is sent —
- *  set one of the keys above in your hosting env (e.g. Vercel) to receive mail.
+ *  Optional upgrades (set either to override FormSubmit):
+ *    WEB3FORMS_ACCESS_KEY  – https://web3forms.com (no domain to verify)
+ *    RESEND_API_KEY (+ NOTIFY_FROM) – https://resend.com (needs a domain)
  * ============================================================================
  */
 
@@ -156,6 +154,30 @@ async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean;
     if (!res.ok) {
       const detail = await res.text().catch(() => '')
       return { sent: false, reason: `resend-error: ${res.status} ${detail.slice(0, 200)}` }
+    }
+    return { sent: true }
+  }
+
+  // --- Default: FormSubmit (zero-config — no account, key or env needed) -----
+  // Delivers to the RECIPIENTS below. The very first submission triggers a
+  // one-time activation email to the primary address; click its link once and
+  // every future enquiry is delivered automatically.
+  if (RECIPIENTS.length > 0) {
+    const [primary, ...cc] = RECIPIENTS
+    const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(primary)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        _subject: subject,
+        _replyto: data.email,
+        _template: 'table',
+        ...(cc.length ? { _cc: cc.join(',') } : {}),
+        ...Object.fromEntries(rows),
+      }),
+    })
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '')
+      return { sent: false, reason: `formsubmit-error: ${res.status} ${detail.slice(0, 200)}` }
     }
     return { sent: true }
   }
