@@ -263,12 +263,17 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ||
     'https://www.astriseducation.in'
 
+  const debug = new URL(req.url).searchParams.get('debug') === '1'
   try {
     const result = await sendEmail(data, origin)
     if (!result.sent && result.reason !== 'email-not-configured') {
       console.error('[register] email failed:', result.reason)
       return NextResponse.json(
-        { ok: false, error: 'We could not send your request right now. Please try again or contact us directly.' },
+        {
+          ok: false,
+          error: 'We could not send your request right now. Please try again or contact us directly.',
+          ...(debug ? { reason: result.reason, origin } : {}),
+        },
         { status: 502 },
       )
     }
