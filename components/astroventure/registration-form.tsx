@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -40,7 +40,6 @@ interface Props {
 }
 
 export default function RegistrationForm({ defaultDestination }: Props) {
-  const renderedAt = useRef(Date.now())
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -58,17 +57,52 @@ export default function RegistrationForm({ defaultDestination }: Props) {
     },
   })
 
+  // Booking enquiries are emailed via FormSubmit straight from the browser
+  // (their server endpoint blocks datacenter IPs, so client-side is required).
+  // Delivered to astriseducation@gmail.com with eeshumtravels@gmail.com CC'd.
+  const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/astriseducation@gmail.com'
+  const NOTIFY_CC = 'eeshumtravels@gmail.com'
+
   const onSubmit = async (data: FormValues) => {
     setStatus('submitting')
     setErrorMsg('')
+
+    // Honeypot — bots fill the hidden "company" field; drop silently.
+    if (data.company && data.company.length > 0) {
+      setStatus('success')
+      reset()
+      return
+    }
+
+    const destLabel =
+      destinations.find((d) => d.slug === data.destination)?.name ??
+      (data.destination === 'any' ? 'Any / Not sure yet' : data.destination)
+
     try {
-      const res = await fetch('/api/register', {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, renderedAt: renderedAt.current }),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `New Astroventure Nights enquiry — ${data.fullName}`,
+          _template: 'table',
+          _captcha: 'false',
+          _cc: NOTIFY_CC,
+          _replyto: data.email,
+          _honey: data.company || '',
+          'Full Name': data.fullName,
+          Phone: data.phone,
+          Email: data.email,
+          Age: String(data.age),
+          City: data.city,
+          Participants: String(data.participants),
+          'Preferred Destination': destLabel,
+          'Preferred Date': data.preferredDate,
+          Notes: data.notes || '—',
+        }),
       })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok || !json.ok) throw new Error(json.error || 'Submission failed. Please try again.')
+      const json = await res.json().catch(() => ({} as { success?: string | boolean }))
+      const ok = res.ok && (json.success === 'true' || json.success === true)
+      if (!ok) throw new Error('Submission failed. Please try again or contact us directly.')
       setStatus('success')
       reset()
     } catch (e) {
