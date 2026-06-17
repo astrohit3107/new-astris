@@ -68,8 +68,8 @@ export default function PromoPopup() {
             25 June – 2 July 2026
           </p>
           <p className="mt-3 text-sm font-light leading-relaxed text-white/65">
-            Bookings are now open for a full week under India’s darkest skies in
-            Chitkul. Limited seats — reserve your spot before they fill up.
+            Bookings are open daily across this window under India’s darkest
+            skies in Chitkul — pick any dates that suit you and reserve your spot.
           </p>
 
           <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">

@@ -67,7 +67,8 @@ export default function BookSlots({ slug }: Props) {
                     <div>
                       <h3 className="font-semibold text-white">{ev.batchName}</h3>
                       <p className="flex items-center gap-1 text-xs text-white/55">
-                        <CalendarDays size={12} /> {ev.dateLabel} · {ev.nights} nights
+                        <CalendarDays size={12} /> {ev.dateLabel}
+                        {ev.flexible ? ' · book any dates' : ` · ${ev.nights} nights`}
                       </p>
                     </div>
                   </div>
@@ -92,13 +93,8 @@ export default function BookSlots({ slug }: Props) {
                     </div>
                   </div>
 
-                  {/* Price */}
+                  {/* Status */}
                   <div className="md:col-span-2">
-                    <span className="text-[11px] text-white/45">from</span>
-                    <p className="font-display text-xl font-semibold text-white">
-                      {ev.currency}
-                      {ev.price.toLocaleString('en-IN')}
-                    </p>
                     <span className={cn('flex items-center gap-1.5 text-xs font-medium', status.text)}>
                       <span className={cn('h-1.5 w-1.5 rounded-full', status.dot)} />
                       {status.label}

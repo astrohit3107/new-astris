@@ -17,10 +17,24 @@ export default function EventCalendar() {
   // Map of ISO date -> events on that date
   const eventsByDate = useMemo(() => {
     const map = new Map<string, SlotEvent[]>()
-    for (const ev of upcomingEvents) {
-      const arr = map.get(ev.date) ?? []
+    const add = (key: string, ev: SlotEvent) => {
+      const arr = map.get(key) ?? []
       arr.push(ev)
-      map.set(ev.date, arr)
+      map.set(key, arr)
+    }
+    for (const ev of upcomingEvents) {
+      if (ev.flexible && ev.endDate) {
+        // flexible window — every day in the range is a bookable slot.
+        // Parse parts locally so keys match the calendar cells' ymd().
+        const [ys, ms, ds] = ev.date.split('-').map(Number)
+        const [ye, me, de] = ev.endDate.split('-').map(Number)
+        const end = new Date(ye, me - 1, de)
+        for (let d = new Date(ys, ms - 1, ds); d <= end; d.setDate(d.getDate() + 1)) {
+          add(ymd(d), ev)
+        }
+      } else {
+        add(ev.date, ev)
+      }
     }
     return map
   }, [])
@@ -160,11 +174,7 @@ export default function EventCalendar() {
                         <p className="mt-1 flex items-center gap-1.5 text-xs text-white/55">
                           <CalendarDays size={12} /> {ev.dateLabel}
                         </p>
-                        <div className="mt-3 flex items-center justify-between">
-                          <span className="font-display text-lg font-semibold text-white">
-                            {ev.currency}
-                            {ev.price.toLocaleString('en-IN')}
-                          </span>
+                        <div className="mt-3 flex items-center justify-end">
                           {ev.status === 'soldout' ? (
                             <span className="text-xs font-medium text-white/40">Sold out</span>
                           ) : (
@@ -172,7 +182,7 @@ export default function EventCalendar() {
                               href="#register"
                               className="inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black transition-colors hover:bg-[var(--av-gold)]"
                             >
-                              Reserve <ArrowRight size={13} />
+                              Book your slot <ArrowRight size={13} />
                             </a>
                           )}
                         </div>

@@ -76,8 +76,6 @@ export default async function DestinationPage({ params }: { params: Promise<Para
             startDate: destEvents[0].date,
             offers: {
               '@type': 'Offer',
-              price: destEvents[0].price,
-              priceCurrency: 'INR',
               url: `${SITE_URL}/astroventure-nights/${destination.slug}#book`,
             },
           },

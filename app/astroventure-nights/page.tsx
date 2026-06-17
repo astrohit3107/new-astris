@@ -54,8 +54,6 @@ function StructuredData() {
           },
           offers: {
             '@type': 'Offer',
-            price: e.price,
-            priceCurrency: 'INR',
             availability:
               e.status === 'soldout'
                 ? 'https://schema.org/SoldOut'

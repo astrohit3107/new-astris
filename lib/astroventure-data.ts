@@ -100,11 +100,13 @@ export interface SlotEvent {
   destinationSlug: DestinationSlug
   /** ISO date (YYYY-MM-DD) of the first night */
   date: string
+  /** for flexible windows, the last bookable day (inclusive) */
+  endDate?: string
+  /** when true, any dates within [date, endDate] can be booked */
+  flexible?: boolean
   /** human readable date range */
   dateLabel: string
   nights: number
-  price: number
-  currency: string
   seatsTotal: number
   seatsAvailable: number
   status: 'open' | 'filling' | 'soldout'
@@ -526,13 +528,13 @@ export const galleryCategories = [
 export const events: SlotEvent[] = [
   {
     id: 'ck-2026-06-25',
-    batchName: 'Chitkul Dark-Sky Week',
+    batchName: 'Chitkul Open Dates',
     destinationSlug: 'chitkul',
     date: '2026-06-25',
-    dateLabel: '25 Jun – 2 Jul 2026',
-    nights: 7,
-    price: 49999,
-    currency: '₹',
+    endDate: '2026-07-02',
+    flexible: true,
+    dateLabel: 'Open daily · 25 Jun – 2 Jul 2026',
+    nights: 2,
     seatsTotal: 16,
     seatsAvailable: 16,
     status: 'open',
@@ -544,8 +546,6 @@ export const events: SlotEvent[] = [
     date: '2026-07-04',
     dateLabel: '4 – 6 Jul 2026',
     nights: 2,
-    price: 14999,
-    currency: '₹',
     seatsTotal: 20,
     seatsAvailable: 6,
     status: 'filling',
@@ -557,8 +557,6 @@ export const events: SlotEvent[] = [
     date: '2026-07-18',
     dateLabel: '18 – 20 Jul 2026',
     nights: 2,
-    price: 21999,
-    currency: '₹',
     seatsTotal: 16,
     seatsAvailable: 11,
     status: 'open',
@@ -570,8 +568,6 @@ export const events: SlotEvent[] = [
     date: '2026-08-01',
     dateLabel: '1 – 3 Aug 2026',
     nights: 2,
-    price: 12999,
-    currency: '₹',
     seatsTotal: 24,
     seatsAvailable: 18,
     status: 'open',
@@ -583,8 +579,6 @@ export const events: SlotEvent[] = [
     date: '2026-08-15',
     dateLabel: '15 – 17 Aug 2026',
     nights: 2,
-    price: 23999,
-    currency: '₹',
     seatsTotal: 16,
     seatsAvailable: 0,
     status: 'soldout',
@@ -596,8 +590,6 @@ export const events: SlotEvent[] = [
     date: '2026-09-12',
     dateLabel: '12 – 14 Sep 2026',
     nights: 2,
-    price: 15999,
-    currency: '₹',
     seatsTotal: 20,
     seatsAvailable: 20,
     status: 'open',
@@ -609,8 +601,6 @@ export const events: SlotEvent[] = [
     date: '2026-10-03',
     dateLabel: '3 – 5 Oct 2026',
     nights: 2,
-    price: 13999,
-    currency: '₹',
     seatsTotal: 24,
     seatsAvailable: 9,
     status: 'filling',
