@@ -501,13 +501,13 @@ export const galleryImages: GalleryImage[] = [
   { src: `${A}/gallery/gallery-image-01.webp`, alt: 'The Andromeda Galaxy beyond the peaks', category: 'Milky Way', span: 'tall' },
   { src: `${A}/gallery/gallery-image-02.webp`, alt: 'The Milky Way core over the Himalayas', category: 'Milky Way', span: 'normal' },
   { src: `${A}/gallery/gallery-image-03.webp`, alt: 'Stargazers gathered beneath a star-filled sky', category: 'Stargazing', span: 'wide' },
-  { src: `${A}/gallery/gallery-image-04.webp`, alt: 'A telescope tracking the night sky', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-04.webp`, alt: 'A telescope set up as twilight fades', category: 'Telescopes', span: 'normal' },
   { src: `${A}/gallery/gallery-image-05.webp`, alt: 'Guests observing the cosmos through a telescope', category: 'Participants', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-06.webp`, alt: 'Snow peaks under a canopy of stars', category: 'Landscapes', span: 'tall' },
+  { src: `${A}/gallery/gallery-image-06.webp`, alt: 'The Milky Way over the mountain ridge', category: 'Landscapes', span: 'tall' },
   { src: `${A}/gallery/gallery-image-07.webp`, alt: 'The Milky Way arching over snow peaks', category: 'Milky Way', span: 'wide' },
-  { src: `${A}/gallery/gallery-image-08.webp`, alt: 'A telescope silhouetted against the stars', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-08.webp`, alt: 'A reflector telescope ready for the night', category: 'Telescopes', span: 'normal' },
   { src: `${A}/gallery/gallery-image-09.webp`, alt: 'A deep-sky view of the Milky Way', category: 'Milky Way', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-10.webp`, alt: 'Star trails wheeling above the mountains', category: 'Activities', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-10.webp`, alt: 'Star trails circling the celestial pole', category: 'Activities', span: 'normal' },
 ]
 
 export const galleryCategories = [
