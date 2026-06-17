@@ -79,27 +79,35 @@ export default function PhotoGallery() {
               delay={(i % 3) * 80}
               className="mb-4 break-inside-avoid"
             >
-              <button
-                onClick={() => setLightbox(i)}
-                className="group relative block w-full overflow-hidden rounded-2xl border border-white/10"
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  loading="lazy"
-                  className={cn(
-                    'w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110',
-                    img.span === 'tall' ? 'h-[28rem]' : img.span === 'wide' ? 'h-56' : 'h-72',
-                  )}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4 opacity-0 transition-all duration-500 group-hover:opacity-100">
-                  <span className="text-sm font-medium text-white">{img.category}</span>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm">
-                    <ZoomIn size={16} />
+              <figure className="overflow-hidden rounded-2xl border border-white/10">
+                <button
+                  onClick={() => setLightbox(i)}
+                  className="group relative block w-full overflow-hidden"
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    className={cn(
+                      'w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110',
+                      img.span === 'tall' ? 'h-[28rem]' : img.span === 'wide' ? 'h-56' : 'h-72',
+                    )}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                    <span className="text-sm font-medium text-white">{img.category}</span>
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm">
+                      <ZoomIn size={16} />
+                    </span>
+                  </div>
+                </button>
+                <figcaption className="flex items-center justify-between gap-3 bg-white/[0.03] px-4 py-3">
+                  <span className="text-sm font-light leading-snug text-white/75">{img.alt}</span>
+                  <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-[var(--av-gold)]">
+                    {img.category}
                   </span>
-                </div>
-              </button>
+                </figcaption>
+              </figure>
             </ScrollReveal>
           ))}
         </div>

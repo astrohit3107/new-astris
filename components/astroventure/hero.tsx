@@ -45,7 +45,7 @@ export default function AstroHero() {
           style={{ animationDelay: '0.1s' }}
         >
           Astroventure
-          <span className="block text-gradient-gold italic">Nights</span>
+          <span className="block italic text-[var(--av-gold)]">Nights</span>
         </h1>
 
         <p

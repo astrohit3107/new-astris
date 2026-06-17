@@ -28,7 +28,7 @@ export default function FinalCta() {
           Astroventure Nights
         </p>
         <h2 className="font-display mt-5 text-balance text-5xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
-          The Universe <span className="text-gradient-gold italic">Is Waiting.</span>
+          The Universe <span className="italic text-[var(--av-gold)]">Is Waiting.</span>
         </h2>
         <p className="mx-auto mt-6 max-w-xl text-balance text-base font-light leading-relaxed text-white/75 sm:text-lg">
           Reserve your Astroventure Nights experience and witness the night sky like never before.

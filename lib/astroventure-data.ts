@@ -129,8 +129,37 @@ export interface Destination {
   heroImage: string
   overview: string
   highlights: string[]
+  inclusions: string[]
+  exclusions: string[]
   itinerary: ItineraryDay[]
 }
+
+/* ---------------------------------------------------------------------------
+ * 3a. SHARED INCLUSIONS / EXCLUSIONS
+ * ------------------------------------------------------------------------- *
+ *  Inclusions cover accommodation and every stargazing / astronomy activity.
+ *  Exclusions cover everything else. When a guest reserves a slot or sends an
+ *  enquiry, our experts build a tailored package around these.
+ * ------------------------------------------------------------------------- */
+export const TAILORED_PACKAGE_NOTE =
+  'When you reserve a slot or send us your enquiry, our experts will create a tailored package for you.'
+
+export const defaultInclusions: string[] = [
+  'Accommodation for the entire stay (tents / cottages as per the site)',
+  'All guided stargazing and telescope observation sessions',
+  'Astrophotography workshops and Milky Way viewing',
+  'Night-sky orientation and laser-guided constellation tours',
+  'Astronomy storytelling sessions led by expert astronomers',
+  'Use of research-grade telescopes, mounts and equipment',
+]
+
+export const defaultExclusions: string[] = [
+  'Travel and transport to and from the destination',
+  'Meals and beverages, unless specified in your tailored package',
+  'Personal expenses, shopping and tips',
+  'Travel insurance and any permits',
+  'Anything not explicitly listed under Inclusions',
+]
 
 /* ---------------------------------------------------------------------------
  * 4. DESTINATIONS  (add / edit / reorder freely)
@@ -138,9 +167,9 @@ export interface Destination {
 export const destinations: Destination[] = [
   {
     slug: 'solang-valley',
-    name: 'Solang Valley',
-    valley: 'Solang Valley',
-    locationLabel: 'Grossnum Deshank, Solang Valley',
+    name: 'Groshnam Deshang',
+    valley: 'Soldung Valley',
+    locationLabel: 'Groshnam Deshang, Soldung Valley',
     tagline: 'Where the snow-line meets the star-river.',
     altitude: '2,560 m',
     darkSkyRating: 4,
@@ -153,13 +182,15 @@ export const destinations: Destination[] = [
     imageMobile: IMAGES.solangMobile,
     heroImage: IMAGES.solang,
     overview:
-      'Cradled beneath the Dhauladhar peaks just beyond Manali, Solang Valley trades its daytime adventure-sports buzz for a profound silence after dark. We set up camp on a high meadow where the light of Manali falls away behind the ridgeline, leaving a horizon-to-horizon canopy of stars reflected in the season’s first snow.',
+      'Tucked away in the high Soldung Valley, Groshnam Deshang trades the daytime mountain bustle for a profound silence after dark. We set up camp on a high meadow where every trace of town light falls away behind the ridgeline, leaving a horizon-to-horizon canopy of stars reflected in the season’s first snow.',
     highlights: [
       'Snow-meadow observation site shielded from town light',
-      'Panoramic Dhauladhar horizon for rising constellations',
+      'Panoramic Himalayan horizon for rising constellations',
       'Bonfire astronomy storytelling under the Milky Way',
       'Sunrise over the peaks after a full night of observing',
     ],
+    inclusions: defaultInclusions,
+    exclusions: defaultExclusions,
     itinerary: [
       {
         day: 'Day 1',
@@ -186,7 +217,7 @@ export const destinations: Destination[] = [
       {
         day: 'Day 3',
         title: 'Dawn & Departure',
-        summary: 'Sunrise over the Dhauladhar and farewell.',
+        summary: 'Sunrise over the peaks and farewell.',
         events: [
           { time: '05:30', title: 'Pre-Dawn Planets', detail: 'Final views of the morning sky and zodiacal light.' },
           { time: '07:00', title: 'Sunrise & Breakfast', detail: 'Golden light on the peaks with hot breakfast.' },
@@ -219,6 +250,8 @@ export const destinations: Destination[] = [
       'Naked-eye Milky Way bright enough to cast shadows',
       'High-altitude clarity for faint galaxies and nebulae',
     ],
+    inclusions: defaultInclusions,
+    exclusions: defaultExclusions,
     itinerary: [
       {
         day: 'Day 1',
@@ -278,6 +311,8 @@ export const destinations: Destination[] = [
       'Constellation identification and laser sky tours',
       'Cosy café culture by day, deep-sky wonder by night',
     ],
+    inclusions: defaultInclusions,
+    exclusions: defaultExclusions,
     itinerary: [
       {
         day: 'Day 1',
@@ -463,16 +498,16 @@ export const celestialTargets: { name: string; type: string }[] = [
  * 7. PHOTO GALLERY  (masonry + lightbox)
  * ------------------------------------------------------------------------- */
 export const galleryImages: GalleryImage[] = [
-  { src: `${A}/gallery/gallery-image-01.webp`, alt: 'The Milky Way arching over the Himalayas', category: 'Milky Way', span: 'tall' },
-  { src: `${A}/gallery/gallery-image-02.webp`, alt: 'A telescope pointed at the night sky', category: 'Telescopes', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-03.webp`, alt: 'Stargazers beneath a star-filled sky', category: 'Stargazing', span: 'wide' },
-  { src: `${A}/gallery/gallery-image-04.webp`, alt: 'Observation setup under the stars', category: 'Telescopes', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-05.webp`, alt: 'Participants enjoying the night sky', category: 'Participants', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-06.webp`, alt: 'Himalayan landscape at twilight', category: 'Landscapes', span: 'tall' },
-  { src: `${A}/gallery/gallery-image-07.webp`, alt: 'Deep night sky over the mountains', category: 'Milky Way', span: 'wide' },
-  { src: `${A}/gallery/gallery-image-08.webp`, alt: 'Premium telescope under the stars', category: 'Telescopes', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-09.webp`, alt: 'Astronomy activity at dusk', category: 'Activities', span: 'normal' },
-  { src: `${A}/gallery/gallery-image-10.webp`, alt: 'Camp beneath the cosmos', category: 'Stargazing', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-01.webp`, alt: 'The Andromeda Galaxy beyond the peaks', category: 'Milky Way', span: 'tall' },
+  { src: `${A}/gallery/gallery-image-02.webp`, alt: 'The Milky Way core over the Himalayas', category: 'Milky Way', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-03.webp`, alt: 'Stargazers gathered beneath a star-filled sky', category: 'Stargazing', span: 'wide' },
+  { src: `${A}/gallery/gallery-image-04.webp`, alt: 'A telescope tracking the night sky', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-05.webp`, alt: 'Guests observing the cosmos through a telescope', category: 'Participants', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-06.webp`, alt: 'Snow peaks under a canopy of stars', category: 'Landscapes', span: 'tall' },
+  { src: `${A}/gallery/gallery-image-07.webp`, alt: 'The Milky Way arching over snow peaks', category: 'Milky Way', span: 'wide' },
+  { src: `${A}/gallery/gallery-image-08.webp`, alt: 'A telescope silhouetted against the stars', category: 'Telescopes', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-09.webp`, alt: 'A deep-sky view of the Milky Way', category: 'Milky Way', span: 'normal' },
+  { src: `${A}/gallery/gallery-image-10.webp`, alt: 'Star trails wheeling above the mountains', category: 'Activities', span: 'normal' },
 ]
 
 export const galleryCategories = [
@@ -490,8 +525,21 @@ export const galleryCategories = [
  * ------------------------------------------------------------------------- */
 export const events: SlotEvent[] = [
   {
+    id: 'ck-2026-06-25',
+    batchName: 'Chitkul Dark-Sky Week',
+    destinationSlug: 'chitkul',
+    date: '2026-06-25',
+    dateLabel: '25 Jun – 2 Jul 2026',
+    nights: 7,
+    price: 49999,
+    currency: '₹',
+    seatsTotal: 16,
+    seatsAvailable: 16,
+    status: 'open',
+  },
+  {
     id: 'sv-2026-07-04',
-    batchName: 'Solang Summer Skies',
+    batchName: 'Soldung Summer Skies',
     destinationSlug: 'solang-valley',
     date: '2026-07-04',
     dateLabel: '4 – 6 Jul 2026',
@@ -543,7 +591,7 @@ export const events: SlotEvent[] = [
   },
   {
     id: 'sv-2026-09-12',
-    batchName: 'Solang Autumn Clarity',
+    batchName: 'Soldung Autumn Clarity',
     destinationSlug: 'solang-valley',
     date: '2026-09-12',
     dateLabel: '12 – 14 Sep 2026',
@@ -599,7 +647,7 @@ export const testimonials: {
     quote:
       'The astrophotography session was worth the trip alone. The guides were patient, knowledgeable and genuinely passionate.',
     name: 'Rohan Mehta',
-    role: 'Mumbai · Solang Valley',
+    role: 'Mumbai · Groshnam Deshang',
     avatar: `${A}/icons/avatar-rohan-thumb.webp`,
     rating: 5,
   },
@@ -643,7 +691,7 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: 'Is the event suitable for children?',
     answer:
-      'Yes. Families are very welcome and children are often the most enthusiastic observers. Kasol and Solang Valley are especially well-suited for younger participants. We recommend Chitkul for ages 10+ due to its high altitude.',
+      'Yes. Families are very welcome and children are often the most enthusiastic observers. Kasol and Groshnam Deshang are especially well-suited for younger participants. We recommend Chitkul for ages 10+ due to its high altitude.',
   },
   {
     question: 'How long are the observation sessions?',

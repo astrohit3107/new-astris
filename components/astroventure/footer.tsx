@@ -1,5 +1,5 @@
-import { Mail, Phone, MapPin, Instagram, Twitter, Youtube, Facebook } from 'lucide-react'
-import { SITE, destinations } from '@/lib/astroventure-data'
+import { Mail, Phone, MapPin } from 'lucide-react'
+import { SITE, destinations, TAILORED_PACKAGE_NOTE } from '@/lib/astroventure-data'
 
 const quickLinks = [
   { label: 'Destinations', href: '/astroventure-nights#destinations' },
@@ -30,25 +30,6 @@ export default function AstroFooter() {
               Luxury Himalayan dark-sky astronomy expeditions. Pristine skies, research-grade
               telescopes and expert astronomers — under the most beautiful nights in India.
             </p>
-            <div className="mt-6 flex gap-3">
-              {[
-                { Icon: Instagram, href: SITE.instagram, label: 'Instagram' },
-                { Icon: Twitter, href: SITE.twitter, label: 'Twitter' },
-                { Icon: Youtube, href: SITE.youtube, label: 'YouTube' },
-                { Icon: Facebook, href: SITE.facebook, label: 'Facebook' },
-              ].map(({ Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 text-white/70 transition-all duration-300 hover:border-[var(--av-gold)] hover:text-[var(--av-gold)]"
-                >
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Destinations */}
@@ -104,6 +85,10 @@ export default function AstroFooter() {
         </div>
 
         <div className="av-divider my-10" />
+
+        <p className="mb-8 text-center text-sm font-light leading-relaxed text-white/70">
+          {TAILORED_PACKAGE_NOTE}
+        </p>
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-white/45">

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     'Himalayan stargazing',
     'dark sky tourism',
     'astrophotography tour',
-    'Solang Valley stargazing',
+    'Soldung Valley stargazing',
     'Chitkul dark sky',
     'Kasol astronomy',
     'telescope observation',

@@ -49,17 +49,9 @@ export default function Testimonials() {
                     <blockquote className="font-display mt-5 text-balance text-xl font-light italic leading-relaxed text-white sm:text-2xl">
                       “{t.quote}”
                     </blockquote>
-                    <figcaption className="mt-6 flex items-center justify-center gap-3">
-                      <img
-                        src={t.avatar}
-                        alt={t.name}
-                        loading="lazy"
-                        className="h-11 w-11 rounded-full object-cover ring-1 ring-white/20"
-                      />
-                      <div className="text-left">
-                        <p className="text-sm font-semibold text-white">{t.name}</p>
-                        <p className="text-xs text-white/50">{t.role}</p>
-                      </div>
+                    <figcaption className="mt-6 text-center">
+                      <p className="text-sm font-semibold text-white">{t.name}</p>
+                      <p className="text-xs text-white/50">{t.role}</p>
                     </figcaption>
                   </div>
                 </figure>
