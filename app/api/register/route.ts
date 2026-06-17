@@ -70,7 +70,11 @@ const RECIPIENTS = [
   process.env.NOTIFY_EMAIL_2 || 'eeshumtravels@gmail.com',
 ].filter((e): e is string => !!e && /.+@.+\..+/.test(e))
 
-async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean; reason?: string }> {
+async function sendEmail(
+  data: z.infer<typeof schema>,
+  origin: string,
+): Promise<{ sent: boolean; reason?: string }> {
+  let lastError = 'email-not-configured'
   const rows: [string, string][] = [
     ['Full Name', data.fullName],
     ['Phone', data.phone],
@@ -108,25 +112,26 @@ async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean;
   // second recipient from the Web3Forms dashboard.
   const web3Key = process.env.WEB3FORMS_ACCESS_KEY
   if (web3Key) {
-    const res = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        access_key: web3Key,
-        subject,
-        from_name: 'Astroventure Nights',
-        replyto: data.email,
-        // include the second inbox if the plan allows multiple recipients
-        cc: RECIPIENTS.join(','),
-        message: text,
-        ...Object.fromEntries(rows),
-      }),
-    })
-    if (!res.ok) {
-      const detail = await res.text().catch(() => '')
-      return { sent: false, reason: `web3forms-error: ${res.status} ${detail.slice(0, 200)}` }
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: web3Key,
+          subject,
+          from_name: 'Astroventure Nights',
+          replyto: data.email,
+          // include the second inbox if the plan allows multiple recipients
+          cc: RECIPIENTS.join(','),
+          message: text,
+          ...Object.fromEntries(rows),
+        }),
+      })
+      if (res.ok) return { sent: true }
+      lastError = `web3forms-error: ${res.status} ${(await res.text().catch(() => '')).slice(0, 200)}`
+    } catch (e) {
+      lastError = `web3forms-exception: ${String(e).slice(0, 200)}`
     }
-    return { sent: true }
   }
 
   // --- Option B: Resend ------------------------------------------------------
@@ -135,54 +140,74 @@ async function sendEmail(data: z.infer<typeof schema>): Promise<{ sent: boolean;
   // account email until you verify a domain.
   const apiKey = process.env.RESEND_API_KEY
   if (apiKey && RECIPIENTS.length > 0) {
-    const from = process.env.NOTIFY_FROM || 'Astroventure Nights <onboarding@resend.dev>'
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: RECIPIENTS,
-        reply_to: data.email,
-        subject,
-        html,
-        text,
-      }),
-    })
-    if (!res.ok) {
-      const detail = await res.text().catch(() => '')
-      return { sent: false, reason: `resend-error: ${res.status} ${detail.slice(0, 200)}` }
+    try {
+      const from = process.env.NOTIFY_FROM || 'Astroventure Nights <onboarding@resend.dev>'
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from,
+          to: RECIPIENTS,
+          reply_to: data.email,
+          subject,
+          html,
+          text,
+        }),
+      })
+      if (res.ok) return { sent: true }
+      // fall through to FormSubmit if Resend rejects (e.g. unverified domain)
+      lastError = `resend-error: ${res.status} ${(await res.text().catch(() => '')).slice(0, 200)}`
+    } catch (e) {
+      lastError = `resend-exception: ${String(e).slice(0, 200)}`
     }
-    return { sent: true }
   }
 
   // --- Default: FormSubmit (zero-config — no account, key or env needed) -----
-  // Delivers to the RECIPIENTS below. The very first submission triggers a
-  // one-time activation email to the primary address; click its link once and
-  // every future enquiry is delivered automatically.
+  // Delivers to the RECIPIENTS below. The first submission triggers a one-time
+  // activation email to the primary address; click its link once and every
+  // future enquiry is delivered automatically. FormSubmit requires an Origin
+  // header and returns HTTP 200 even on soft failures, so parse the body.
   if (RECIPIENTS.length > 0) {
-    const [primary, ...cc] = RECIPIENTS
-    const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(primary)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        _subject: subject,
-        _replyto: data.email,
-        _template: 'table',
-        ...(cc.length ? { _cc: cc.join(',') } : {}),
-        ...Object.fromEntries(rows),
-      }),
-    })
-    if (!res.ok) {
-      const detail = await res.text().catch(() => '')
-      return { sent: false, reason: `formsubmit-error: ${res.status} ${detail.slice(0, 200)}` }
+    try {
+      const [primary, ...cc] = RECIPIENTS
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(primary)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Origin: origin,
+          Referer: origin,
+        },
+        body: JSON.stringify({
+          _subject: subject,
+          _replyto: data.email,
+          _template: 'table',
+          ...(cc.length ? { _cc: cc.join(',') } : {}),
+          ...Object.fromEntries(rows),
+        }),
+      })
+      const json: { success?: string | boolean; message?: string } = await res
+        .json()
+        .catch(() => ({}))
+      const success = json.success === true || json.success === 'true'
+      // "needs activation" is a one-time bootstrap, not a real failure
+      const pendingActivation = /activat/i.test(json.message || '')
+      if (res.ok && (success || pendingActivation)) return { sent: true }
+      lastError = `formsubmit-error: ${res.status} ${JSON.stringify(json).slice(0, 200)}`
+    } catch (e) {
+      lastError = `formsubmit-exception: ${String(e).slice(0, 200)}`
     }
-    return { sent: true }
   }
 
-  return { sent: false, reason: 'email-not-configured' }
+  return { sent: false, reason: lastError }
+}
+
+/** Lightweight health/version check (no email sent). */
+export async function GET() {
+  return NextResponse.json({ ok: true, service: 'register', delivery: 'formsubmit-fallback' })
 }
 
 export async function POST(req: Request) {
@@ -230,8 +255,16 @@ export async function POST(req: Request) {
   }
 
   // --- Deliver ---------------------------------------------------------------
+  // FormSubmit requires a real Origin/Referer; derive it from the request.
+  const host = req.headers.get('host')
+  const origin =
+    req.headers.get('origin') ||
+    (host ? `https://${host}` : '') ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    'https://www.astriseducation.in'
+
   try {
-    const result = await sendEmail(data)
+    const result = await sendEmail(data, origin)
     if (!result.sent && result.reason !== 'email-not-configured') {
       console.error('[register] email failed:', result.reason)
       return NextResponse.json(
