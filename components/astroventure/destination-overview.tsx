@@ -91,6 +91,25 @@ export default function DestinationOverview({ destination: d }: { destination: D
             {TAILORED_PACKAGE_NOTE}
           </p>
         </ScrollReveal>
+
+        {d.partner && (
+          <ScrollReveal className="mt-8 flex flex-col items-center gap-3 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
+              In partnership with
+            </p>
+            <div className="flex items-center gap-4">
+              <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-white/20">
+                <img
+                  src={d.partner.logo}
+                  alt={`${d.partner.name} logo`}
+                  loading="lazy"
+                  className="h-full w-full object-contain p-1"
+                />
+              </span>
+              <span className="font-display text-lg font-semibold text-white">{d.partner.name}</span>
+            </div>
+          </ScrollReveal>
+        )}
       </div>
     </section>
   )

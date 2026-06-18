@@ -133,6 +133,8 @@ export interface Destination {
   highlights: string[]
   inclusions: string[]
   exclusions: string[]
+  /** optional on-ground partner shown on the destination page */
+  partner?: { name: string; logo: string; url?: string }
   itinerary: ItineraryDay[]
 }
 
@@ -254,6 +256,10 @@ export const destinations: Destination[] = [
     ],
     inclusions: defaultInclusions,
     exclusions: defaultExclusions,
+    partner: {
+      name: 'Eeshum Travels',
+      logo: '/partners/eeshum-travels-logo.webp',
+    },
     itinerary: [
       {
         day: 'Day 1',

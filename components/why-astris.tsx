@@ -91,6 +91,26 @@ export default function WhyAstris() {
           </div>
         </div>
 
+        {/* ISRO Space Tutor affiliation */}
+        <div
+          className="flex flex-col items-center gap-4 rounded-2xl border border-foreground/20 bg-secondary p-6 md:p-8 text-center animate-fade-in-up"
+          style={{ animationDelay: '0.35s' }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-foreground/60">
+            Recognised Affiliation
+          </p>
+          <img
+            src="/partners/isro-logo.webp"
+            alt="ISRO — Indian Space Research Organisation"
+            className="h-20 w-auto object-contain"
+          />
+          <p className="text-base md:text-lg font-bold text-foreground">Official ISRO Space Tutor</p>
+          <p className="max-w-xl text-sm font-light text-foreground/70">
+            Astris Space is an affiliated ISRO Space Tutor — bringing authentic,
+            space-agency-backed astronomy education to schools, resorts and explorers across India.
+          </p>
+        </div>
+
         {/* Key values */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-secondary border-foreground/20 p-8 hover:border-foreground/40 transition-all duration-500 hover:shadow-lg hover:shadow-foreground/10 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>

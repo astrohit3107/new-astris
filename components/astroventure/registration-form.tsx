@@ -135,6 +135,16 @@ export default function RegistrationForm({ defaultDestination }: Props) {
           subtitle="Tell us a little about you and we’ll confirm availability and the next steps within 24 hours."
         />
 
+        <p className="mt-4 text-center text-sm text-white/60">
+          Prefer to talk? Call or WhatsApp{' '}
+          <a
+            href="tel:+918628076477"
+            className="font-semibold text-[var(--av-gold)] underline-offset-2 hover:underline"
+          >
+            +91 86280 76477
+          </a>
+        </p>
+
         <ScrollReveal className="mt-12">
           <div className="glass-strong rounded-3xl p-6 sm:p-8">
             {status === 'success' ? (
@@ -148,6 +158,15 @@ export default function RegistrationForm({ defaultDestination }: Props) {
                 <p className="mt-2 max-w-md text-sm font-light text-white/65">
                   Thank you for reaching out. Our team will contact you within 24 hours to confirm
                   your Astroventure Nights experience. Keep an eye on your inbox and phone.
+                </p>
+                <p className="mt-3 text-sm text-white/70">
+                  Need anything sooner? Call or WhatsApp{' '}
+                  <a
+                    href="tel:+918628076477"
+                    className="font-semibold text-[var(--av-gold)] underline-offset-2 hover:underline"
+                  >
+                    +91 86280 76477
+                  </a>
                 </p>
                 <button
                   onClick={() => setStatus('idle')}
