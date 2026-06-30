@@ -1,7 +1,8 @@
 import { CalendarDays, Clock, Mountain, Moon } from 'lucide-react'
 import SectionHeading from '@/components/astroventure/section-heading'
 import ScrollReveal from '@/components/astroventure/scroll-reveal'
-import { SPITI, SPITI_OVERVIEW, SPITI_IMAGES } from '@/lib/spiti-data'
+import PartnerLockup from './partner-lockup'
+import { SPITI, SPITI_OVERVIEW, SPITI_IMAGES, SPITI_PARTNER } from '@/lib/spiti-data'
 
 const stats = [
   { icon: Clock, value: SPITI.durationLabel, label: 'Expedition length' },
@@ -52,6 +53,17 @@ export default function SpitiOverview() {
                   </div>
                 )
               })}
+            </div>
+
+            {/* Partner credit */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <PartnerLockup variant="inline" />
+              <p className="mt-3 text-sm font-light leading-relaxed text-white/55">
+                Astroventure Spiti ’26 is conducted in partnership with{' '}
+                <span className="font-medium text-white/80">{SPITI_PARTNER.name}</span>, our{' '}
+                {SPITI_PARTNER.role.toLowerCase()} across the Spiti Valley — pairing Astris Space’s
+                astronomy expertise with seamless on-ground logistics.
+              </p>
             </div>
           </ScrollReveal>
         </div>

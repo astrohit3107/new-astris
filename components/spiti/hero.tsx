@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, ChevronDown, CalendarDays, Clock, IndianRupee, Sparkles } from 'lucide-react'
 import { SPITI, SPITI_IMAGES } from '@/lib/spiti-data'
 import Starfield from '@/components/astroventure/starfield'
+import PartnerLockup from './partner-lockup'
 
 function useCountdown(targetISO: string) {
   const [now, setNow] = useState<number | null>(null)
@@ -42,10 +43,10 @@ export default function SpitiHero() {
       {/* Cinematic Spiti / Milky Way background */}
       <div className="absolute inset-0">
         <picture className="block h-full w-full">
-          <source srcSet={SPITI_IMAGES.heroMilkyWayMobile} media="(max-width: 1024px)" />
+          <source srcSet={SPITI_IMAGES.kiMonasteryMobile} media="(max-width: 1024px)" />
           <img
-            src={SPITI_IMAGES.heroMilkyWay}
-            alt="The Milky Way over the Spiti Himalayas"
+            src={SPITI_IMAGES.kiMonastery}
+            alt="The Milky Way behind Ki Monastery in the Spiti Himalayas"
             fetchPriority="high"
             className="animate-drift h-full w-full object-cover object-center"
           />
@@ -81,6 +82,14 @@ export default function SpitiHero() {
           {SPITI.subheading}
           <span className="mt-1 block text-sm italic text-white/55">{SPITI.tagline}</span>
         </p>
+
+        {/* Co-branding — Astris Space × Eeshum Travels */}
+        <div
+          className="animate-fade-in-up mt-7 flex justify-center"
+          style={{ animationDelay: '0.24s' }}
+        >
+          <PartnerLockup variant="hero" />
+        </div>
 
         {/* Key facts */}
         <div

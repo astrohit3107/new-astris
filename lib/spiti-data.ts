@@ -86,6 +86,23 @@ export const SPITI_CONTACT = {
 } as const
 
 /* ---------------------------------------------------------------------------
+ * 2a. EXPEDITION PARTNER  (co-branding)
+ * ------------------------------------------------------------------------- *
+ *  Astroventure Spiti '26 is conducted in partnership with Eeshum Travels,
+ *  our on-ground expedition partner. Co-branding appears near the hero, the
+ *  overview and the booking section.
+ * ------------------------------------------------------------------------- */
+export const SPITI_PARTNER = {
+  name: 'Eeshum Travels',
+  logo: '/partners/eeshum-travels-logo.webp',
+  role: 'On-ground Expedition Partner',
+  prefix: 'In partnership with',
+} as const
+
+/** The Astris Space brand logo, used in the co-branded lockup. */
+export const SPITI_BRAND_LOGO = '/logo.svg'
+
+/* ---------------------------------------------------------------------------
  * 3. IMAGE ASSETS  (reuse / replace with your own Spiti photography)
  * ------------------------------------------------------------------------- */
 const A = '/astroventure-assets'
@@ -93,6 +110,11 @@ const A = '/astroventure-assets'
 export const SPITI_IMAGES = {
   heroMilkyWay: `${A}/hero/hero-himalayan-milkyway.webp`,
   heroMilkyWayMobile: `${A}/hero/hero-himalayan-milkyway-mobile.webp`,
+  // Signature image — the Milky Way behind Ki (Key) Monastery, Spiti.
+  // Drop a real Ki Monastery night photo at this path and every Astroventure
+  // hero updates. Defaults to the closest real night-village asset we ship.
+  kiMonastery: `${A}/spiti/ki-monastery-milkyway.webp`,
+  kiMonasteryMobile: `${A}/spiti/ki-monastery-milkyway-mobile.webp`,
   milkyWayArch: `${A}/milky-way/milkyway-panoramic-arch.webp`,
   landscapePrimary: `${A}/chitkul/chitkul-village-stars.webp`,
   landscapeSecondary: `${A}/solang-valley/solang-valley-night.webp`,

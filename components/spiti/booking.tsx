@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { SPITI, SPITI_CONTACT } from '@/lib/spiti-data'
 import ScrollReveal from '@/components/astroventure/scroll-reveal'
+import PartnerLockup from './partner-lockup'
 import { cn } from '@/lib/utils'
 
 const schema = z.object({
@@ -156,6 +157,11 @@ export default function SpitiBooking() {
               {SPITI_CONTACT.bookingPhone}
             </a>
           </p>
+
+          {/* Co-branding — Astris Space × Eeshum Travels */}
+          <div className="mt-6 flex justify-center">
+            <PartnerLockup variant="hero" />
+          </div>
         </ScrollReveal>
 
         {/* Form */}
