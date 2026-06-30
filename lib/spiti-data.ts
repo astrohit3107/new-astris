@@ -272,7 +272,7 @@ export const spitiItinerary: SpitiDay[] = [
   },
   {
     day: 7,
-    route: 'Kaza → Chandratal / Manali Side',
+    route: 'Kaza',
     title: 'Reflection & Farewell',
     highlights: [
       'Reflection on the expedition',
