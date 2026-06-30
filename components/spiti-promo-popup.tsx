@@ -60,8 +60,9 @@ export default function SpitiPromoPopup() {
         <div className="relative h-44 w-full overflow-hidden">
           <img
             src={SPITI_IMAGES.landscapeSecondary}
-            alt="The Spiti Himalayas under a star-filled sky"
+            alt="The Milky Way stretched across the dark Spiti night sky"
             className="h-full w-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--av-deep)] via-black/40 to-transparent" />
         </div>

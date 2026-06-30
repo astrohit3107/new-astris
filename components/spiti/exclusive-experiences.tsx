@@ -32,14 +32,14 @@ export default function SpitiExclusiveExperiences() {
             <div className="relative grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <img
-                  src={SPITI_IMAGES.laser}
-                  alt="A laser-guided sky tour in progress"
+                  src={SPITI_IMAGES.stargazingGroup}
+                  alt="Participants stargazing through a telescope under a dark sky"
                   className="aspect-[3/4] w-full rounded-3xl border border-white/10 object-cover"
                   loading="lazy"
                 />
                 <img
                   src={SPITI_IMAGES.telescope}
-                  alt="A research-grade telescope under the stars"
+                  alt="A telescope set up for an evening of deep-sky observation"
                   className="aspect-square w-full rounded-3xl border border-white/10 object-cover"
                   loading="lazy"
                 />
@@ -47,13 +47,13 @@ export default function SpitiExclusiveExperiences() {
               <div className="space-y-4 pt-8">
                 <img
                   src={SPITI_IMAGES.astrophotography}
-                  alt="An astrophotography rig framing the night sky"
+                  alt="Observing Saturn through the eyepiece of a telescope"
                   className="aspect-square w-full rounded-3xl border border-white/10 object-cover"
                   loading="lazy"
                 />
                 <img
                   src={SPITI_IMAGES.starTrails}
-                  alt="Star trails circling above the mountains"
+                  alt="Star trails wheeling above the mountains through the night"
                   className="aspect-[3/4] w-full rounded-3xl border border-white/10 object-cover"
                   loading="lazy"
                 />

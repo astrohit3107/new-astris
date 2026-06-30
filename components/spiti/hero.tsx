@@ -43,11 +43,13 @@ export default function SpitiHero() {
       {/* Cinematic Spiti / Milky Way background */}
       <div className="absolute inset-0">
         <picture className="block h-full w-full">
-          <source srcSet={SPITI_IMAGES.kiMonasteryMobile} media="(max-width: 1024px)" />
+          <source srcSet={SPITI_IMAGES.heroMilkyWayMobile} media="(max-width: 1024px)" />
           <img
-            src={SPITI_IMAGES.kiMonastery}
-            alt="The Milky Way behind Ki Monastery in the Spiti Himalayas"
+            src={SPITI_IMAGES.heroMilkyWay}
+            alt="The Milky Way core arching over the high Himalaya at night"
             fetchPriority="high"
+            width={2200}
+            height={1467}
             className="animate-drift h-full w-full object-cover object-center"
           />
         </picture>

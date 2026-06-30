@@ -1,5 +1,5 @@
 import { Mail, Phone, ArrowUpRight } from 'lucide-react'
-import { SPITI, SPITI_CONTACT, SPITI_IMAGES } from '@/lib/spiti-data'
+import { SPITI, SPITI_CONTACT, SPITI_IMAGES, SPITI_PHOTO_CREDITS } from '@/lib/spiti-data'
 
 export default function SpitiFooter() {
   return (
@@ -65,6 +65,31 @@ export default function SpitiFooter() {
           <p>© {new Date().getFullYear()} {SPITI_CONTACT.brand}. All rights reserved.</p>
           <p>{SPITI.name} · {SPITI.dateLabel}</p>
         </div>
+
+        {/* Photography credits — required attribution for CC BY / CC BY-SA imagery */}
+        <details className="mt-6 text-[11px] text-white/35">
+          <summary className="cursor-pointer list-none text-white/40 transition-colors hover:text-white/60">
+            Photography credits
+          </summary>
+          <p className="mt-3 leading-relaxed">
+            Expedition photography sourced from Wikimedia Commons under CC0,
+            Public Domain, CC BY and CC BY-SA licenses —{' '}
+            {SPITI_PHOTO_CREDITS.map((c, i) => (
+              <span key={c.source}>
+                <a
+                  href={c.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-2 transition-colors hover:text-white/70 hover:underline"
+                >
+                  {c.subject}
+                </a>{' '}
+                by {c.author} ({c.license})
+                {i < SPITI_PHOTO_CREDITS.length - 1 ? '; ' : '.'}
+              </span>
+            ))}
+          </p>
+        </details>
       </div>
     </footer>
   )

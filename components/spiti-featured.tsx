@@ -51,7 +51,7 @@ export default function SpitiFeatured() {
             <div className="group relative overflow-hidden rounded-3xl border border-foreground/10">
               <img
                 src={SPITI_IMAGES.landscapePrimary}
-                alt="The Spiti Himalayas beneath a star-filled sky"
+                alt="Ki (Key) Monastery, the cliffside gompa of the Spiti Valley, at golden hour"
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

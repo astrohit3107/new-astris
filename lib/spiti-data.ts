@@ -107,24 +107,43 @@ export const SPITI_BRAND_LOGO = '/logo.svg'
  * ------------------------------------------------------------------------- */
 const A = '/astroventure-assets'
 
+/**
+ * Real, properly-licensed Spiti & astronomy photographs sourced from Wikimedia
+ * Commons (CC0 / Public Domain / CC BY / CC BY-SA) and self-hosted under
+ * `/public/astroventure-assets/spiti-real`. Attribution for CC-BY / CC-BY-SA
+ * images is rendered in the footer — see `SPITI_PHOTO_CREDITS` below.
+ *
+ * NOTE on the hero: a free, licensable photo of the Milky Way *directly above
+ * Ki Monastery* does not exist (those are paid-stock only), so the hero uses a
+ * real Milky Way over the Himalaya, and the real Ki Monastery is featured as
+ * the signature location image in the overview and gallery. To use a precise
+ * "Milky Way over Ki Monastery" shot you own/license, drop it at
+ * `spiti-real/hero-milkyway.jpg` (+ `-mobile.jpg`) — no code change needed.
+ */
+const R = '/astroventure-assets/spiti-real'
+
 export const SPITI_IMAGES = {
-  heroMilkyWay: `${A}/hero/hero-himalayan-milkyway.webp`,
-  heroMilkyWayMobile: `${A}/hero/hero-himalayan-milkyway-mobile.webp`,
-  // Signature image — the Milky Way behind Ki (Key) Monastery, Spiti.
-  // Drop a real Ki Monastery night photo at this path and every Astroventure
-  // hero updates. Defaults to the closest real night-village asset we ship.
-  kiMonastery: `${A}/spiti/ki-monastery-milkyway.webp`,
-  kiMonasteryMobile: `${A}/spiti/ki-monastery-milkyway-mobile.webp`,
-  milkyWayArch: `${A}/milky-way/milkyway-panoramic-arch.webp`,
-  landscapePrimary: `${A}/chitkul/chitkul-village-stars.webp`,
-  landscapeSecondary: `${A}/solang-valley/solang-valley-night.webp`,
-  landscapeTertiary: `${A}/kasol/kasol-riverside-dusk.webp`,
-  telescope: `${A}/telescopes/telescope-setup-general.webp`,
-  starTrails: `${A}/activities/star-trails-mountains.webp`,
-  astrophotography: `${A}/activities/astrophotography-setup.webp`,
-  stargazingGroup: `${A}/stargazing/stargazing-group-01.webp`,
-  laser: `${A}/stargazing/stargazing-pointing-laser.webp`,
-  footerNebula: `${A}/backgrounds/footer-nebula.webp`,
+  // Hero — real Milky Way over the high Himalaya (responsive desktop + mobile)
+  heroMilkyWay: `${R}/hero-milkyway.jpg`,
+  heroMilkyWayMobile: `${R}/hero-milkyway-mobile.jpg`,
+  // Ki (Key) Monastery, Spiti — the expedition's signature location
+  kiMonastery: `${R}/ki-monastery-sunset.jpg`,
+  kiMonasteryWide: `${R}/ki-monastery-day.jpg`,
+  // Night-sky backdrops
+  milkyWayArch: `${R}/nights-milkyway.jpg`,
+  starTrails: `${R}/star-trails.jpg`,
+  footerNebula: `${R}/nights-milkyway.jpg`,
+  // Spiti landscapes
+  landscapePrimary: `${R}/ki-monastery-sunset.jpg`,
+  landscapeSecondary: `${R}/nights-milkyway.jpg`,
+  landscapeTertiary: `${R}/spiti-landscape.jpg`,
+  chandratal: `${R}/chandratal.jpg`,
+  // Astronomy in the field
+  telescope: `${R}/telescope-obs.jpg`,
+  astrophotography: `${R}/saturn-stargazing.jpg`,
+  stargazingGroup: `${R}/stargazing-camp.jpg`,
+  laser: `${R}/stargazing-camp.jpg`,
+  solar: `${R}/solar-telescope.jpg`,
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -428,26 +447,33 @@ export interface SpitiGalleryImage {
 }
 
 export const spitiGallery: SpitiGalleryImage[] = [
-  { src: `${A}/milky-way/milkyway-panoramic-arch.webp`, alt: 'The Milky Way arching over the Spiti Himalayas', category: 'Milky Way', span: 'wide' },
-  { src: `${A}/telescopes/telescope-setup-general.webp`, alt: 'A research-grade telescope set up under the stars', category: 'Telescopes', span: 'normal' },
-  { src: `${A}/chitkul/chitkul-village-stars.webp`, alt: 'A high Himalayan village beneath a star-filled sky', category: 'Landscapes', span: 'tall' },
-  { src: `${A}/stargazing/stargazing-group-01.webp`, alt: 'Participants gathered for a night of observation', category: 'Participants', span: 'normal' },
-  { src: `${A}/activities/star-trails-mountains.webp`, alt: 'Star trails circling above the mountains', category: 'Night Photography', span: 'normal' },
-  { src: `${A}/solang-valley/solang-valley-night.webp`, alt: 'A high-altitude camp under the cosmos', category: 'Camp', span: 'wide' },
-  { src: `${A}/activities/astrophotography-setup.webp`, alt: 'An astrophotography rig framing the night sky', category: 'Night Photography', span: 'normal' },
-  { src: `${A}/stargazing/stargazing-pointing-laser.webp`, alt: 'A laser-guided sky tour in progress', category: 'Stargazing', span: 'tall' },
-  { src: `${A}/kasol/kasol-riverside-dusk.webp`, alt: 'Dusk settling over the Himalayan valley', category: 'Landscapes', span: 'normal' },
+  { src: `${R}/nights-milkyway.jpg`, alt: 'The Milky Way core stretched across a dark Himalayan night sky', category: 'Milky Way', span: 'wide' },
+  { src: `${R}/ki-monastery-sunset.jpg`, alt: 'Ki (Key) Monastery, Spiti Valley, glowing at golden hour', category: 'Landscapes', span: 'tall' },
+  { src: `${R}/telescope-obs.jpg`, alt: 'A telescope set up for an evening of observation', category: 'Telescopes', span: 'normal' },
+  { src: `${R}/chandratal.jpg`, alt: 'Chandratal lake mirroring the high Himalaya', category: 'Landscapes', span: 'wide' },
+  { src: `${R}/star-trails.jpg`, alt: 'Star trails wheeling above the mountains through the night', category: 'Night Photography', span: 'normal' },
+  { src: `${R}/stargazing-camp.jpg`, alt: 'Participants stargazing through a telescope under the stars', category: 'Participants', span: 'tall' },
+  { src: `${R}/langza.jpg`, alt: 'The giant Buddha statue at Langza, Spiti Valley', category: 'Landscapes', span: 'normal' },
+  { src: `${R}/saturn-stargazing.jpg`, alt: 'Observing Saturn through the eyepiece of a telescope', category: 'Stargazing', span: 'normal' },
+  { src: `${R}/spiti-landscape.jpg`, alt: 'The vast cold-desert landscape of Spiti', category: 'Landscapes', span: 'wide' },
+  { src: `${R}/kaza.jpg`, alt: 'Sakya Tangyud Monastery above Kaza, the heart of Spiti', category: 'Landscapes', span: 'normal' },
+  { src: `${R}/hikkim.jpg`, alt: 'Hikkim — among the highest villages on Earth', category: 'Landscapes', span: 'normal' },
+  { src: `${R}/spiti-road.jpg`, alt: 'The winding Himalayan road into the Spiti Valley', category: 'Landscapes', span: 'wide' },
+  { src: `${R}/premium-stay.jpg`, alt: 'A heritage Himalayan house — the premium expedition stay', category: 'Camp', span: 'normal' },
+  { src: `${R}/solar-telescope.jpg`, alt: 'Solar observation through a dedicated solar telescope', category: 'Telescopes', span: 'tall' },
+  { src: `${R}/ki-monastery-day.jpg`, alt: 'Ki (Key) Monastery perched on the cliffs above the Spiti river', category: 'Landscapes', span: 'wide' },
+  { src: `${R}/komic.jpg`, alt: 'Snow-dusted Spiti peaks above Komic, one of the world’s highest villages', category: 'Landscapes', span: 'normal' },
 ]
 
 export const spitiGalleryCategories = [
   'All',
   'Milky Way',
-  'Telescopes',
   'Landscapes',
+  'Telescopes',
   'Participants',
   'Night Photography',
-  'Camp',
   'Stargazing',
+  'Camp',
 ] as const
 
 /* ---------------------------------------------------------------------------
@@ -518,3 +544,31 @@ export const spitiCalendarEntry = {
   seatsLabel: SPITI.seatsLabel,
   fromPriceLabel: SPITI.fromPriceLabel,
 } as const
+
+/* ---------------------------------------------------------------------------
+ * 14. PHOTOGRAPHY CREDITS  (Wikimedia Commons — required attribution)
+ * ------------------------------------------------------------------------- *
+ *  Rendered subtly in the expedition footer. CC0 / Public-domain images are
+ *  listed too, for full transparency. Replace any image and update its row.
+ * ------------------------------------------------------------------------- */
+export const SPITI_PHOTO_CREDITS: {
+  subject: string; author: string; license: string; source: string
+}[] = [
+  { subject: "Milky Way over the Himalaya", author: "CuriousZil", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Milky_way_amongst_mountain.jpg" },
+  { subject: "Milky Way panorama", author: "NASA/JPL-Caltech/UCLA", license: "Public domain", source: "https://commons.wikimedia.org/wiki/File:Milky_way1.jpg" },
+  { subject: "Ki (Key) Monastery at golden hour", author: "Rajarshi MITRA", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Sunset_and_the_Key_Monastery_(48314649526).jpg" },
+  { subject: "Ki (Key) Monastery, Spiti", author: "TheWanderer7562", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Key_Monastery.jpg" },
+  { subject: "Chandratal lake, Spiti", author: "Poojilsharma07", license: "CC0", source: "https://commons.wikimedia.org/wiki/File:Chander_Tal,_Spiti,_Himachal_Pradesh.jpg" },
+  { subject: "Langza, Spiti Valley", author: "Sumita Roy Dutta", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Buddha_Statue_at_Langza_village_Spiti_valley.jpg" },
+  { subject: "Spiti high-altitude peaks", author: "Sumita Roy Dutta", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Chau_Chau_Kang_Nilda(CCKN)_peak_of_Spiti_Himachal_Pradesh_from_Komic_village_to_Demul_Vllage.jpg" },
+  { subject: "Hikkim village, Spiti", author: "Sumita Roy Dutta", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Hikkim_Village.jpg" },
+  { subject: "Sakya Tangyud Monastery, Kaza", author: "Nrr1729", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Sakya_Tangyud_Monastery_(Kaza).jpg" },
+  { subject: "The road into Spiti", author: "Carlos Adampol Galindo", license: "CC BY-SA 2.0", source: "https://commons.wikimedia.org/wiki/File:Camino_a_Spiti_valley,_Himachal_Pradesh_(8513985670).jpg" },
+  { subject: "Cold desert of Spiti", author: "Poojilsharma07", license: "CC0", source: "https://commons.wikimedia.org/wiki/File:Cold_Desert_of_Spiti.jpg" },
+  { subject: "Telescope observation", author: "Cats' photos", license: "CC0", source: "https://commons.wikimedia.org/wiki/File:Telescope_and_Venus._Amateur_astronomers_(Astrofili_Frentani_group)_in_Lanciano,_Italy.jpg" },
+  { subject: "Stargazing through a telescope", author: "Astroclubkosova", license: "CC BY 4.0", source: "https://commons.wikimedia.org/wiki/File:Stargazing_with_telescope_during_Astro-Camp_in_Brod,_Dragash_-_Kosovo.jpg" },
+  { subject: "Heritage Himalayan house", author: "Shobhla-Himachal", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Zomsa,_A_heritage_house_in_Lahaul,_Himachal_Pradesh.jpg" },
+  { subject: "Observing Saturn", author: "PlainVector", license: "CC0", source: "https://commons.wikimedia.org/wiki/File:Stargazing_at_Saturn_Rings.jpg" },
+  { subject: "Star trails over the mountains", author: "Joshua Tree National Park", license: "Public domain", source: "https://commons.wikimedia.org/wiki/File:Star_trails_and_comet_NEOWISE_over_Queen_Valley_(50127118631).jpg" },
+  { subject: "Solar telescope", author: "NOIRLab/NSF/AURA", license: "CC BY 4.0", source: "https://commons.wikimedia.org/wiki/File:SPO_Vacuum_Tower_Telescope_(noao-02219).jpg" },
+]

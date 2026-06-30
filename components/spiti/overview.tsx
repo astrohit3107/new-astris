@@ -26,7 +26,7 @@ export default function SpitiOverview() {
             <div className="relative overflow-hidden rounded-3xl border border-white/10">
               <img
                 src={SPITI_IMAGES.landscapePrimary}
-                alt="A high Himalayan village in Spiti beneath a star-filled sky"
+                alt="Ki (Key) Monastery — the thousand-year-old cliffside gompa of the Spiti Valley — at golden hour"
                 className="aspect-[4/5] w-full object-cover sm:aspect-[5/4]"
                 loading="lazy"
               />
