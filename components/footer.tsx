@@ -22,6 +22,11 @@ export default function Footer() {
             <h4 className="font-semibold text-foreground text-sm mb-3">Products</h4>
             <ul className="space-y-1.5">
               <li>
+                <a href="/astroventure-astrophotography" className="text-xs font-semibold text-foreground hover:text-accent transition">
+                  Astrophotography Expedition
+                </a>
+              </li>
+              <li>
                 <a href="/astroventure-nights" className="text-xs font-semibold text-foreground hover:text-accent transition">
                   Astroventure Nights
                 </a>

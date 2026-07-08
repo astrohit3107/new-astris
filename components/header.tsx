@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Menu, X, Sparkles, ChevronDown, ArrowUpRight } from 'lucide-react'
+import { Menu, X, Sparkles, ChevronDown, ArrowUpRight, Camera } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SPITI } from '@/lib/spiti-data'
+import { ASTRO } from '@/lib/astrophotography-data'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -49,6 +50,23 @@ export default function Header() {
                     </span>
                   </a>
                   <a
+                    href={ASTRO.path}
+                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
+                  >
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--av-gold)]/15 ring-1 ring-[var(--av-gold)]/25">
+                      <Camera size={13} className="text-[var(--av-gold)]" />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                        Astrophotography
+                        <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">
+                          New
+                        </span>
+                      </span>
+                      <span className="mt-0.5 text-[11px] text-foreground/55">6-day Ladakh photography masterclass</span>
+                    </span>
+                  </a>
+                  <a
                     href="/astroventure-nights"
                     className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
                   >
@@ -57,15 +75,6 @@ export default function Header() {
                     </span>
                     <span className="text-xs font-medium text-foreground/80">Astroventure Nights</span>
                   </a>
-                  <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 opacity-60">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-foreground/5 ring-1 ring-foreground/10">
-                      <ChevronDown size={13} className="text-foreground/40" />
-                    </span>
-                    <span className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground/70">Future Expeditions</span>
-                      <span className="text-[10px] uppercase tracking-wide text-foreground/40">Coming Soon</span>
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -115,14 +124,17 @@ export default function Header() {
                   </span>
                   <ArrowUpRight size={13} className="text-foreground/50" />
                 </a>
+                <a href={ASTRO.path} className="flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-bold text-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    Astrophotography
+                    <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">New</span>
+                  </span>
+                  <ArrowUpRight size={13} className="text-foreground/50" />
+                </a>
                 <a href="/astroventure-nights" className="flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-medium text-foreground/80">
                   Astroventure Nights
                   <ArrowUpRight size={13} className="text-foreground/40" />
                 </a>
-                <span className="flex items-center justify-between gap-2 px-1 py-2 text-xs font-medium text-foreground/45">
-                  Future Expeditions
-                  <span className="text-[9px] uppercase tracking-wide">Coming Soon</span>
-                </span>
               </div>
               <a href="#astrotrain" data-link="astrotrain" className="text-xs text-foreground/60 hover:text-foreground transition-colors px-2 py-2 duration-300">
                 AstroTrain
