@@ -23,7 +23,7 @@ export default function AstroIntro() {
             <div className="relative overflow-hidden rounded-3xl border border-white/10">
               <img
                 src={ASTRO_IMAGES.introMilkyWay}
-                alt="The Milky Way arching over the high Himalaya — the canvas for the expedition"
+                alt="Orion’s nebulae — the Horsehead, Flame and Great Orion Nebula — the kind of deep-sky image you’ll learn to create"
                 className="aspect-[4/5] w-full object-cover sm:aspect-[5/4]"
                 loading="lazy"
               />

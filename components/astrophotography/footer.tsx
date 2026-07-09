@@ -1,5 +1,11 @@
 import { Mail, Phone, ArrowUpRight } from 'lucide-react'
-import { ASTRO, ASTRO_CONTACT, ASTRO_IMAGES } from '@/lib/astrophotography-data'
+import {
+  ASTRO,
+  ASTRO_CONTACT,
+  ASTRO_IMAGES,
+  ASTRO_TRAINER,
+  ASTRO_PHOTO_CREDITS,
+} from '@/lib/astrophotography-data'
 
 export default function AstroFooter() {
   return (
@@ -76,6 +82,32 @@ export default function AstroFooter() {
           <p>© {new Date().getFullYear()} {ASTRO_CONTACT.brand}. All rights reserved.</p>
           <p>{ASTRO.name}</p>
         </div>
+
+        {/* Photography credits */}
+        <details className="mt-6 text-[11px] text-white/35">
+          <summary className="cursor-pointer list-none text-white/40 transition-colors hover:text-white/60">
+            Photography credits
+          </summary>
+          <p className="mt-3 leading-relaxed">
+            Flagship Milky Way, nebula and star-trail photography © {ASTRO_TRAINER.name}. Galaxy and
+            student-gallery reference images are sourced from Wikimedia Commons under public-domain
+            and Creative Commons licenses —{' '}
+            {ASTRO_PHOTO_CREDITS.map((c, i) => (
+              <span key={c.source}>
+                <a
+                  href={c.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-2 transition-colors hover:text-white/70 hover:underline"
+                >
+                  {c.subject}
+                </a>{' '}
+                by {c.author} ({c.license})
+                {i < ASTRO_PHOTO_CREDITS.length - 1 ? '; ' : '.'}
+              </span>
+            ))}
+          </p>
+        </details>
       </div>
     </footer>
   )

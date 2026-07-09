@@ -12,10 +12,10 @@ export default function AstroHero() {
           <source srcSet={ASTRO_IMAGES.heroMobile} media="(max-width: 1024px)" />
           <img
             src={ASTRO_IMAGES.hero}
-            alt="A photographer capturing the Milky Way beside a high-altitude Himalayan lake at night"
+            alt="A photographer beneath the Milky Way core in the high Himalaya"
             fetchPriority="high"
-            width={2200}
-            height={1467}
+            width={2400}
+            height={1600}
             className="animate-drift h-full w-full object-cover object-center"
           />
         </picture>

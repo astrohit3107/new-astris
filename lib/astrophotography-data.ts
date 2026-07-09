@@ -84,17 +84,26 @@ export const ASTRO_BRAND_LOGO = '/logo.svg'
  * ------------------------------------------------------------------------- */
 const A = '/astroventure-assets'
 
+/**
+ * Real, licensed photography by trainer Jhankrit Ahuja, plus a small set of
+ * public-domain / CC deep-sky reference images, self-hosted under
+ * `/public/astroventure-assets/astrophotography-real`. Attribution for the
+ * sourced (non-Jhankrit) images is in `ASTRO_PHOTO_CREDITS` below and rendered
+ * in the footer. Swap any file here for your own — no code change needed.
+ */
+const RA = '/astroventure-assets/astrophotography-real'
+
 export const ASTRO_IMAGES = {
-  // Hero — placeholder: a photographer capturing the Milky Way beside Pangong Lake
-  hero: `${A}/hero/hero-himalayan-milkyway.webp`,
-  heroMobile: `${A}/hero/hero-himalayan-milkyway-mobile.webp`,
-  // Introduction / editorial
-  introMilkyWay: `${A}/milky-way/milkyway-panoramic-arch.webp`,
-  // Trainer portrait — neutral placeholder to be replaced with a portrait of Jhankrit Ahuja
-  trainer: '/placeholder-user.jpg',
+  // Hero — the Milky Way core over the high Himalaya, by Jhankrit Ahuja
+  hero: `${RA}/milkyway-silhouette.jpg`,
+  heroMobile: `${RA}/milkyway-silhouette-mobile.jpg`,
+  // Introduction / editorial — Orion's nebulae wide field, by Jhankrit Ahuja
+  introMilkyWay: `${RA}/orion-widefield.jpg`,
+  // Trainer portrait — Jhankrit Ahuja
+  trainer: `${RA}/trainer-jhankrit.jpg`,
   // Field / experience imagery
   astrophotographySetup: `${A}/activities/astrophotography-setup.webp`,
-  starTrails: `${A}/activities/star-trails-mountains.webp`,
+  starTrails: `${RA}/star-trails.jpg`,
   telescope: `${A}/telescopes/telescope-apochromatic.webp`,
   stargazingGroup: `${A}/stargazing/stargazing-group-01.webp`,
   laser: `${A}/stargazing/stargazing-pointing-laser.webp`,
@@ -609,40 +618,67 @@ export interface AstroGalleryImage {
   alt: string
   category: string
   span?: 'tall' | 'wide' | 'normal'
+  /** Credit line shown in the lightbox (e.g. the trainer, or a CC/PD source). */
+  credit?: string
 }
 
-const PLACEHOLDER = '/placeholder.svg'
-
+/**
+ * Trainer portfolio — flagship photography by Jhankrit Ahuja. The Galaxies
+ * entries are public-domain / CC reference images (credited) until the
+ * trainer's own galaxy work is added. Every tile is click-to-enlarge.
+ */
 export const astroPortfolio: AstroGalleryImage[] = [
-  { src: PLACEHOLDER, alt: 'Milky Way over the mountains (placeholder)', category: 'Milky Way', span: 'wide' },
-  { src: PLACEHOLDER, alt: 'Deep sky object (placeholder)', category: 'Deep Sky', span: 'tall' },
-  { src: PLACEHOLDER, alt: 'Nebula (placeholder)', category: 'Nebulae', span: 'normal' },
-  { src: PLACEHOLDER, alt: 'Galaxy (placeholder)', category: 'Galaxies', span: 'normal' },
-  { src: PLACEHOLDER, alt: 'Star trails (placeholder)', category: 'Star Trails', span: 'wide' },
-  { src: PLACEHOLDER, alt: 'Night landscape (placeholder)', category: 'Landscapes', span: 'tall' },
-  { src: PLACEHOLDER, alt: 'Timelapse frame (placeholder)', category: 'Timelapse Frames', span: 'normal' },
-  { src: PLACEHOLDER, alt: 'Night portrait (placeholder)', category: 'Night Portraits', span: 'normal' },
+  { src: `${RA}/milkyway-silhouette.jpg`, alt: 'A lone photographer beneath the Milky Way core in the high Himalaya', category: 'Milky Way', span: 'wide', credit: '© Jhankrit Ahuja' },
+  { src: `${RA}/orion-nebula-m42.jpg`, alt: 'The Orion Nebula (Messier 42) rendered in narrowband', category: 'Nebulae', span: 'tall', credit: '© Jhankrit Ahuja' },
+  { src: `${RA}/orion-widefield.jpg`, alt: 'Orion’s Belt wide field — the Horsehead, Flame and Great Orion nebulae', category: 'Deep Sky', span: 'wide', credit: '© Jhankrit Ahuja' },
+  { src: `${RA}/north-america-nebula.jpg`, alt: 'The North America Nebula (NGC 7000) in the SHO palette', category: 'Nebulae', span: 'normal', credit: '© Jhankrit Ahuja' },
+  { src: `${RA}/star-trails.jpg`, alt: 'Circular star trails wheeling around the celestial pole over Ladakh', category: 'Star Trails', span: 'tall', credit: '© Jhankrit Ahuja' },
+  { src: `${RA}/galaxy-andromeda.jpg`, alt: 'The Andromeda Galaxy (Messier 31)', category: 'Galaxies', span: 'wide', credit: 'Adam Evans · CC BY 2.0' },
+  { src: `${RA}/galaxy-sombrero.jpg`, alt: 'The Sombrero Galaxy (Messier 104)', category: 'Galaxies', span: 'normal', credit: 'NASA/ESA/Hubble · Public domain' },
 ]
 
 export const astroPortfolioCategories = [
   'All',
   'Milky Way',
-  'Deep Sky',
   'Nebulae',
+  'Deep Sky',
   'Galaxies',
   'Star Trails',
-  'Landscapes',
-  'Timelapse Frames',
-  'Night Portraits',
 ] as const
 
-/** Student gallery — placeholders for photographs from future expeditions. */
-export const astroStudentGallery: AstroGalleryImage[] = Array.from({ length: 8 }, (_, i) => ({
-  src: PLACEHOLDER,
-  alt: `Student photograph ${i + 1} (placeholder)`,
-  category: 'Student Work',
-  span: (i % 5 === 0 ? 'wide' : i % 3 === 0 ? 'tall' : 'normal') as AstroGalleryImage['span'],
-}))
+/**
+ * Student gallery — illustrative, copyright-free deep-sky & nightscape imagery
+ * (public domain / Creative Commons, credited) as placeholders until real
+ * photographs from future expeditions are added.
+ */
+export const astroStudentGallery: AstroGalleryImage[] = [
+  { src: `${RA}/student-01-milky.jpg`, alt: 'The Milky Way and a Perseid meteor over a dark bog', category: 'Student Work', span: 'wide', credit: 'Martin Mark · CC BY-SA 4.0' },
+  { src: `${RA}/student-02-pleiades.jpg`, alt: 'The Pleiades star cluster (Messier 45)', category: 'Student Work', span: 'normal', credit: 'NASA/ESA/AURA/Caltech · Public domain' },
+  { src: `${RA}/student-03-lagoon.jpg`, alt: 'The Lagoon Nebula (Messier 8)', category: 'Student Work', span: 'tall', credit: 'ESO/VVV · CC BY 4.0' },
+  { src: `${RA}/student-04-rho.jpg`, alt: 'The Rho Ophiuchi cloud complex', category: 'Student Work', span: 'normal', credit: 'NASA/JPL-Caltech/WISE · Public domain' },
+  { src: `${RA}/student-05-nightscape.jpg`, alt: 'A starry night sky over the high Himalaya', category: 'Student Work', span: 'wide', credit: 'Matt Wier · CC BY-SA 3.0' },
+  { src: `${RA}/student-06-eagle.jpg`, alt: 'The Eagle Nebula (Messier 16)', category: 'Student Work', span: 'normal', credit: 'NASA/ESA/Hubble · Public domain' },
+]
+
+/* ---------------------------------------------------------------------------
+ * 17b. PHOTOGRAPHY CREDITS  (sourced reference imagery — required attribution)
+ * ------------------------------------------------------------------------- *
+ *  Flagship Milky Way, nebula and star-trail photographs are © Jhankrit Ahuja.
+ *  The galaxy and student-gallery reference images below are public-domain / CC
+ *  from Wikimedia Commons and are credited here (rendered in the footer).
+ * ------------------------------------------------------------------------- */
+export const ASTRO_PHOTO_CREDITS: {
+  subject: string; author: string; license: string; source: string
+}[] = [
+  { subject: 'Andromeda Galaxy (M31)', author: 'Adam Evans', license: 'CC BY 2.0', source: 'https://commons.wikimedia.org/wiki/File:Andromeda_Galaxy_(with_h-alpha).jpg' },
+  { subject: 'Sombrero Galaxy (M104)', author: 'NASA/ESA/Hubble Heritage', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:M104_ngc4594_sombrero_galaxy_hi-res.jpg' },
+  { subject: 'Milky Way over Luhasoo bog', author: 'Martin Mark', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:In_the_photo_there_is_one_Perseid,_Milky_Way_and_Andromega_galaxy_and_light_pollution_on_the_horizon_-_Luhasoo_bog_in_Estonia.jpg' },
+  { subject: 'Pleiades (M45)', author: 'NASA/ESA/AURA/Caltech', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Pleiades_large.jpg' },
+  { subject: 'Lagoon Nebula (M8)', author: 'ESO/VVV', license: 'CC BY 4.0', source: 'https://commons.wikimedia.org/wiki/File:VISTA%27s_infrared_view_of_the_Lagoon_Nebula_(Messier_8).jpg' },
+  { subject: 'Rho Ophiuchi cloud complex', author: 'NASA/JPL-Caltech/WISE', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Rho_Ophiuchi.jpg' },
+  { subject: 'Starry night at Mount Everest', author: 'Matt Wier', license: 'CC BY-SA 3.0', source: 'https://commons.wikimedia.org/wiki/File:Starry_night_at_Mount_Everest.jpg' },
+  { subject: 'Eagle Nebula (M16)', author: 'NASA/ESA/Hubble Heritage', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Fairy_of_Eagle_Nebula.jpg' },
+]
 
 /* ---------------------------------------------------------------------------
  * 18. FAQ

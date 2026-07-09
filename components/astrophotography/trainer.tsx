@@ -17,7 +17,7 @@ export default function AstroTrainer() {
               <div className="relative overflow-hidden rounded-3xl border border-white/12">
                 <img
                   src={t.portrait}
-                  alt={`Portrait of ${t.name} (placeholder)`}
+                  alt={`Portrait of ${t.name}, professional astrophotographer`}
                   className="aspect-[4/5] w-full object-cover"
                   loading="lazy"
                 />
