@@ -15,11 +15,11 @@ export const MISSION = {
      COUNTDOWN_TARGET is the moment the observation window opens.
      Full ISO-8601 WITH an explicit timezone offset (+05:30 = IST) so the
      countdown is identical for every visitor.                              */
-  COUNTDOWN_TARGET: "2026-09-20T20:00:00+05:30",
-  MISSION_DATE: "20 SEP 2026",
+  COUNTDOWN_TARGET: "2026-09-15T20:00:00+05:30",
+  MISSION_DATE: "15 SEP 2026",
 
   /* --- Extraction point (REQUEST CLEARANCE button, opens in a new tab) --- */
-  GOOGLE_FORM_URL: "https://forms.gle/REPLACE_WITH_REAL_FORM",
+  GOOGLE_FORM_URL: "https://forms.gle/RDgR3CWcCzTwDwnj8",
 
   /* --- Environment parameters (Mission Dossier) ------------------------- */
   COORDINATES: "32.2396° N, 78.0349° E",
