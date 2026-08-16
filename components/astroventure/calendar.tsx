@@ -1,8 +1,14 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight, CalendarDays, MapPin, ArrowRight } from 'lucide-react'
-import { upcomingEvents, getDestination, type SlotEvent } from '@/lib/astroventure-data'
+import { ChevronLeft, ChevronRight, CalendarDays, MapPin, ArrowRight, Users, BedDouble, Wallet } from 'lucide-react'
+import {
+  upcomingEvents,
+  eventsForDestination,
+  getDestination,
+  type SlotEvent,
+  type DestinationSlug,
+} from '@/lib/astroventure-data'
 import SectionHeading from './section-heading'
 import ScrollReveal from './scroll-reveal'
 import { cn } from '@/lib/utils'
@@ -13,7 +19,16 @@ function ymd(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-export default function EventCalendar() {
+interface Props {
+  /** When set, the calendar shows only this destination's departures and its
+   *  detail panel surfaces per-city pricing, accommodation and capacity. */
+  slug?: DestinationSlug
+}
+
+export default function EventCalendar({ slug }: Props) {
+  // Scope to one destination on its detail page, else show every departure.
+  const sourceEvents = slug ? eventsForDestination(slug) : upcomingEvents
+
   // Map of ISO date -> events on that date
   const eventsByDate = useMemo(() => {
     const map = new Map<string, SlotEvent[]>()
@@ -22,7 +37,7 @@ export default function EventCalendar() {
       arr.push(ev)
       map.set(key, arr)
     }
-    for (const ev of upcomingEvents) {
+    for (const ev of sourceEvents) {
       if (ev.flexible && ev.endDate) {
         // flexible window — every day in the range is a bookable slot.
         // Parse parts locally so keys match the calendar cells' ymd().
@@ -40,11 +55,11 @@ export default function EventCalendar() {
   }, [])
 
   // Start on the month of the first upcoming event
-  const firstEventDate = upcomingEvents[0] ? new Date(upcomingEvents[0].date) : new Date()
+  const firstEventDate = sourceEvents[0] ? new Date(sourceEvents[0].date) : new Date()
   const [cursor, setCursor] = useState(
     new Date(firstEventDate.getFullYear(), firstEventDate.getMonth(), 1),
   )
-  const [selected, setSelected] = useState<string | null>(upcomingEvents[0]?.date ?? null)
+  const [selected, setSelected] = useState<string | null>(sourceEvents[0]?.date ?? null)
 
   const year = cursor.getFullYear()
   const month = cursor.getMonth()
@@ -64,9 +79,13 @@ export default function EventCalendar() {
     <section className="relative overflow-hidden bg-[var(--av-deep)] py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Plan ahead"
-          title="Event Calendar"
-          subtitle="Browse upcoming Astroventure Nights at a glance. Highlighted dates mark a departure — tap one to see availability."
+          eyebrow={slug ? 'Upcoming departures' : 'Plan ahead'}
+          title={slug ? 'Pick Your Weekend' : 'Event Calendar'}
+          subtitle={
+            slug
+              ? 'Choose a weekend below. Highlighted dates are available departures — select one to see pricing, accommodation and how to reserve.'
+              : 'Browse upcoming Astroventure Nights at a glance. Highlighted dates mark a departure — tap one to see availability.'
+          }
         />
 
         <ScrollReveal className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-5">
@@ -169,11 +188,44 @@ export default function EventCalendar() {
                         <h4 className="font-semibold text-white">{ev.batchName}</h4>
                         <p className="mt-1 flex items-center gap-1.5 text-xs text-white/55">
                           <MapPin size={12} className="text-[var(--av-gold)]" />
-                          {dest?.name} · {dest?.valley}
+                          {dest?.name}
+                          {dest?.pricing ? ` · ${dest.region ?? dest.valley}` : ` · ${dest?.valley}`}
                         </p>
                         <p className="mt-1 flex items-center gap-1.5 text-xs text-white/55">
                           <CalendarDays size={12} /> {ev.dateLabel}
                         </p>
+
+                        {/* Per-city pricing + accommodation + capacity (weekend escapes) */}
+                        {dest?.pricing && dest.pricing.length > 0 && (
+                          <div className="mt-3 space-y-1.5 border-t border-white/10 pt-3">
+                            {dest.pricing.map((p) => (
+                              <div
+                                key={p.fromCity}
+                                className="flex items-center justify-between text-xs text-white/70"
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <Wallet size={12} className="text-[var(--av-gold)]" />
+                                  From {p.fromCity}
+                                </span>
+                                <span className="font-semibold text-white">
+                                  {p.amountLabel}
+                                  <span className="font-normal text-white/45"> / person</span>
+                                </span>
+                              </div>
+                            ))}
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] text-white/45">
+                              <span className="flex items-center gap-1">
+                                <BedDouble size={11} /> {dest.pricing[0].accommodation}
+                              </span>
+                              {dest.capacity && (
+                                <span className="flex items-center gap-1">
+                                  <Users size={11} /> Group of up to {dest.capacity}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
                         <div className="mt-3 flex items-center justify-end">
                           {ev.status === 'soldout' ? (
                             <span className="text-xs font-medium text-white/40">Sold out</span>
@@ -182,7 +234,7 @@ export default function EventCalendar() {
                               href="#register"
                               className="inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black transition-colors hover:bg-[var(--av-gold)]"
                             >
-                              Book your slot <ArrowRight size={13} />
+                              Reserve Your Spot <ArrowRight size={13} />
                             </a>
                           )}
                         </div>

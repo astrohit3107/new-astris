@@ -10,8 +10,7 @@ import RegistrationForm from '@/components/astroventure/registration-form'
 import Testimonials from '@/components/astroventure/testimonials'
 import Faq from '@/components/astroventure/faq'
 import FinalCta from '@/components/astroventure/final-cta'
-import PromoPopup from '@/components/astroventure/promo-popup'
-import { SITE, destinations, upcomingEvents, faqs } from '@/lib/astroventure-data'
+import { SITE, activeDestinations, destinations, upcomingEvents, faqs } from '@/lib/astroventure-data'
 
 const SITE_URL = 'https://astrisspace.com'
 
@@ -31,7 +30,7 @@ function StructuredData() {
           telephone: SITE.phone,
         },
         touristType: 'Astronomy & adventure travellers',
-        itinerary: destinations.map((d) => ({
+        itinerary: activeDestinations.map((d) => ({
           '@type': 'Place',
           name: `${d.name}, ${d.valley}`,
         })),
@@ -85,7 +84,6 @@ export default function AstroventureNightsPage() {
   return (
     <>
       <StructuredData />
-      <PromoPopup />
       <AstroHero />
       <DestinationShowcase />
       <Experiences />

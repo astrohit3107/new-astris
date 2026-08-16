@@ -1,6 +1,7 @@
 'use client'
 
-import { ArrowRight, ArrowLeft, MapPin, Mountain, Star, Eye } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { ArrowRight, ArrowLeft, MapPin, Mountain, Star, Eye, Clock, Route } from 'lucide-react'
 import type { Destination } from '@/lib/astroventure-data'
 import Starfield from './starfield'
 
@@ -26,7 +27,7 @@ export default function DestinationHero({ destination: d }: { destination: Desti
           <source srcSet={d.imageMobile} media="(max-width: 1024px)" />
           <img
             src={d.heroImage}
-            alt={`${d.name}, ${d.valley}`}
+            alt={`${d.name} — ${d.locationLabel}`}
             fetchPriority="high"
             className="animate-kenburns h-full w-full object-cover object-center"
           />
@@ -67,12 +68,21 @@ export default function DestinationHero({ destination: d }: { destination: Desti
           className="animate-fade-in-up mt-9 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4"
           style={{ animationDelay: '0.26s' }}
         >
-          {[
-            { icon: Mountain, label: 'Altitude', value: d.altitude },
-            { icon: MapPin, label: 'Valley', value: d.valley },
-            { icon: Star, label: 'Dark Sky', value: d.bortle },
-            { icon: Eye, label: 'Rating', value: <DarkSkyRating rating={d.darkSkyRating} /> },
-          ].map(({ icon: Icon, label, value }, i) => (
+          {(d.heroStats
+            ? // Data-driven tiles (Rajasthan weekend escapes) — no "Valley" card.
+              d.heroStats.map((s, i) => ({
+                icon: [MapPin, Clock, Route, Star][i % 4],
+                label: s.label,
+                value: s.value as ReactNode,
+              }))
+            : // Default expedition tiles (Himalayan valleys keep geography).
+              [
+                { icon: Mountain, label: 'Altitude', value: d.altitude as ReactNode },
+                { icon: MapPin, label: 'Valley', value: d.valley },
+                { icon: Star, label: 'Dark Sky', value: d.bortle },
+                { icon: Eye, label: 'Rating', value: <DarkSkyRating rating={d.darkSkyRating} /> },
+              ]
+          ).map(({ icon: Icon, label, value }, i) => (
             <div key={i} className="glass rounded-2xl p-4">
               <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-white/50">
                 <Icon size={12} className="text-[var(--av-gold)]" />

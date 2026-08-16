@@ -5,10 +5,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Check, ShieldCheck, Send, AlertCircle } from 'lucide-react'
-import { destinations, upcomingEvents, IMAGES, type DestinationSlug } from '@/lib/astroventure-data'
+import {
+  activeDestinations as destinations,
+  upcomingEvents,
+  eventsForDestination,
+  getDestination,
+  IMAGES,
+  type DestinationSlug,
+} from '@/lib/astroventure-data'
 import SectionHeading from './section-heading'
 import ScrollReveal from './scroll-reveal'
 import { cn } from '@/lib/utils'
+
+// Official Astris contact line — the same number used across the site
+// (footer, Spiti, astrophotography). Do NOT use unrelated fallback numbers.
+const PHONE_DISPLAY = '+91 75818 21834'
+const PHONE_TEL = '+917581821834'
 
 const schema = z.object({
   fullName: z.string().trim().min(2, 'Please enter your full name'),
@@ -22,6 +34,7 @@ const schema = z.object({
   city: z.string().trim().min(2, 'Enter your city'),
   participants: z.coerce.number().int().min(1, 'At least 1').max(20, 'Max 20 — contact us for groups'),
   destination: z.string().min(1, 'Select a destination'),
+  departureCity: z.string().optional().or(z.literal('')),
   preferredDate: z.string().min(1, 'Select a preferred date'),
   notes: z.string().max(1000).optional().or(z.literal('')),
   consent: z.literal(true, { errorMap: () => ({ message: 'Please accept to continue' }) }),
@@ -37,11 +50,28 @@ const errCls = 'mt-1 flex items-center gap-1 text-xs text-red-300'
 
 interface Props {
   defaultDestination?: DestinationSlug
+  /** Human-readable experience name emailed with the enquiry (e.g. for the
+   *  Rajasthan weekends). Falls back to the selected destination name. */
+  experienceName?: string
+  /** When provided, shows a departure-city selector and emails the choice. */
+  departureCities?: string[]
 }
 
-export default function RegistrationForm({ defaultDestination }: Props) {
+export default function RegistrationForm({
+  defaultDestination,
+  experienceName,
+  departureCities,
+}: Props) {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  // Captured at mount — the API rejects forms filled in suspiciously fast.
+  const [renderedAt] = useState(() => Date.now())
+
+  // Scope the date options to the current destination when we're on a
+  // destination page; otherwise offer every active upcoming departure.
+  const dateOptions = defaultDestination
+    ? eventsForDestination(defaultDestination)
+    : upcomingEvents
 
   const {
     register,
@@ -53,15 +83,10 @@ export default function RegistrationForm({ defaultDestination }: Props) {
     defaultValues: {
       participants: 1,
       destination: defaultDestination ?? '',
+      departureCity: departureCities?.[0] ?? '',
       preferredDate: '',
     },
   })
-
-  // Booking enquiries are emailed via FormSubmit straight from the browser
-  // (their server endpoint blocks datacenter IPs, so client-side is required).
-  // Delivered to astriseducation@gmail.com with eeshumtravels@gmail.com CC'd.
-  const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/astriseducation@gmail.com'
-  const NOTIFY_CC = 'eeshumtravels@gmail.com'
 
   const onSubmit = async (data: FormValues) => {
     setStatus('submitting')
@@ -75,39 +100,48 @@ export default function RegistrationForm({ defaultDestination }: Props) {
     }
 
     const destLabel =
-      destinations.find((d) => d.slug === data.destination)?.name ??
+      getDestination(data.destination)?.name ??
       (data.destination === 'any' ? 'Any / Not sure yet' : data.destination)
+    const experience = experienceName ?? destLabel
 
     try {
-      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+      // Submit through the app's own server API (validation, spam screening,
+      // rate limiting) which emails the enquiry to the Astris team.
+      const res = await fetch('/api/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          _subject: `New Astroventure Nights enquiry — ${data.fullName}`,
-          _template: 'table',
-          _captcha: 'false',
-          _cc: NOTIFY_CC,
-          _replyto: data.email,
-          _honey: data.company || '',
-          'Full Name': data.fullName,
-          Phone: data.phone,
-          Email: data.email,
-          Age: String(data.age),
-          City: data.city,
-          Participants: String(data.participants),
-          'Preferred Destination': destLabel,
-          'Preferred Date': data.preferredDate,
-          Notes: data.notes || '—',
+          fullName: data.fullName,
+          phone: data.phone,
+          email: data.email,
+          age: data.age,
+          city: data.city,
+          participants: data.participants,
+          destination: destLabel,
+          departureCity: data.departureCity || undefined,
+          experience,
+          preferredDate: data.preferredDate,
+          notes: data.notes || '',
+          consent: data.consent,
+          company: data.company || '',
+          renderedAt,
         }),
       })
-      const json = await res.json().catch(() => ({} as { success?: string | boolean }))
-      const ok = res.ok && (json.success === 'true' || json.success === true)
-      if (!ok) throw new Error('Submission failed. Please try again or contact us directly.')
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+      if (!res.ok || !json.ok) {
+        throw new Error(
+          json.error || 'We couldn’t submit your request right now. Please try again or contact us directly.',
+        )
+      }
       setStatus('success')
       reset()
     } catch (e) {
       setStatus('error')
-      setErrorMsg(e instanceof Error ? e.message : 'Something went wrong. Please try again.')
+      setErrorMsg(
+        e instanceof Error
+          ? e.message
+          : 'We couldn’t submit your request right now. Please try again or contact us directly.',
+      )
     }
   }
 
@@ -138,10 +172,10 @@ export default function RegistrationForm({ defaultDestination }: Props) {
         <p className="mt-4 text-center text-sm text-white/60">
           Prefer to talk? Call or WhatsApp{' '}
           <a
-            href="tel:+918628076477"
+            href={`tel:${PHONE_TEL}`}
             className="font-semibold text-[var(--av-gold)] underline-offset-2 hover:underline"
           >
-            +91 86280 76477
+            {PHONE_DISPLAY}
           </a>
         </p>
 
@@ -153,19 +187,19 @@ export default function RegistrationForm({ defaultDestination }: Props) {
                   <Check size={32} />
                 </span>
                 <h3 className="font-display mt-5 text-2xl font-semibold text-white">
-                  Reservation received!
+                  Reservation request received
                 </h3>
                 <p className="mt-2 max-w-md text-sm font-light text-white/65">
-                  Thank you for reaching out. Our team will contact you within 24 hours to confirm
-                  your Astroventure Nights experience. Keep an eye on your inbox and phone.
+                  Thank you. Your details have been received by the Astris team. We’ll get in touch
+                  shortly to confirm availability and the next steps for your booking.
                 </p>
                 <p className="mt-3 text-sm text-white/70">
                   Need anything sooner? Call or WhatsApp{' '}
                   <a
-                    href="tel:+918628076477"
+                    href={`tel:${PHONE_TEL}`}
                     className="font-semibold text-[var(--av-gold)] underline-offset-2 hover:underline"
                   >
-                    +91 86280 76477
+                    {PHONE_DISPLAY}
                   </a>
                 </p>
                 <button
@@ -229,13 +263,26 @@ export default function RegistrationForm({ defaultDestination }: Props) {
                     </select>
                     {errors.destination && <p className={errCls}><AlertCircle size={12} />{errors.destination.message}</p>}
                   </div>
+
+                  {departureCities && departureCities.length > 0 && (
+                    <div>
+                      <label className={labelCls} htmlFor="departureCity">Departure City</label>
+                      <select id="departureCity" className={cn(inputCls, 'appearance-none')} {...register('departureCity')}>
+                        {departureCities.map((c) => (
+                          <option key={c} value={c} className="bg-[var(--av-deep)]">
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 <div>
                   <label className={labelCls} htmlFor="preferredDate">Preferred Date</label>
                   <select id="preferredDate" className={cn(inputCls, 'appearance-none')} {...register('preferredDate')}>
                     <option value="" className="bg-[var(--av-deep)]">Select a batch / date</option>
-                    {upcomingEvents
+                    {dateOptions
                       .filter((e) => e.status !== 'soldout')
                       .map((e) => (
                         <option key={e.id} value={e.dateLabel} className="bg-[var(--av-deep)]">

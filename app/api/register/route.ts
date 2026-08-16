@@ -39,7 +39,11 @@ const schema = z.object({
   age: z.coerce.number().int().min(5).max(120),
   city: z.string().trim().min(2).max(80),
   participants: z.coerce.number().int().min(1).max(20),
-  destination: z.string().trim().min(1).max(60),
+  destination: z.string().trim().min(1).max(80),
+  /** Human-readable experience name (e.g. "Astroventure Sambhar Lake"). */
+  experience: z.string().trim().max(120).optional().or(z.literal('')),
+  /** Chosen departure city, when the experience offers a choice. */
+  departureCity: z.string().trim().max(60).optional().or(z.literal('')),
   preferredDate: z.string().trim().min(1).max(80),
   notes: z.string().trim().max(1000).optional().or(z.literal('')),
   consent: z.literal(true),
@@ -76,18 +80,22 @@ async function sendEmail(
 ): Promise<{ sent: boolean; reason?: string }> {
   let lastError = 'email-not-configured'
   const rows: [string, string][] = [
+    ['Experience', data.experience || data.destination],
+    ['Preferred Destination', data.destination],
+    ['Departure City', data.departureCity || '—'],
+    ['Preferred Date', data.preferredDate],
+    ['Participants', String(data.participants)],
     ['Full Name', data.fullName],
     ['Phone', data.phone],
     ['Email', data.email],
     ['Age', String(data.age)],
     ['City', data.city],
-    ['Participants', String(data.participants)],
-    ['Preferred Destination', data.destination],
-    ['Preferred Date', data.preferredDate],
     ['Notes', data.notes || '—'],
+    ['Submitted', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST'],
   ]
 
-  const subject = `New Astroventure Nights enquiry — ${data.fullName}`
+  const experienceLabel = data.experience || data.destination
+  const subject = `New Astroventure Booking — ${experienceLabel} — ${data.preferredDate}`
   const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n')
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;color:#0b0b14">

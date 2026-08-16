@@ -1,13 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { Menu, X, Sparkles, ChevronDown, ArrowUpRight, Camera } from 'lucide-react'
+import { Menu, X, Sparkles, ChevronDown, ArrowUpRight, Camera, Moon, Telescope, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { SPITI } from '@/lib/spiti-data'
-import { ASTRO } from '@/lib/astrophotography-data'
+import { experiencesInOrder } from '@/lib/astroventure-experiences'
+
+// Icon lookup for the registry-driven Astroventure menu.
+const NAV_ICONS = { Sparkles, Camera, Moon, Telescope, MapPin } as const
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // Single source of truth: every active Astroventure experience.
+  const experiences = experiencesInOrder
 
   return (
     <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -19,10 +23,10 @@ export default function Header() {
           </div>
 
           <nav className="hidden md:flex items-center space-x-6">
-            {/* Astroventure dropdown */}
+            {/* Astroventure dropdown — driven by the active-experience registry */}
             <div className="group relative">
               <a
-                href={SPITI.path}
+                href="/astroventure-nights"
                 className="inline-flex items-center gap-1 text-xs font-bold text-foreground hover:text-foreground/80 transition-colors duration-300"
               >
                 <Sparkles size={12} className="text-[var(--av-gold)]" />
@@ -30,42 +34,33 @@ export default function Header() {
                 <ChevronDown size={12} className="text-foreground/50 transition-transform duration-300 group-hover:rotate-180" />
               </a>
               {/* Hover menu */}
-              <div className="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                 <div className="overflow-hidden rounded-xl border border-foreground/10 bg-background/95 p-1.5 shadow-2xl backdrop-blur-xl">
-                  <a
-                    href={SPITI.path}
-                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
-                  >
-                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--av-gold)]/15 ring-1 ring-[var(--av-gold)]/25">
-                      <Sparkles size={13} className="text-[var(--av-gold)]" />
-                    </span>
-                    <span className="flex flex-col">
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
-                        Spiti ’26
-                        <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">
-                          Flagship
+                  {experiences.map((exp) => {
+                    const Icon = NAV_ICONS[exp.icon] ?? Sparkles
+                    return (
+                      <a
+                        key={exp.id}
+                        href={exp.href}
+                        className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
+                      >
+                        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--av-gold)]/15 ring-1 ring-[var(--av-gold)]/25">
+                          <Icon size={13} className="text-[var(--av-gold)]" />
                         </span>
-                      </span>
-                      <span className="mt-0.5 text-[11px] text-foreground/55">8-day high-altitude expedition</span>
-                    </span>
-                  </a>
-                  <a
-                    href={ASTRO.path}
-                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
-                  >
-                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--av-gold)]/15 ring-1 ring-[var(--av-gold)]/25">
-                      <Camera size={13} className="text-[var(--av-gold)]" />
-                    </span>
-                    <span className="flex flex-col">
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
-                        Astrophotography
-                        <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">
-                          New
+                        <span className="flex flex-col">
+                          <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                            {exp.name}
+                            {exp.badge && (
+                              <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">
+                                {exp.badge}
+                              </span>
+                            )}
+                          </span>
+                          <span className="mt-0.5 text-[11px] text-foreground/55">{exp.blurb}</span>
                         </span>
-                      </span>
-                      <span className="mt-0.5 text-[11px] text-foreground/55">6-day Ladakh photography masterclass</span>
-                    </span>
-                  </a>
+                      </a>
+                    )
+                  })}
                   <a
                     href="/astroventure-nights"
                     className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
@@ -73,7 +68,7 @@ export default function Header() {
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-foreground/5 ring-1 ring-foreground/10">
                       <ArrowUpRight size={13} className="text-foreground/70" />
                     </span>
-                    <span className="text-xs font-medium text-foreground/80">Astroventure Nights</span>
+                    <span className="text-xs font-medium text-foreground/80">All Astroventure Nights</span>
                   </a>
                 </div>
               </div>
@@ -117,22 +112,26 @@ export default function Header() {
                 <span className="flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
                   <Sparkles size={12} className="text-[var(--av-gold)]" /> Astroventure
                 </span>
-                <a href={SPITI.path} className="mt-1.5 flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-bold text-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    Spiti ’26
-                    <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">Flagship</span>
-                  </span>
-                  <ArrowUpRight size={13} className="text-foreground/50" />
-                </a>
-                <a href={ASTRO.path} className="flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-bold text-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    Astrophotography
-                    <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">New</span>
-                  </span>
-                  <ArrowUpRight size={13} className="text-foreground/50" />
-                </a>
-                <a href="/astroventure-nights" className="flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-medium text-foreground/80">
-                  Astroventure Nights
+                {experiences.map((exp, i) => (
+                  <a
+                    key={exp.id}
+                    href={exp.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-bold text-foreground ${i === 0 ? 'mt-1.5' : ''}`}
+                  >
+                    <span className="inline-flex items-center gap-1.5">
+                      {exp.name}
+                      {exp.badge && (
+                        <span className="rounded-full bg-[var(--av-gold)]/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--av-gold)]">
+                          {exp.badge}
+                        </span>
+                      )}
+                    </span>
+                    <ArrowUpRight size={13} className="text-foreground/50" />
+                  </a>
+                ))}
+                <a href="/astroventure-nights" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between gap-2 rounded-md px-1 py-2 text-xs font-medium text-foreground/80">
+                  All Astroventure Nights
                   <ArrowUpRight size={13} className="text-foreground/40" />
                 </a>
               </div>

@@ -73,10 +73,14 @@ export const IMAGES = {
   // Rajasthan weekend escapes — PLACEHOLDERS reusing existing night-sky assets.
   // Swap for real Sambhar Lake / Tijara photography (lake, salt flats, fort,
   // sunrise, telescope line-up) when available.
-  sambhar: `${A}/milky-way/milkyway-panoramic-arch.webp`,
-  sambharMobile: `${A}/milky-way/milkyway-panoramic-arch.webp`,
-  tijara: `${A}/activities/star-trails-mountains.webp`,
-  tijaraMobile: `${A}/activities/star-trails-mountains.webp`,
+  // Rajasthan weekend escapes — real, correctly-attributed Creative Commons
+  // photography self-hosted under /public (see rajasthan/_attribution.json).
+  // Sambhar: sunset over the salt lake (CC BY-SA 3.0, Nawanshu91).
+  // Tijara: the Aravalli range in Alwar, where Tijara sits (CC BY 3.0, Onef9day).
+  sambhar: `${A}/rajasthan/sambhar-lake.jpg`,
+  sambharMobile: `${A}/rajasthan/sambhar-lake.jpg`,
+  tijara: `${A}/rajasthan/tijara.jpg`,
+  tijaraMobile: `${A}/rajasthan/tijara.jpg`,
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -186,6 +190,19 @@ export interface Destination {
   collegeGroups?: boolean
   /** Destination-specific FAQ. Falls back to the shared `faqs` when omitted. */
   faqs?: { question: string; answer: string }[]
+  /**
+   * When true, the destination is archived: hidden from all active promo
+   * surfaces (homepage, nav dropdown, index showcase, upcoming departures,
+   * registration dropdowns) while its detail page stays reachable for
+   * archival / reference. Completed seasons (e.g. Chitkul) use this.
+   */
+  archived?: boolean
+  /**
+   * Optional data-driven hero stat tiles. When provided, these override the
+   * default Altitude / Valley / Dark-Sky / Rating strip — so non-valley
+   * destinations (the Rajasthan weekend escapes) never show a "Valley" card.
+   */
+  heroStats?: { label: string; value: string }[]
 }
 
 /* ---------------------------------------------------------------------------
@@ -283,6 +300,9 @@ export const destinations: Destination[] = [
   {
     slug: 'chitkul',
     name: 'Chitkul',
+    // Completed season — archived: page stays live for reference, but Chitkul
+    // no longer appears in active promo surfaces (home, nav, index, departures).
+    archived: true,
     valley: 'Baspa Valley',
     locationLabel: 'Baspa Valley',
     tagline: 'India’s last village — and its darkest sky.',
@@ -432,6 +452,12 @@ export const destinations: Destination[] = [
     heroImage: IMAGES.sambhar,
     categoryLabel: 'Weekend Astronomy Escape',
     durationLabel: '3 Days · 2 Nights',
+    heroStats: [
+      { label: 'Location', value: 'Sambhar, Rajasthan' },
+      { label: 'Duration', value: '3D · 2N (Fri–Sun)' },
+      { label: 'Departs', value: 'Delhi / Jaipur' },
+      { label: 'Dark Sky', value: 'Bortle 4' },
+    ],
     capacity: 30,
     collegeGroups: true,
     overview:
@@ -551,6 +577,12 @@ export const destinations: Destination[] = [
     heroImage: IMAGES.tijara,
     categoryLabel: 'Weekend Astronomy Escape',
     durationLabel: '3 Days · 2 Nights',
+    heroStats: [
+      { label: 'Location', value: 'Tijara, Alwar · Rajasthan' },
+      { label: 'Duration', value: '3D · 2N (Fri–Sun)' },
+      { label: 'Departs', value: 'Delhi / Jaipur' },
+      { label: 'Dark Sky', value: 'Bortle 4' },
+    ],
     capacity: 30,
     collegeGroups: true,
     overview:
@@ -656,6 +688,19 @@ export const destinations: Destination[] = [
 export function getDestination(slug: string): Destination | undefined {
   return destinations.find((d) => d.slug === slug)
 }
+
+/**
+ * Active destinations only — everything not marked `archived`. This is the
+ * single list that drives every active promo surface (index showcase,
+ * registration dropdown, related destinations). Archived destinations keep
+ * their detail page but never appear in discovery.
+ */
+export const activeDestinations: Destination[] = destinations.filter((d) => !d.archived)
+
+/** Slugs of archived destinations, for quick lookups. */
+export const archivedSlugs = new Set(
+  destinations.filter((d) => d.archived).map((d) => d.slug),
+)
 
 /**
  * Generic 3-day itinerary used on the main landing page.
@@ -986,7 +1031,14 @@ export function eventsForDestination(slug: DestinationSlug): SlotEvent[] {
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
-export const upcomingEvents = [...events].sort((a, b) => a.date.localeCompare(b.date))
+/**
+ * All upcoming departures for active destinations, earliest first. Archived
+ * destinations (e.g. completed Chitkul seasons) are excluded so they never
+ * surface in the calendar, book-slots or registration date pickers.
+ */
+export const upcomingEvents = [...events]
+  .filter((e) => !archivedSlugs.has(e.destinationSlug))
+  .sort((a, b) => a.date.localeCompare(b.date))
 
 /* ---------------------------------------------------------------------------
  * 9. TESTIMONIALS  (placeholders — replace with real reviews)

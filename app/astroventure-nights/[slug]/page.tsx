@@ -8,6 +8,7 @@ import Pricing from '@/components/astroventure/pricing'
 import TelescopeGallery from '@/components/astroventure/telescope-gallery'
 import PhotoGallery from '@/components/astroventure/photo-gallery'
 import BookSlots from '@/components/astroventure/book-slots'
+import EventCalendar from '@/components/astroventure/calendar'
 import CollegeCta from '@/components/astroventure/college-cta'
 import RegistrationForm from '@/components/astroventure/registration-form'
 import Faq from '@/components/astroventure/faq'
@@ -143,9 +144,19 @@ export default async function DestinationPage({ params }: { params: Promise<Para
       <Pricing destination={destination} />
       <TelescopeGallery />
       <PhotoGallery />
-      <BookSlots slug={destination.slug} />
+      {/* Weekend escapes (with published pricing) get a compact calendar/date
+          selector; expeditions keep the batch list. */}
+      {destination.pricing ? (
+        <EventCalendar slug={destination.slug} />
+      ) : (
+        <BookSlots slug={destination.slug} />
+      )}
       {destination.collegeGroups && <CollegeCta destination={destination} />}
-      <RegistrationForm defaultDestination={destination.slug} />
+      <RegistrationForm
+        defaultDestination={destination.slug}
+        experienceName={destination.pricing ? `Astroventure ${destination.name}` : undefined}
+        departureCities={destination.pricing?.map((p) => p.fromCity)}
+      />
       <Faq items={destination.faqs} />
       <RelatedDestinations currentSlug={destination.slug} />
       <FinalCta />

@@ -2,6 +2,7 @@ import Header from '@/components/header'
 import AnnouncementBar from '@/components/announcement-bar'
 import Hero from '@/components/hero'
 import SpitiFeatured from '@/components/spiti-featured'
+import AstroventureLineup from '@/components/astroventure-lineup'
 import SpitiPromoPopup from '@/components/spiti-promo-popup'
 import AstroTrain from '@/components/astrotrain'
 import AstroEd from '@/components/astroed'
@@ -17,6 +18,7 @@ export default function Home() {
       <Header />
       <Hero />
       <SpitiFeatured />
+      <AstroventureLineup />
       <AstroTrain />
       <AstroEd />
       <NakshatraScopes />

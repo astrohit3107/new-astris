@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowUpRight, MapPin, Star, Mountain, CalendarRange } from 'lucide-react'
-import { destinations } from '@/lib/astroventure-data'
+import { activeDestinations as destinations } from '@/lib/astroventure-data'
 import SectionHeading from './section-heading'
 import ScrollReveal from './scroll-reveal'
 
