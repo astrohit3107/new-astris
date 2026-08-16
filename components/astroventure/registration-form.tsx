@@ -104,9 +104,49 @@ export default function RegistrationForm({
       (data.destination === 'any' ? 'Any / Not sure yet' : data.destination)
     const experience = experienceName ?? destLabel
 
+    const GENERIC_ERROR =
+      'We couldn’t submit your request right now. Please try again or contact us directly.'
+
+    // Deliver the enquiry straight to FormSubmit from the browser. FormSubmit
+    // blocks datacenter/server IPs, so a server-side call from Vercel is
+    // rejected — the reliable path is client-side. Delivered to
+    // astriseducation@gmail.com with eeshumtravels@gmail.com CC'd.
+    const submitViaFormSubmit = async () => {
+      const res = await fetch('https://formsubmit.co/ajax/astriseducation@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `New Astroventure Booking — ${experience} — ${data.preferredDate}`,
+          _template: 'table',
+          _captcha: 'false',
+          _cc: 'eeshumtravels@gmail.com',
+          _replyto: data.email,
+          _honey: data.company || '',
+          Experience: experience,
+          'Preferred Destination': destLabel,
+          'Departure City': data.departureCity || '—',
+          'Preferred Date': data.preferredDate,
+          Participants: String(data.participants),
+          'Full Name': data.fullName,
+          Phone: data.phone,
+          Email: data.email,
+          Age: String(data.age),
+          City: data.city,
+          Notes: data.notes || '—',
+        }),
+      })
+      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string }
+      const ok =
+        res.ok &&
+        (json.success === true || json.success === 'true' || /activat/i.test(json.message || ''))
+      if (!ok) throw new Error(GENERIC_ERROR)
+    }
+
+    // Prefer the app's own server route (validation, spam screening, rate
+    // limiting, and a real email provider when WEB3FORMS_ACCESS_KEY / RESEND is
+    // configured). If it can't deliver (e.g. FormSubmit blocked server-side on
+    // Vercel → 5xx) or the network fails, fall back to client-side FormSubmit.
     try {
-      // Submit through the app's own server API (validation, spam screening,
-      // rate limiting) which emails the enquiry to the Astris team.
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -128,20 +168,32 @@ export default function RegistrationForm({
         }),
       })
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
-      if (!res.ok || !json.ok) {
-        throw new Error(
-          json.error || 'We couldn’t submit your request right now. Please try again or contact us directly.',
-        )
+
+      if (res.ok && json.ok) {
+        setStatus('success')
+        reset()
+        return
       }
+      // A 4xx is a genuine problem with the submission (validation / rate limit
+      // / too fast) — surface it rather than silently retrying.
+      if (res.status >= 400 && res.status < 500) {
+        throw new Error(json.error || GENERIC_ERROR)
+      }
+      // Otherwise (5xx / delivery failure) fall through to FormSubmit.
+      await submitViaFormSubmit()
       setStatus('success')
       reset()
     } catch (e) {
-      setStatus('error')
-      setErrorMsg(
-        e instanceof Error
-          ? e.message
-          : 'We couldn’t submit your request right now. Please try again or contact us directly.',
-      )
+      // Server route unreachable or delivery failed — last attempt via FormSubmit.
+      try {
+        await submitViaFormSubmit()
+        setStatus('success')
+        reset()
+        return
+      } catch {
+        setStatus('error')
+        setErrorMsg(e instanceof Error ? e.message : GENERIC_ERROR)
+      }
     }
   }
 
