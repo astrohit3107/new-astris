@@ -30,8 +30,8 @@ export default function DestinationShowcase() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Choose your sky"
-          title="Three Himalayan Dark-Sky Escapes"
-          subtitle="Each destination offers its own character of darkness — from alpine snow-meadows to the last village before Tibet. Pick the night that calls to you."
+          title="Dark-Sky Escapes Across India"
+          subtitle="From Himalayan snow-meadows and the last village before Tibet to affordable weekend getaways in the deserts of Rajasthan — pick the night that calls to you."
         />
 
         <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -107,6 +107,23 @@ export default function DestinationShowcase() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Pricing / duration (weekend escapes only) */}
+                  {d.pricing && d.pricing.length > 0 && (
+                    <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-[var(--av-gold)]/20 bg-[var(--av-gold)]/[0.05] px-3 py-2.5 text-xs">
+                      <span className="font-semibold text-white">
+                        From{' '}
+                        {d.pricing
+                          .reduce((min, p) => (p.amount < min.amount ? p : min))
+                          .amountLabel}
+                        <span className="font-normal text-white/50"> / person</span>
+                      </span>
+                      {d.durationLabel && (
+                        <span className="text-white/45">· {d.durationLabel}</span>
+                      )}
+                      {d.capacity && <span className="text-white/45">· {d.capacity} slots</span>}
+                    </div>
+                  )}
 
                   {/* CTA */}
                   <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">

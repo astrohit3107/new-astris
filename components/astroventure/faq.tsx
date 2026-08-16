@@ -2,12 +2,24 @@
 
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
-import { faqs } from '@/lib/astroventure-data'
+import { faqs as defaultFaqs } from '@/lib/astroventure-data'
 import SectionHeading from './section-heading'
 import ScrollReveal from './scroll-reveal'
 import { cn } from '@/lib/utils'
 
-export default function Faq() {
+interface Props {
+  /** Override the shared FAQ set with destination-specific questions. */
+  items?: { question: string; answer: string }[]
+  eyebrow?: string
+  title?: string
+}
+
+export default function Faq({
+  items,
+  eyebrow = 'Good to know',
+  title = 'Frequently Asked Questions',
+}: Props = {}) {
+  const faqs = items && items.length > 0 ? items : defaultFaqs
   const [open, setOpen] = useState<number | null>(0)
 
   return (
@@ -16,7 +28,7 @@ export default function Faq() {
       className="relative scroll-mt-20 overflow-hidden bg-gradient-to-b from-[var(--av-deep)] via-black to-[var(--av-deep)] py-24 sm:py-32"
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Good to know" title="Frequently Asked Questions" />
+        <SectionHeading eyebrow={eyebrow} title={title} />
 
         <div className="mt-12 space-y-3">
           {faqs.map((f, i) => {

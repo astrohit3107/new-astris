@@ -69,6 +69,14 @@ export const IMAGES = {
   astrophotography: `${A}/activities/astrophotography-setup.webp`,
   laserPointing: `${A}/stargazing/stargazing-pointing-laser.webp`,
   stargazingGroup: `${A}/stargazing/stargazing-group-01.webp`,
+
+  // Rajasthan weekend escapes — PLACEHOLDERS reusing existing night-sky assets.
+  // Swap for real Sambhar Lake / Tijara photography (lake, salt flats, fort,
+  // sunrise, telescope line-up) when available.
+  sambhar: `${A}/milky-way/milkyway-panoramic-arch.webp`,
+  sambharMobile: `${A}/milky-way/milkyway-panoramic-arch.webp`,
+  tijara: `${A}/activities/star-trails-mountains.webp`,
+  tijaraMobile: `${A}/activities/star-trails-mountains.webp`,
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -112,7 +120,31 @@ export interface SlotEvent {
   status: 'open' | 'filling' | 'soldout'
 }
 
-export type DestinationSlug = 'solang-valley' | 'chitkul' | 'kasol'
+export type DestinationSlug =
+  | 'solang-valley'
+  | 'chitkul'
+  | 'kasol'
+  | 'sambhar-lake'
+  | 'tijara'
+
+/**
+ * A single fixed-price departure option (used by the Rajasthan weekend
+ * escapes, which run on published per-person pricing from a chosen city).
+ * Himalayan expeditions leave this undefined and use the tailored-package flow.
+ */
+export interface DeparturePricing {
+  /** e.g. 'Delhi → Sambhar Lake → Delhi' */
+  route: string
+  /** short label for cards, e.g. 'Delhi' */
+  fromCity: string
+  /** numeric amount in ₹ (for schema.org offers) */
+  amount: number
+  /** display label, e.g. '₹4,500' */
+  amountLabel: string
+  /** e.g. 'Double sharing' */
+  accommodation: string
+  featured?: boolean
+}
 
 export interface Destination {
   slug: DestinationSlug
@@ -136,6 +168,24 @@ export interface Destination {
   /** optional on-ground partner shown on the destination page */
   partner?: { name: string; logo: string; url?: string }
   itinerary: ItineraryDay[]
+
+  /* --- Optional fields (used by the Rajasthan weekend escapes) ----------- */
+  /** State/region for schema.org PostalAddress. Defaults to Himachal Pradesh. */
+  region?: string
+  /** Short category label for cards, e.g. 'Weekend Astronomy Escape'. */
+  categoryLabel?: string
+  /** e.g. '3 Days · 2 Nights'. */
+  durationLabel?: string
+  /** Fixed per-person departure pricing (enables the pricing section + card price). */
+  pricing?: DeparturePricing[]
+  /** Seats per departure (drives the capacity messaging). */
+  capacity?: number
+  /** Who the experience is designed for (audience chips). */
+  audience?: string[]
+  /** When true, renders the "Coming with your college?" group CTA. */
+  collegeGroups?: boolean
+  /** Destination-specific FAQ. Falls back to the shared `faqs` when omitted. */
+  faqs?: { question: string; answer: string }[]
 }
 
 /* ---------------------------------------------------------------------------
@@ -356,6 +406,251 @@ export const destinations: Destination[] = [
       },
     ],
   },
+
+  /* ======================= RAJASTHAN WEEKEND ESCAPES ======================= *
+   *  Affordable Friday-night → Sunday-morning astronomy weekends built for
+   *  students, young professionals and college societies. These run on fixed
+   *  per-person pricing (Delhi / Jaipur departures) rather than the tailored
+   *  Himalayan package flow.
+   * ----------------------------------------------------------------------- */
+  {
+    slug: 'sambhar-lake',
+    name: 'Sambhar Lake',
+    valley: 'Rajasthan',
+    locationLabel: 'Sambhar Salt Lake, Rajasthan',
+    tagline: 'India’s largest salt lake — and a sky the city forgot.',
+    altitude: '360 m',
+    darkSkyRating: 3,
+    darkSkyLabel: 'Rural desert sky',
+    bortle: 'Bortle 4',
+    region: 'Rajasthan',
+    bestSeason: 'October – March',
+    observationConditions:
+      'A flat, wide-open salt basin gives an unobstructed horizon in almost every direction. Jaipur’s glow sits low on the eastern edge, but the western and overhead sky is a genuine rural Bortle 4 — the Milky Way returns to the naked eye on clear, moonless winter nights.',
+    image: IMAGES.sambhar,
+    imageMobile: IMAGES.sambharMobile,
+    heroImage: IMAGES.sambhar,
+    categoryLabel: 'Weekend Astronomy Escape',
+    durationLabel: '3 Days · 2 Nights',
+    capacity: 30,
+    collegeGroups: true,
+    overview:
+      'Sambhar is India’s largest inland salt lake — a 200-square-kilometre sheet of white that empties of people the moment the sun goes down. Roughly two hours from Jaipur and an overnight run from Delhi, it trades the honking, floodlit city for a horizon so low and so dark that the stars come down to meet the salt. This is not a sightseeing tour with a telescope bolted on. The night sky is the reason we go; everything else is built around it.',
+    highlights: [
+      'Naked-eye Milky Way over the open salt flats',
+      'Guided telescope observation — Moon, planets, clusters & nebulae',
+      'Beginner astrophotography with camera and mobile',
+      'A dedicated Sambhar Lake sunrise',
+      'Shakambhari temple & the heritage salt works',
+      'A weekend that runs on astronomy, not itineraries',
+    ],
+    audience: [
+      'College students',
+      'Young professionals',
+      'Beginners in astronomy',
+      'Photography enthusiasts',
+      'Astronomy, physics & science clubs',
+      'College & university societies',
+    ],
+    inclusions: [
+      'Return travel from your chosen departure city (Delhi or Jaipur)',
+      'One night’s accommodation on a double-sharing basis',
+      'All guided stargazing and telescope observation sessions',
+      'Beginner astrophotography guidance — camera and mobile',
+      'A dedicated Sambhar Lake sunrise session',
+      'Night-sky orientation and constellation tours with expert astronomers',
+    ],
+    exclusions: [
+      'Meals and beverages not specified in your booking confirmation',
+      'Personal expenses, shopping and tips',
+      'Travel insurance and any permits',
+      'Anything not explicitly listed under Inclusions',
+      'Observation is always subject to weather and sky conditions',
+    ],
+    pricing: [
+      {
+        route: 'Jaipur → Sambhar Lake → Jaipur',
+        fromCity: 'Jaipur',
+        amount: 3500,
+        amountLabel: '₹3,500',
+        accommodation: 'Double sharing',
+      },
+      {
+        route: 'Delhi → Sambhar Lake → Delhi',
+        fromCity: 'Delhi',
+        amount: 4500,
+        amountLabel: '₹4,500',
+        accommodation: 'Double sharing',
+        featured: true,
+      },
+    ],
+    itinerary: [
+      {
+        day: 'Friday',
+        title: 'Departure & First Night Under the Stars',
+        summary: 'Leave the city behind and meet a genuinely dark sky.',
+        events: [
+          { time: 'Evening', title: 'Departure', detail: 'Set off from Delhi or Jaipur towards Sambhar Lake, depending on your departure option.' },
+          { time: 'Late night', title: 'Arrival & Settling In', detail: 'Check in beside the lake and step straight out under the stars once your eyes adjust.' },
+          { time: 'Night', title: 'Night-Sky Orientation', detail: 'A naked-eye tour of the constellations, bright stars and visible planets — learning to read the sky, not just look at it.' },
+          { time: 'Late night', title: 'First Telescope Session', detail: 'Telescope set-up and guided observation of the Moon, planets and deep-sky objects where conditions permit.' },
+        ],
+      },
+      {
+        day: 'Saturday',
+        title: 'Salt Flats by Day, Deep Sky by Night',
+        summary: 'A light morning of exploration; the primary astronomy night after dark.',
+        events: [
+          { time: 'Morning', title: 'Breakfast', detail: 'A relaxed start after a late first night under the sky.' },
+          { time: 'Late morning', title: 'Sambhar Exploration', detail: 'A lightweight look around the region — the Shakambhari Devi temple, the heritage salt works and the vast white lakebed. Kept short so the sky stays the point.' },
+          { time: 'Afternoon', title: 'Rest & Camera Prep', detail: 'Lunch and downtime, with an optional primer on camera settings and night-photography basics.' },
+          { time: 'Night', title: 'Flagship Astronomy Night', detail: 'The main event: guided sky orientation, telescope observation of star clusters, nebulae, planets and the Moon, celestial coordinates, and how astronomers actually find objects.' },
+          { time: 'Late night', title: 'Basic Astrophotography', detail: 'Beginner-friendly night photography — tripod, ISO, aperture, shutter, focus, white balance, star trails and Milky Way basics where conditions permit, plus mobile astrophotography.' },
+        ],
+      },
+      {
+        day: 'Sunday',
+        title: 'Sunrise & Return',
+        summary: 'A quiet dawn over the salt, then the road home.',
+        events: [
+          { time: 'Pre-dawn', title: 'Sambhar Sunrise', detail: 'Wake for a dedicated sunrise over the salt flats — sunrise and landscape photography in the still morning light.' },
+          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast and a last look at the lake before heading back.' },
+          { time: 'Morning', title: 'Departure', detail: 'Return towards Delhi or Jaipur. Trip concludes.' },
+        ],
+      },
+    ],
+    faqs: [
+      { question: 'What is included in the Sambhar Lake Astroventure?', answer: 'Return travel from your chosen departure city (Delhi or Jaipur), one night’s stay on a double-sharing basis, all guided stargazing and telescope sessions, beginner astrophotography guidance, a dedicated sunrise session, and expert astronomy mentoring throughout the weekend.' },
+      { question: 'Where does the trip start — Delhi or Jaipur?', answer: 'Both. You choose your departure city when you book: Delhi → Sambhar → Delhi at ₹4,500 per person, or Jaipur → Sambhar → Jaipur at ₹3,500 per person. Return travel from that city is included.' },
+      { question: 'What is the accommodation like?', answer: 'Comfortable accommodation near the lake on a double-sharing basis for one night. Share your preferences when you book and we’ll do our best to accommodate them.' },
+      { question: 'Is telescope observation included?', answer: 'Yes. Guided telescope observation is the heart of the weekend — the Moon, planets, star clusters, nebulae and deep-sky objects, led by expert astronomers who teach you how to navigate the sky yourself.' },
+      { question: 'Is astrophotography included?', answer: 'Yes — a beginner-friendly introduction to night-sky photography with both camera and mobile: tripod technique, ISO, aperture, shutter, focus and Milky Way basics where conditions permit. It is included as part of the experience, not a separate professional workshop.' },
+      { question: 'Is this suitable for complete beginners?', answer: 'Completely. The weekend is designed for first-timers, students and young professionals. No equipment or prior knowledge is needed — just curiosity and warm layers.' },
+      { question: 'What happens if it is cloudy?', answer: 'Astronomy depends on the sky, so observation is always subject to weather and cloud cover. We track the forecast and work the clearest windows of the night; if clouds move in we shift to sky talks, telescope demonstrations and astrophotography theory, and make the most of any clearing.' },
+      { question: 'How many participants are on each trip?', answer: 'Up to 30 participants per departure, so the group stays social while everyone still gets real time at the telescope.' },
+      { question: 'Can college groups or societies join?', answer: 'Yes — Sambhar is deliberately priced for students. Astronomy clubs, physics and science societies, photography clubs and college communities can book a dedicated group departure. Use “Plan a College Astronomy Trip” to talk to us.' },
+      { question: 'What should I bring?', answer: 'Warm layered clothing (desert nights get cold in winter), comfortable shoes, a head-torch (red light preferred), any personal medication, and a camera or phone if you’d like to try astrophotography. A full checklist is shared on booking.' },
+    ],
+  },
+  {
+    slug: 'tijara',
+    name: 'Tijara',
+    valley: 'Alwar, Rajasthan',
+    locationLabel: 'Tijara, Alwar · Rajasthan',
+    tagline: 'A Delhi weekend where the Aravallis swallow the city glow.',
+    altitude: '320 m',
+    darkSkyRating: 3,
+    darkSkyLabel: 'Aravalli rural sky',
+    bortle: 'Bortle 4',
+    region: 'Rajasthan',
+    bestSeason: 'October – March',
+    observationConditions:
+      'Tucked into the Aravalli country of Alwar, the low ridgelines block a slice of the Delhi-NCR light dome to the north-east. It is an honest rural Bortle 4 — not a remote desert, but a dramatic step down from Delhi’s washed-out Bortle 8–9 sky, with the Milky Way and hundreds of stars back in view on clear winter nights.',
+    image: IMAGES.tijara,
+    imageMobile: IMAGES.tijaraMobile,
+    heroImage: IMAGES.tijara,
+    categoryLabel: 'Weekend Astronomy Escape',
+    durationLabel: '3 Days · 2 Nights',
+    capacity: 30,
+    collegeGroups: true,
+    overview:
+      'Tijara is the closest a Delhi student can get to a real dark sky on a Friday-night budget. A couple of hours south of the city in the Aravalli hills of Alwar, it swaps the NCR’s permanent orange haze for quiet heritage country — the restored Tijara Fort-Palace on one ridge, a Jain pilgrimage temple down the road, and above it all a sky that actually has stars in it. The weekend is built around the telescope and the night, with just enough of the region by day to stretch your legs.',
+    highlights: [
+      'A real dark-ish sky within reach of Delhi',
+      'Guided telescope observation of planets, clusters & nebulae',
+      'Beginner astrophotography with camera and mobile',
+      'Sunrise over the Aravalli country',
+      'Tijara Fort-Palace & heritage surroundings',
+      'Built for college groups and first-time stargazers',
+    ],
+    audience: [
+      'College students',
+      'Young professionals',
+      'Beginners in astronomy',
+      'Photography enthusiasts',
+      'Astronomy, physics & science clubs',
+      'Delhi-NCR student communities',
+    ],
+    inclusions: [
+      'Return travel from your chosen departure city (Delhi or Jaipur)',
+      'One night’s accommodation on a double-sharing basis',
+      'All guided stargazing and telescope observation sessions',
+      'Beginner astrophotography guidance — camera and mobile',
+      'A dedicated Aravalli sunrise session',
+      'Night-sky orientation and constellation tours with expert astronomers',
+    ],
+    exclusions: [
+      'Meals and beverages not specified in your booking confirmation',
+      'Personal expenses, shopping and tips',
+      'Travel insurance and any permits',
+      'Anything not explicitly listed under Inclusions',
+      'Observation is always subject to weather and sky conditions',
+    ],
+    pricing: [
+      {
+        route: 'Delhi → Tijara → Delhi',
+        fromCity: 'Delhi',
+        amount: 3500,
+        amountLabel: '₹3,500',
+        accommodation: 'Double sharing',
+        featured: true,
+      },
+      {
+        route: 'Jaipur → Tijara → Jaipur',
+        fromCity: 'Jaipur',
+        amount: 4500,
+        amountLabel: '₹4,500',
+        accommodation: 'Double sharing',
+      },
+    ],
+    itinerary: [
+      {
+        day: 'Friday',
+        title: 'Out of the City, Into the Dark',
+        summary: 'A short run from Delhi to a sky worth staying up for.',
+        events: [
+          { time: 'Evening', title: 'Departure', detail: 'Leave Delhi or Jaipur and drive into the Aravalli country around Tijara.' },
+          { time: 'Night', title: 'Arrival & Check-in', detail: 'Settle in, then head out to let your eyes adapt to a properly dark sky.' },
+          { time: 'Night', title: 'Guided Stargazing', detail: 'Naked-eye astronomy, constellation identification and seasonal sky orientation, followed by telescope set-up.' },
+          { time: 'Late night', title: 'Telescope & Deep-Sky Intro', detail: 'Guided telescope observation and an introduction to deep-sky viewing where conditions allow.' },
+        ],
+      },
+      {
+        day: 'Saturday',
+        title: 'Heritage by Day, the Flagship Night',
+        summary: 'A little of Alwar’s history, then the primary astronomy night.',
+        events: [
+          { time: 'Morning', title: 'Breakfast', detail: 'An easy start after the first night’s observing.' },
+          { time: 'Late morning', title: 'Local Sightseeing', detail: 'A lightweight visit to the heritage Tijara Fort-Palace and the nearby Tijara Jain temple — kept short so the astronomy stays the focus.' },
+          { time: 'Afternoon', title: 'Rest & Camera Prep', detail: 'Lunch, downtime and an optional walk-through of camera settings and night-photography basics.' },
+          { time: 'Night', title: 'Flagship Astronomy Night', detail: 'Guided stargazing, telescope observation of clusters, nebulae, planets and the Moon, astronomy storytelling, and hands-on practical telescope use.' },
+          { time: 'Late night', title: 'Basic Astrophotography', detail: 'Camera set-up and manual controls — ISO, shutter, aperture, manual focus, tripod technique and Milky Way basics where conditions permit, plus simple mobile astrophotography.' },
+        ],
+      },
+      {
+        day: 'Sunday',
+        title: 'Sunrise & Return',
+        summary: 'A calm Aravalli dawn before the drive back.',
+        events: [
+          { time: 'Pre-dawn', title: 'Aravalli Sunrise', detail: 'A dedicated sunrise session with landscape and sunrise photography in the quiet morning light.' },
+          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast before wrapping up.' },
+          { time: 'Morning', title: 'Departure', detail: 'Return towards Delhi or Jaipur. Trip concludes.' },
+        ],
+      },
+    ],
+    faqs: [
+      { question: 'What is included in the Tijara Astroventure?', answer: 'Return travel from your chosen departure city (Delhi or Jaipur), one night’s stay on a double-sharing basis, all guided stargazing and telescope sessions, beginner astrophotography guidance, a dedicated sunrise session, and expert astronomy mentoring across the weekend.' },
+      { question: 'Can I join from Delhi?', answer: 'Yes — Tijara is positioned as a Delhi weekend getaway. Delhi → Tijara → Delhi is ₹3,500 per person. You can also join from Jaipur (Jaipur → Tijara → Jaipur) at ₹4,500 per person. Return travel from your chosen city is included.' },
+      { question: 'How dark is the sky, really?', answer: 'Tijara is an honest rural Bortle 4 — not a remote desert, but a dramatic improvement on Delhi’s Bortle 8–9 city sky. On a clear, moonless winter night the Milky Way and hundreds of stars come back into view. We never promise a specific rating on a given night; conditions depend on weather and the Moon.' },
+      { question: 'What is the accommodation?', answer: 'Comfortable accommodation in the Tijara area on a double-sharing basis for one night. Tell us your preferences when booking and we’ll try to match them.' },
+      { question: 'Is telescope observation and astrophotography included?', answer: 'Both are included. Guided telescope observation of planets, clusters and nebulae is the centrepiece, alongside a beginner-friendly introduction to night-sky photography with camera and mobile. It’s an included experience, not a separate professional workshop.' },
+      { question: 'Is this suitable for beginners?', answer: 'Yes — it’s designed for first-timers, students and young professionals. No prior experience or equipment is required.' },
+      { question: 'What happens if the weather is cloudy?', answer: 'Observation is always subject to weather and cloud cover. We follow the forecast and use the clearest windows; if it clouds over we move to sky talks, telescope demos and astrophotography theory, and make the most of any break in the clouds.' },
+      { question: 'How many people come along?', answer: 'Up to 30 participants per departure — sociable, but small enough that everyone gets real time at the eyepiece.' },
+      { question: 'Can college groups join?', answer: 'Absolutely. Tijara is priced for students, and astronomy clubs, physics and science societies and photography clubs can book a dedicated group departure. Use “Plan a College Astronomy Trip” to reach us.' },
+      { question: 'What should I bring?', answer: 'Warm layers (winter nights get cold), comfortable shoes, a red-light head-torch, personal medication, and a camera or phone for astrophotography. A full checklist is shared on booking.' },
+    ],
+  },
 ]
 
 export function getDestination(slug: string): Destination | undefined {
@@ -530,7 +825,75 @@ export const galleryCategories = [
 
 /* ---------------------------------------------------------------------------
  * 8. EVENTS / BOOKABLE SLOTS  (drives Book Slots + Calendar)
+ * ------------------------------------------------------------------------- *
+ *  Himalayan expeditions are hand-scheduled batches (listed explicitly below).
+ *  The Rajasthan weekend escapes run EVERY weekend across the season, so their
+ *  Friday→Sunday slots are GENERATED from real calendar dates (never hand-typed
+ *  weekdays) by `weekendSlots()`. To extend or shorten the season, edit
+ *  WEEKEND_SEASON_START / WEEKEND_SEASON_END — no other change needed. Capacity
+ *  is a real number (30 seats); availability is not faked, so every generated
+ *  weekend opens with all 30 seats until a booking backend is connected.
  * ------------------------------------------------------------------------- */
+
+/** Season window for the auto-generated Rajasthan weekend departures. */
+export const WEEKEND_SEASON_START = '2026-08-01'
+export const WEEKEND_SEASON_END = '2026-12-31'
+
+interface WeekendSlotOpts {
+  slug: DestinationSlug
+  idPrefix: string
+  batchName: string
+  seatsTotal?: number
+  seasonStart?: string
+  seasonEnd?: string
+}
+
+/**
+ * Generate a Friday→Sunday `SlotEvent` for every weekend in the season window,
+ * starting from the next Friday on or after today (so past weekends drop off
+ * automatically). Weekdays are derived from the real calendar via `Date`.
+ */
+export function weekendSlots({
+  slug,
+  idPrefix,
+  batchName,
+  seatsTotal = 30,
+  seasonStart = WEEKEND_SEASON_START,
+  seasonEnd = WEEKEND_SEASON_END,
+}: WeekendSlotOpts): SlotEvent[] {
+  const start = new Date(`${seasonStart}T12:00:00Z`)
+  const end = new Date(`${seasonEnd}T12:00:00Z`)
+  const now = new Date()
+  const cursor = new Date(Math.max(start.getTime(), now.getTime()))
+  cursor.setUTCHours(12, 0, 0, 0)
+  // Advance to the next Friday (UTC day 5).
+  while (cursor.getUTCDay() !== 5) cursor.setUTCDate(cursor.getUTCDate() + 1)
+
+  const fmt = (d: Date) =>
+    d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+
+  const out: SlotEvent[] = []
+  while (cursor.getTime() <= end.getTime()) {
+    const fri = new Date(cursor)
+    const sun = new Date(cursor)
+    sun.setUTCDate(sun.getUTCDate() + 2)
+    const iso = fri.toISOString().slice(0, 10)
+    out.push({
+      id: `${idPrefix}-${iso}`,
+      batchName,
+      destinationSlug: slug,
+      date: iso,
+      dateLabel: `${fmt(fri)} – ${fmt(sun)} ${sun.getUTCFullYear()}`,
+      nights: 2,
+      seatsTotal,
+      seatsAvailable: seatsTotal,
+      status: 'open',
+    })
+    cursor.setUTCDate(cursor.getUTCDate() + 7)
+  }
+  return out
+}
+
 export const events: SlotEvent[] = [
   {
     id: 'ck-2026-06-25',
@@ -611,6 +974,10 @@ export const events: SlotEvent[] = [
     seatsAvailable: 9,
     status: 'filling',
   },
+
+  // --- Rajasthan weekend escapes — every weekend of the season ------------
+  ...weekendSlots({ slug: 'sambhar-lake', idPrefix: 'sl', batchName: 'Sambhar Lake Weekend' }),
+  ...weekendSlots({ slug: 'tijara', idPrefix: 'tj', batchName: 'Tijara Weekend' }),
 ]
 
 export function eventsForDestination(slug: DestinationSlug): SlotEvent[] {
