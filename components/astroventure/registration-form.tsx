@@ -122,6 +122,20 @@ export default function RegistrationForm({
           _cc: 'eeshumtravels@gmail.com',
           _replyto: data.email,
           _honey: data.company || '',
+          // Acknowledgement emailed straight back to the person who enquired,
+          // so they have written confirmation alongside the on-screen message.
+          _autoresponse:
+            `Hi ${data.fullName},\n\n` +
+            `Thank you for your reservation request for ${experience}.\n\n` +
+            `We've received your details and our team will contact you within the next 24 hours ` +
+            `to confirm availability and walk you through the next steps.\n\n` +
+            `Your request\n` +
+            `• Experience: ${experience}\n` +
+            (data.departureCity ? `• Departure city: ${data.departureCity}\n` : '') +
+            `• Preferred dates: ${data.preferredDate}\n` +
+            `• Participants: ${data.participants}\n\n` +
+            `If you need anything sooner, call or WhatsApp us on ${PHONE_DISPLAY}.\n\n` +
+            `Clear skies,\nTeam Astris Space`,
           Experience: experience,
           'Preferred Destination': destLabel,
           'Departure City': data.departureCity || '—',
