@@ -142,12 +142,16 @@ export default function RegistrationForm({
       if (!ok) throw new Error(GENERIC_ERROR)
     }
 
-    // Prefer the app's own server route (validation, spam screening, rate
-    // limiting, and a real email provider when WEB3FORMS_ACCESS_KEY / RESEND is
-    // configured). If it can't deliver (e.g. FormSubmit blocked server-side on
-    // Vercel → 5xx) or the network fails, fall back to client-side FormSubmit.
+    // Deliver via client-side FormSubmit as the primary path — verified working
+    // from the production origin, and it avoids FormSubmit's datacenter-IP block
+    // that makes a server-side call from Vercel fail. Then, best-effort and
+    // non-blocking, also notify our own /api/register (useful once a proper
+    // provider like Web3Forms/Resend is configured; it silently no-ops today).
     try {
-      const res = await fetch('/api/register', {
+      await submitViaFormSubmit()
+
+      // Fire-and-forget server notification — never blocks the acknowledgement.
+      void fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -166,34 +170,13 @@ export default function RegistrationForm({
           company: data.company || '',
           renderedAt,
         }),
-      })
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+      }).catch(() => {})
 
-      if (res.ok && json.ok) {
-        setStatus('success')
-        reset()
-        return
-      }
-      // A 4xx is a genuine problem with the submission (validation / rate limit
-      // / too fast) — surface it rather than silently retrying.
-      if (res.status >= 400 && res.status < 500) {
-        throw new Error(json.error || GENERIC_ERROR)
-      }
-      // Otherwise (5xx / delivery failure) fall through to FormSubmit.
-      await submitViaFormSubmit()
       setStatus('success')
       reset()
     } catch (e) {
-      // Server route unreachable or delivery failed — last attempt via FormSubmit.
-      try {
-        await submitViaFormSubmit()
-        setStatus('success')
-        reset()
-        return
-      } catch {
-        setStatus('error')
-        setErrorMsg(e instanceof Error ? e.message : GENERIC_ERROR)
-      }
+      setStatus('error')
+      setErrorMsg(e instanceof Error ? e.message : GENERIC_ERROR)
     }
   }
 
@@ -239,11 +222,11 @@ export default function RegistrationForm({
                   <Check size={32} />
                 </span>
                 <h3 className="font-display mt-5 text-2xl font-semibold text-white">
-                  Reservation request received
+                  Your request has been submitted
                 </h3>
                 <p className="mt-2 max-w-md text-sm font-light text-white/65">
-                  Thank you. Your details have been received by the Astris team. We’ll get in touch
-                  shortly to confirm availability and the next steps for your booking.
+                  Thank you — your details have reached the Astris team. We’ll contact you within
+                  the next 24 hours to confirm availability and the next steps for your booking.
                 </p>
                 <p className="mt-3 text-sm text-white/70">
                   Need anything sooner? Call or WhatsApp{' '}
