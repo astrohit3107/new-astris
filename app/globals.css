@@ -443,3 +443,28 @@
 }
 
 html { scroll-behavior: smooth; }
+
+/* ==========================================================================
+   PARTNER LOGO MARQUEE — continuous horizontal scroll
+   ========================================================================== */
+@keyframes logo-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  /* The track renders the logo list twice; shifting by exactly half the
+     track width makes the loop seamless. */
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.logo-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: logo-marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover so a visitor can actually look at a logo. */
+.logo-marquee:hover .logo-marquee-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee-track { animation: none; }
+  .logo-marquee { overflow-x: auto; }
+}

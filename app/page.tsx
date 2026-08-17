@@ -7,6 +7,7 @@ import SpitiPromoPopup from '@/components/spiti-promo-popup'
 import AstroTrain from '@/components/astrotrain'
 import AstroEd from '@/components/astroed'
 import NakshatraScopes from '@/components/nakshatra-scopes'
+import PartnersMarquee from '@/components/partners-marquee'
 import WhyAstris from '@/components/why-astris'
 import FinalCTA from '@/components/final-cta'
 import Footer from '@/components/footer'
@@ -22,6 +23,7 @@ export default function Home() {
       <AstroTrain />
       <AstroEd />
       <NakshatraScopes />
+      <PartnersMarquee />
       <WhyAstris />
       <FinalCTA />
       <Footer />
