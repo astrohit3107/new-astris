@@ -26,7 +26,7 @@ export default function WhyAstris() {
   ]
 
   return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
+    <section id="about" className="dark py-20 px-4 sm:px-6 lg:px-8 bg-[var(--av-deep)] text-white">
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Header */}
         <div className="space-y-2 animate-fade-in-up">

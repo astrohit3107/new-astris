@@ -32,7 +32,7 @@ export default function FinalCTA() {
   ]
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-primary/3 to-background">
+    <section className="dark py-14 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--av-deep)] via-black to-[var(--av-deep)] text-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="space-y-3 mb-10 text-center animate-fade-in-up">

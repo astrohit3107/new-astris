@@ -2,14 +2,14 @@ import { Mail, Phone, MapPin } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary/50 border-t border-border/40">
+    <footer className="dark bg-[var(--av-deep)] border-t border-white/10 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Main footer content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="Astris Space" className="w-6 h-6" />
+              <img src="/logo.svg" alt="Astris Space" className="w-6 h-6 invert dark:invert-0" />
               <span className="text-lg font-bold text-foreground">Astris Space</span>
             </div>
             <p className="text-xs text-foreground/70 leading-relaxed">

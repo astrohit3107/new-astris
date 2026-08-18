@@ -28,7 +28,7 @@ export default function NakshatraScopes() {
     <section 
       ref={sectionRef}
       id="telescopes" 
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/80 overflow-hidden"
+      className="dark relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--av-deep)] to-black overflow-hidden text-white"
     >
       {/* Subtle background elements */}
       <div className="absolute inset-0 opacity-10">

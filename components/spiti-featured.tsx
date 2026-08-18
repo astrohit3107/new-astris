@@ -23,7 +23,7 @@ export default function SpitiFeatured() {
   return (
     <section
       id="astroventure"
-      className="relative overflow-hidden border-y border-foreground/10 bg-gradient-to-b from-background via-[var(--av-deep)] to-background py-20 sm:py-24"
+      className="dark relative overflow-hidden border-y border-white/10 bg-gradient-to-b from-[var(--av-deep)] via-black to-[var(--av-deep)] py-20 sm:py-24 text-white"
     >
       {/* Cosmic glows */}
       <div className="pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-[var(--av-nebula)] opacity-15 blur-[130px]" />

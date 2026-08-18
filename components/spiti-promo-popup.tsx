@@ -39,7 +39,7 @@ export default function SpitiPromoPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-fade-in"
+      className="dark fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-fade-in text-white"
       role="dialog"
       aria-modal="true"
       aria-label="Astroventure Spiti '26 — early registrations open"
