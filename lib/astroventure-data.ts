@@ -178,7 +178,7 @@ export interface Destination {
   region?: string
   /** Short category label for cards, e.g. 'Weekend Astronomy Escape'. */
   categoryLabel?: string
-  /** e.g. '3 Days · 2 Nights'. */
+  /** e.g. '2 Days · 1 Night'. */
   durationLabel?: string
   /** Fixed per-person departure pricing (enables the pricing section + card price). */
   pricing?: DeparturePricing[]
@@ -428,7 +428,7 @@ export const destinations: Destination[] = [
   },
 
   /* ======================= RAJASTHAN WEEKEND ESCAPES ======================= *
-   *  Affordable Friday-night → Sunday-morning astronomy weekends built for
+   *  Affordable Saturday-morning → Sunday astronomy weekends built for
    *  students, young professionals and college societies. These run on fixed
    *  per-person pricing (Delhi / Jaipur departures) rather than the tailored
    *  Himalayan package flow.
@@ -451,10 +451,10 @@ export const destinations: Destination[] = [
     imageMobile: IMAGES.sambharMobile,
     heroImage: IMAGES.sambhar,
     categoryLabel: 'Weekend Astronomy Escape',
-    durationLabel: '3 Days · 2 Nights',
+    durationLabel: '2 Days · 1 Night',
     heroStats: [
       { label: 'Location', value: 'Sambhar, Rajasthan' },
-      { label: 'Duration', value: '3D · 2N (Fri–Sun)' },
+      { label: 'Duration', value: '2D · 1N (Sat–Sun)' },
       { label: 'Departs', value: 'Delhi / Jaipur' },
       { label: 'Dark Sky', value: 'Bortle 4' },
     ],
@@ -512,24 +512,14 @@ export const destinations: Destination[] = [
     ],
     itinerary: [
       {
-        day: 'Friday',
-        title: 'Departure & First Night Under the Stars',
-        summary: 'Leave the city behind and meet a genuinely dark sky.',
-        events: [
-          { time: 'Evening', title: 'Departure', detail: 'Set off from Delhi or Jaipur towards Sambhar Lake, depending on your departure option.' },
-          { time: 'Late night', title: 'Arrival & Settling In', detail: 'Check in beside the lake and step straight out under the stars once your eyes adjust.' },
-          { time: 'Night', title: 'Night-Sky Orientation', detail: 'A naked-eye tour of the constellations, bright stars and visible planets — learning to read the sky, not just look at it.' },
-          { time: 'Late night', title: 'First Telescope Session', detail: 'Telescope set-up and guided observation of the Moon, planets and deep-sky objects where conditions permit.' },
-        ],
-      },
-      {
         day: 'Saturday',
-        title: 'Salt Flats by Day, Deep Sky by Night',
-        summary: 'A light morning of exploration; the primary astronomy night after dark.',
+        title: 'Out of the City, Into the Salt',
+        summary: 'Travel, explore the lake, then let the sky take over after sunset.',
         events: [
-          { time: 'Morning', title: 'Breakfast', detail: 'A relaxed start after a late first night under the sky.' },
-          { time: 'Late morning', title: 'Sambhar Exploration', detail: 'A lightweight look around the region — the Shakambhari Devi temple, the heritage salt works and the vast white lakebed. Kept short so the sky stays the point.' },
-          { time: 'Afternoon', title: 'Rest & Camera Prep', detail: 'Lunch and downtime, with an optional primer on camera settings and night-photography basics.' },
+          { time: 'Morning', title: 'Departure from Delhi', detail: 'Set off from Delhi and travel towards Sambhar Lake. Jaipur departures join the same day.' },
+          { time: 'Afternoon', title: 'Arrival & Settling In', detail: 'Reach Sambhar, check in and settle before the light goes.' },
+          { time: 'Afternoon', title: 'Sambhar Exploration', detail: 'A lightweight look around the region — the Shakambhari Devi temple, the heritage salt works and the vast white lakebed. Kept short so the sky stays the point.' },
+          { time: 'Sunset', title: 'First Light on the Sky', detail: 'As the sun drops, telescopes go up: the visible planets and the brightest objects first, with a naked-eye tour of the constellations to get you oriented.' },
           { time: 'Night', title: 'Flagship Astronomy Night', detail: 'The main event: guided sky orientation, telescope observation of star clusters, nebulae, planets and the Moon, celestial coordinates, and how astronomers actually find objects.' },
           { time: 'Late night', title: 'Basic Astrophotography', detail: 'Beginner-friendly night photography — tripod, ISO, aperture, shutter, focus, white balance, star trails and Milky Way basics where conditions permit, plus mobile astrophotography.' },
         ],
@@ -540,8 +530,8 @@ export const destinations: Destination[] = [
         summary: 'A quiet dawn over the salt, then the road home.',
         events: [
           { time: 'Pre-dawn', title: 'Sambhar Sunrise', detail: 'Wake for a dedicated sunrise over the salt flats — sunrise and landscape photography in the still morning light.' },
-          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast and a last look at the lake before heading back.' },
-          { time: 'Morning', title: 'Departure', detail: 'Return towards Delhi or Jaipur. Trip concludes.' },
+          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast and a last look at the lake.' },
+          { time: 'Afternoon', title: 'Lunch & Departure', detail: 'Lunch, then begin the return journey towards Delhi or Jaipur. Trip concludes.' },
         ],
       },
     ],
@@ -576,17 +566,17 @@ export const destinations: Destination[] = [
     imageMobile: IMAGES.tijaraMobile,
     heroImage: IMAGES.tijara,
     categoryLabel: 'Weekend Astronomy Escape',
-    durationLabel: '3 Days · 2 Nights',
+    durationLabel: '2 Days · 1 Night',
     heroStats: [
       { label: 'Location', value: 'Tijara, Alwar · Rajasthan' },
-      { label: 'Duration', value: '3D · 2N (Fri–Sun)' },
+      { label: 'Duration', value: '2D · 1N (Sat–Sun)' },
       { label: 'Departs', value: 'Delhi / Jaipur' },
       { label: 'Dark Sky', value: 'Bortle 4' },
     ],
     capacity: 30,
     collegeGroups: true,
     overview:
-      'Tijara is the closest a Delhi student can get to a real dark sky on a Friday-night budget. A couple of hours south of the city in the Aravalli hills of Alwar, it swaps the NCR’s permanent orange haze for quiet heritage country — the restored Tijara Fort-Palace on one ridge, a Jain pilgrimage temple down the road, and above it all a sky that actually has stars in it. The weekend is built around the telescope and the night, with just enough of the region by day to stretch your legs.',
+      'Tijara is the closest a Delhi student can get to a real dark sky on a student budget. A couple of hours south of the city in the Aravalli hills of Alwar, it swaps the NCR’s permanent orange haze for quiet heritage country — the restored Tijara Fort-Palace on one ridge, a Jain pilgrimage temple down the road, and above it all a sky that actually has stars in it. The weekend is built around the telescope and the night, with just enough of the region by day to stretch your legs.',
     highlights: [
       'A real dark-ish sky within reach of Delhi',
       'Guided telescope observation of planets, clusters & nebulae',
@@ -637,24 +627,14 @@ export const destinations: Destination[] = [
     ],
     itinerary: [
       {
-        day: 'Friday',
-        title: 'Out of the City, Into the Dark',
-        summary: 'A short run from Delhi to a sky worth staying up for.',
-        events: [
-          { time: 'Evening', title: 'Departure', detail: 'Leave Delhi or Jaipur and drive into the Aravalli country around Tijara.' },
-          { time: 'Night', title: 'Arrival & Check-in', detail: 'Settle in, then head out to let your eyes adapt to a properly dark sky.' },
-          { time: 'Night', title: 'Guided Stargazing', detail: 'Naked-eye astronomy, constellation identification and seasonal sky orientation, followed by telescope set-up.' },
-          { time: 'Late night', title: 'Telescope & Deep-Sky Intro', detail: 'Guided telescope observation and an introduction to deep-sky viewing where conditions allow.' },
-        ],
-      },
-      {
         day: 'Saturday',
-        title: 'Heritage by Day, the Flagship Night',
-        summary: 'A little of Alwar’s history, then the primary astronomy night.',
+        title: 'Out of the City, Into the Dark',
+        summary: 'A short run from Delhi, a little Alwar heritage, then the sky.',
         events: [
-          { time: 'Morning', title: 'Breakfast', detail: 'An easy start after the first night’s observing.' },
-          { time: 'Late morning', title: 'Local Sightseeing', detail: 'A lightweight visit to the heritage Tijara Fort-Palace and the nearby Tijara Jain temple — kept short so the astronomy stays the focus.' },
-          { time: 'Afternoon', title: 'Rest & Camera Prep', detail: 'Lunch, downtime and an optional walk-through of camera settings and night-photography basics.' },
+          { time: 'Morning', title: 'Departure from Delhi', detail: 'Leave Delhi and drive into the Aravalli country around Tijara. Jaipur departures join the same day.' },
+          { time: 'Afternoon', title: 'Arrival & Check-in', detail: 'Reach Tijara and settle in before the light goes.' },
+          { time: 'Afternoon', title: 'Local Sightseeing', detail: 'A lightweight visit to the heritage Tijara Fort-Palace and the nearby Tijara Jain temple — kept short so the astronomy stays the focus.' },
+          { time: 'Sunset', title: 'First Light on the Sky', detail: 'Telescopes go up as the sun drops: the visible planets and brightest objects first, with naked-eye constellation identification and seasonal sky orientation.' },
           { time: 'Night', title: 'Flagship Astronomy Night', detail: 'Guided stargazing, telescope observation of clusters, nebulae, planets and the Moon, astronomy storytelling, and hands-on practical telescope use.' },
           { time: 'Late night', title: 'Basic Astrophotography', detail: 'Camera set-up and manual controls — ISO, shutter, aperture, manual focus, tripod technique and Milky Way basics where conditions permit, plus simple mobile astrophotography.' },
         ],
@@ -666,7 +646,7 @@ export const destinations: Destination[] = [
         events: [
           { time: 'Pre-dawn', title: 'Aravalli Sunrise', detail: 'A dedicated sunrise session with landscape and sunrise photography in the quiet morning light.' },
           { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast before wrapping up.' },
-          { time: 'Morning', title: 'Departure', detail: 'Return towards Delhi or Jaipur. Trip concludes.' },
+          { time: 'Afternoon', title: 'Lunch & Departure', detail: 'Lunch, then depart for Delhi or Jaipur. Trip concludes.' },
         ],
       },
     ],
@@ -873,7 +853,7 @@ export const galleryCategories = [
  * ------------------------------------------------------------------------- *
  *  Himalayan expeditions are hand-scheduled batches (listed explicitly below).
  *  The Rajasthan weekend escapes run EVERY weekend across the season, so their
- *  Friday→Sunday slots are GENERATED from real calendar dates (never hand-typed
+ *  Saturday→Sunday slots are GENERATED from real calendar dates (never hand-typed
  *  weekdays) by `weekendSlots()`. To extend or shorten the season, edit
  *  WEEKEND_SEASON_START / WEEKEND_SEASON_END — no other change needed. Capacity
  *  is a real number (30 seats); availability is not faked, so every generated
@@ -894,8 +874,8 @@ interface WeekendSlotOpts {
 }
 
 /**
- * Generate a Friday→Sunday `SlotEvent` for every weekend in the season window,
- * starting from the next Friday on or after today (so past weekends drop off
+ * Generate a Saturday→Sunday `SlotEvent` for every weekend in the season window,
+ * starting from the next Saturday on or after today (so past weekends drop off
  * automatically). Weekdays are derived from the real calendar via `Date`.
  */
 export function weekendSlots({
@@ -911,25 +891,25 @@ export function weekendSlots({
   const now = new Date()
   const cursor = new Date(Math.max(start.getTime(), now.getTime()))
   cursor.setUTCHours(12, 0, 0, 0)
-  // Advance to the next Friday (UTC day 5).
-  while (cursor.getUTCDay() !== 5) cursor.setUTCDate(cursor.getUTCDate() + 1)
+  // Advance to the next Saturday (UTC day 6).
+  while (cursor.getUTCDay() !== 6) cursor.setUTCDate(cursor.getUTCDate() + 1)
 
   const fmt = (d: Date) =>
     d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 
   const out: SlotEvent[] = []
   while (cursor.getTime() <= end.getTime()) {
-    const fri = new Date(cursor)
+    const sat = new Date(cursor)
     const sun = new Date(cursor)
-    sun.setUTCDate(sun.getUTCDate() + 2)
-    const iso = fri.toISOString().slice(0, 10)
+    sun.setUTCDate(sun.getUTCDate() + 1)
+    const iso = sat.toISOString().slice(0, 10)
     out.push({
       id: `${idPrefix}-${iso}`,
       batchName,
       destinationSlug: slug,
       date: iso,
-      dateLabel: `${fmt(fri)} – ${fmt(sun)} ${sun.getUTCFullYear()}`,
-      nights: 2,
+      dateLabel: `${fmt(sat)} – ${fmt(sun)} ${sun.getUTCFullYear()}`,
+      nights: 1,
       seatsTotal,
       seatsAvailable: seatsTotal,
       status: 'open',
