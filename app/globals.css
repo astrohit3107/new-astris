@@ -3,45 +3,58 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================================
+   THEME TOKENS
+   ----------------------------------------------------------------------------
+   :root  = LIGHT  — "astronomy journal / museum": warm paper ground, deep ink
+                     typography, hairline rules, restrained gold accent.
+   .dark  = DARK   — "observatory / night": the original deep-space identity.
+   Both share the same accent family so the two themes read as one brand.
+   next-themes toggles the `.dark` class on <html> (see app/layout.tsx).
+   ========================================================================== */
 :root {
-  /* Astroventure cosmic accents */
+  /* Astroventure cosmic accents (shared by both themes) */
   --av-aurora: oklch(0.80 0.13 195);   /* glacial teal-cyan */
   --av-nebula: oklch(0.62 0.20 290);   /* cosmic violet */
   --av-gold: oklch(0.83 0.11 78);      /* warm starlight gold */
   --av-deep: oklch(0.07 0.02 265);     /* deep-space navy */
-  --background: oklch(0.10 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.15 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.15 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.98 0 0);
-  --primary-foreground: oklch(0.10 0 0);
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.40 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.98 0 0);
-  --accent-foreground: oklch(0.10 0 0);
+
+  /* --- LIGHT THEME ---
+     Warm off-white paper rather than pure #fff, so photography sits calmly. */
+  --background: oklch(0.985 0.003 85);
+  --foreground: oklch(0.22 0.012 265);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.012 265);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.012 265);
+  --primary: oklch(0.24 0.015 265);
+  --primary-foreground: oklch(0.99 0.002 85);
+  --secondary: oklch(0.955 0.005 85);
+  --secondary-foreground: oklch(0.24 0.015 265);
+  --muted: oklch(0.93 0.004 85);
+  --muted-foreground: oklch(0.48 0.01 265);
+  /* Accent stays in the starlight-gold family, darkened for contrast on paper. */
+  --accent: oklch(0.58 0.11 62);
+  --accent-foreground: oklch(0.99 0.002 85);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.25 0 0);
-  --input: oklch(0.20 0 0);
-  --ring: oklch(0.98 0 0);
-  --chart-1: oklch(0.98 0 0);
-  --chart-2: oklch(0.80 0 0);
-  --chart-3: oklch(0.60 0 0);
-  --chart-4: oklch(0.40 0 0);
-  --chart-5: oklch(0.20 0 0);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.89 0.005 85);
+  --input: oklch(0.92 0.004 85);
+  --ring: oklch(0.58 0.11 62);
+  --chart-1: oklch(0.24 0.015 265);
+  --chart-2: oklch(0.42 0.012 265);
+  --chart-3: oklch(0.58 0.010 265);
+  --chart-4: oklch(0.72 0.008 265);
+  --chart-5: oklch(0.86 0.005 265);
   --radius: 0.625rem;
-  --sidebar: oklch(0.15 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.98 0 0);
-  --sidebar-primary-foreground: oklch(0.10 0 0);
-  --sidebar-accent: oklch(0.98 0 0);
-  --sidebar-accent-foreground: oklch(0.10 0 0);
-  --sidebar-border: oklch(0.25 0 0);
-  --sidebar-ring: oklch(0.98 0 0);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.22 0.012 265);
+  --sidebar-primary: oklch(0.24 0.015 265);
+  --sidebar-primary-foreground: oklch(0.99 0.002 85);
+  --sidebar-accent: oklch(0.955 0.005 85);
+  --sidebar-accent-foreground: oklch(0.24 0.015 265);
+  --sidebar-border: oklch(0.89 0.005 85);
+  --sidebar-ring: oklch(0.58 0.11 62);
 }
 
 .dark {
@@ -57,8 +70,8 @@
   --secondary-foreground: oklch(0.98 0 0);
   --muted: oklch(0.40 0 0);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.98 0 0);
-  --accent-foreground: oklch(0.10 0 0);
+  --accent: oklch(0.83 0.11 78);
+  --accent-foreground: oklch(0.16 0.01 265);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
   --border: oklch(0.25 0 0);

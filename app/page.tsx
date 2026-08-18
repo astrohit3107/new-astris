@@ -4,8 +4,7 @@ import Hero from '@/components/hero'
 import SpitiFeatured from '@/components/spiti-featured'
 import AstroventureLineup from '@/components/astroventure-lineup'
 import SpitiPromoPopup from '@/components/spiti-promo-popup'
-import AstroTrain from '@/components/astrotrain'
-import AstroEd from '@/components/astroed'
+import ProgramTeasers from '@/components/program-teasers'
 import NakshatraScopes from '@/components/nakshatra-scopes'
 import PartnersMarquee from '@/components/partners-marquee'
 import WhyAstris from '@/components/why-astris'
@@ -20,8 +19,7 @@ export default function Home() {
       <Hero />
       <SpitiFeatured />
       <AstroventureLineup />
-      <AstroTrain />
-      <AstroEd />
+      <ProgramTeasers />
       <NakshatraScopes />
       <PartnersMarquee />
       <WhyAstris />

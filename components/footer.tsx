@@ -32,17 +32,17 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#astrotrain" data-link="astrotrain" className="text-xs text-foreground/70 hover:text-accent transition">
+                <a href="/astrotrain" className="text-xs text-foreground/70 hover:text-accent transition">
                   AstroTrain
                 </a>
               </li>
               <li>
-                <a href="#astroed" data-link="astroed" className="text-xs text-foreground/70 hover:text-accent transition">
+                <a href="/astroed" className="text-xs text-foreground/70 hover:text-accent transition">
                   AstroEd
                 </a>
               </li>
               <li>
-                <a href="#telescopes" data-link="telescopes" className="text-xs text-foreground/70 hover:text-accent transition">
+                <a href="/#telescopes" className="text-xs text-foreground/70 hover:text-accent transition">
                   Nakshatra Scopes
                 </a>
               </li>

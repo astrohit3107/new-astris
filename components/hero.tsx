@@ -1,6 +1,7 @@
 'use client'
 
 import { Sparkles, ArrowRight } from 'lucide-react'
+import { ENQUIRY, telHref } from '@/lib/site-config'
 
 export default function Hero() {
   return (
@@ -60,24 +61,26 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 justify-center pt-3">
-          <button 
-            data-link-button="proposal"
+          <a
+            href={ENQUIRY.general.email}
             className="px-6 py-2.5 bg-white hover:bg-white/95 text-black font-bold text-sm rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-2xl shadow-lg"
           >
             Request Proposal
-          </button>
-          <button 
-            data-link-button="call"
+          </a>
+          <a
+            href={telHref}
             className="px-6 py-2.5 border-2 border-white/60 hover:border-white text-white font-bold text-sm rounded-lg transition-all duration-500 hover:bg-white/5 bg-transparent backdrop-blur-sm"
           >
             Book a Call
-          </button>
-          <button 
-            data-link-button="whatsapp"
+          </a>
+          <a
+            href={ENQUIRY.general.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-6 py-2.5 bg-black/60 hover:bg-black/70 text-white font-bold text-sm rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-2xl backdrop-blur-sm border border-white/20"
           >
             WhatsApp Us
-          </button>
+          </a>
         </div>
 
         {/* Scroll indicator */}

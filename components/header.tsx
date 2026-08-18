@@ -1,17 +1,30 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X, Sparkles, ChevronDown, ArrowUpRight, Camera, Moon, Telescope, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { experiencesInOrder } from '@/lib/astroventure-experiences'
+import ThemeToggle from '@/components/theme-toggle'
+import { CONTACT, ENQUIRY, telHref } from '@/lib/site-config'
 
 // Icon lookup for the registry-driven Astroventure menu.
 const NAV_ICONS = { Sparkles, Camera, Moon, Telescope, MapPin } as const
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
   // Single source of truth: every active Astroventure experience.
   const experiences = experiencesInOrder
+
+  // AstroEd and AstroTrain are real routes now, not homepage anchors.
+  const navLinks = [
+    { label: 'AstroEd', href: '/astroed' },
+    { label: 'AstroTrain', href: '/astrotrain' },
+    { label: 'Telescopes', href: '/#telescopes' },
+    { label: 'About', href: '/#about' },
+  ]
+  const isActive = (href: string) => href.startsWith('/') && !href.includes('#') && pathname === href
 
   return (
     <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -73,35 +86,41 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <a href="#astrotrain" data-link="astrotrain" className="text-xs font-medium text-foreground/60 hover:text-foreground transition-colors duration-300">
-              AstroTrain
-            </a>
-            <a href="#astroed" data-link="astroed" className="text-xs font-medium text-foreground/60 hover:text-foreground transition-colors duration-300">
-              AstroEd
-            </a>
-            <a href="#telescopes" data-link="telescopes" className="text-xs font-medium text-foreground/60 hover:text-foreground transition-colors duration-300">
-              Telescopes
-            </a>
-            <a href="#about" data-link="about" className="text-xs font-medium text-foreground/60 hover:text-foreground transition-colors duration-300">
-              About
-            </a>
+            {navLinks.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                aria-current={isActive(l.href) ? 'page' : undefined}
+                className={`text-xs font-medium transition-colors duration-300 hover:text-foreground ${
+                  isActive(l.href) ? 'text-foreground' : 'text-foreground/60'
+                }`}
+              >
+                {l.label}
+              </a>
+            ))}
           </nav>
 
           <div className="hidden md:flex items-center space-x-2">
-            <Button variant="outline" size="sm" data-link-button="call" className="text-xs bg-transparent border-foreground/20 text-foreground hover:bg-foreground/10">
-              Book a Call
+            <ThemeToggle />
+            <Button asChild variant="outline" size="sm" className="text-xs bg-transparent border-foreground/20 text-foreground hover:bg-foreground/10">
+              <a href={telHref}>Call</a>
             </Button>
-            <Button size="sm" data-link-button="whatsapp" className="bg-foreground hover:bg-foreground/90 text-background text-xs">
-              WhatsApp
+            <Button asChild size="sm" className="bg-foreground hover:bg-foreground/90 text-background text-xs">
+              <a href={ENQUIRY.general.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
             </Button>
           </div>
 
-          <button
+          <div className="flex items-center gap-1.5 md:hidden">
+            <ThemeToggle />
+            <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-foreground/10 text-foreground"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+            className="p-2 rounded-lg hover:bg-foreground/10 text-foreground"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            </button>
+          </div>
         </div>
 
         {mobileMenuOpen && (
@@ -135,24 +154,25 @@ export default function Header() {
                   <ArrowUpRight size={13} className="text-foreground/40" />
                 </a>
               </div>
-              <a href="#astrotrain" data-link="astrotrain" className="text-xs text-foreground/60 hover:text-foreground transition-colors px-2 py-2 duration-300">
-                AstroTrain
-              </a>
-              <a href="#astroed" data-link="astroed" className="text-xs text-foreground/60 hover:text-foreground transition-colors px-2 py-2 duration-300">
-                AstroEd
-              </a>
-              <a href="#telescopes" data-link="telescopes" className="text-xs text-foreground/60 hover:text-foreground transition-colors px-2 py-2 duration-300">
-                Telescopes
-              </a>
-              <a href="#about" data-link="about" className="text-xs text-foreground/60 hover:text-foreground transition-colors px-2 py-2 duration-300">
-                About
-              </a>
+              {navLinks.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-current={isActive(l.href) ? 'page' : undefined}
+                  className={`text-xs transition-colors px-2 py-2 duration-300 hover:text-foreground ${
+                    isActive(l.href) ? 'text-foreground font-semibold' : 'text-foreground/60'
+                  }`}
+                >
+                  {l.label}
+                </a>
+              ))}
               <div className="flex flex-col space-y-2 pt-2 px-2">
-                <Button variant="outline" size="sm" data-link-button="call" className="w-full text-xs bg-transparent border-foreground/20 text-foreground hover:bg-foreground/10">
-                  Book a Call
+                <Button asChild variant="outline" size="sm" className="w-full text-xs bg-transparent border-foreground/20 text-foreground hover:bg-foreground/10">
+                  <a href={telHref}>Call {CONTACT.phone}</a>
                 </Button>
-                <Button size="sm" data-link-button="whatsapp" className="w-full bg-foreground hover:bg-foreground/90 text-background text-xs">
-                  WhatsApp
+                <Button asChild size="sm" className="w-full bg-foreground hover:bg-foreground/90 text-background text-xs">
+                  <a href={ENQUIRY.general.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 </Button>
               </div>
             </nav>

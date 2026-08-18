@@ -1,6 +1,7 @@
 'use client'
 
 import { MessageCircle, Calendar, FileText } from 'lucide-react'
+import { CONTACT, ENQUIRY, telHref } from '@/lib/site-config'
 
 export default function FinalCTA() {
   const channels = [
@@ -9,21 +10,24 @@ export default function FinalCTA() {
       title: 'Request Proposal',
       desc: 'Customized solution for your institution',
       action: 'Get a Proposal',
-      link: 'proposal-link'
+      href: ENQUIRY.general.email,
+      external: false
     },
     {
       icon: Calendar,
       title: 'Book a Call',
       desc: 'Discuss your astronomy journey with experts',
       action: 'Schedule Now',
-      link: 'call-link'
+      href: telHref,
+      external: false
     },
     {
       icon: MessageCircle,
       title: 'Chat on WhatsApp',
       desc: 'Quick answers to your questions',
       action: 'Message Us',
-      link: 'whatsapp-link'
+      href: ENQUIRY.general.whatsapp,
+      external: true
     },
   ]
 
@@ -45,9 +49,10 @@ export default function FinalCTA() {
           {channels.map((channel, idx) => {
             const Icon = channel.icon
             return (
-              <button
+              <a
                 key={idx}
-                data-link-button={channel.link}
+                href={channel.href}
+                {...(channel.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 className="p-6 rounded-xl bg-secondary/50 hover:bg-secondary/80 border border-primary/20 hover:border-accent/50 transition-all duration-300 group text-left space-y-3 hover:shadow-lg hover:shadow-accent/10"
               >
                 <div className="w-11 h-11 rounded-lg bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-all">
@@ -61,7 +66,7 @@ export default function FinalCTA() {
                   {channel.action}
                   <span>→</span>
                 </div>
-              </button>
+              </a>
             )
           })}
         </div>
