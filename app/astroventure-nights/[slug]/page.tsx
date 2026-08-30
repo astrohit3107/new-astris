@@ -1,3 +1,4 @@
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import DestinationHero from '@/components/astroventure/destination-hero'
@@ -21,7 +22,8 @@ import {
   faqs as defaultFaqs,
 } from '@/lib/astroventure-data'
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 type Params = { slug: string }
 

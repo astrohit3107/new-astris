@@ -1,3 +1,4 @@
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 import SpitiHero from '@/components/spiti/hero'
 import SpitiOverview from '@/components/spiti/overview'
 import SpitiHighlights from '@/components/spiti/highlights'
@@ -16,7 +17,8 @@ import {
   spitiItinerary,
 } from '@/lib/spiti-data'
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 function StructuredData() {
   const jsonLd = {

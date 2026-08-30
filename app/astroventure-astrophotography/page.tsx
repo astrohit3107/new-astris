@@ -1,3 +1,4 @@
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 import AstroHero from '@/components/astrophotography/hero'
 import AstroIntro from '@/components/astrophotography/intro'
 import AstroTrainer from '@/components/astrophotography/trainer'
@@ -26,7 +27,8 @@ import {
   astroFaqs,
 } from '@/lib/astrophotography-data'
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 function StructuredData() {
   const jsonLd = {

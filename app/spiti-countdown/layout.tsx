@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Space_Mono, Playfair_Display } from 'next/font/google'
 import { MISSION } from './mission.config'
 import './spiti-countdown.css'
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 
 /**
  * Technical / UI monospace and the narrative serif for the Spiti Countdown
@@ -24,7 +25,8 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
 })
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -1,12 +1,42 @@
 /**
  * ============================================================================
- *  ASTRIS SPACE — SITE-WIDE CONTACT & CTA CONFIG
+ *  ASTRIS SPACE — SITE IDENTITY, CANONICAL DOMAIN & CONTACT CONFIG
  * ============================================================================
- *  One source of truth for the official contact details used across the main
- *  site (header, homepage, /astroed, /astrotrain, footer). These match the
- *  numbers already configured in spiti-data / astroventure-data /
- *  astrophotography-data — change them here for the main-site surfaces.
+ *  SINGLE SOURCE OF TRUTH for the production domain and brand identity.
+ *
+ *  CANONICAL DOMAIN
+ *  ----------------
+ *  https://www.astriseducation.in  — verified live (200 OK). The apex
+ *  (astriseducation.in) 307-redirects here, so "www" is the canonical host.
+ *
+ *  Every canonical URL, Open Graph URL, sitemap entry and JSON-LD @id is built
+ *  from `SITE.url`. Never hardcode a domain anywhere else, and never let a
+ *  *.vercel.app deployment URL into a production SEO signal.
+ *
+ *  Override per-environment with NEXT_PUBLIC_SITE_URL if the domain ever moves.
  * ========================================================================== */
+
+/** Canonical production origin, no trailing slash. */
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.astriseducation.in'
+).replace(/\/$/, '')
+
+export const SITE = {
+  /** Primary brand name — the single name Google should display. */
+  name: 'Astris Space',
+  shortName: 'Astris',
+  url: SITE_URL,
+  description:
+    'Astris Space is an astronomy and space education ecosystem — dark-sky expeditions and astrophotography workshops (Astroventure), Space Labs and astronomy curriculum for schools (AstroEd), guest astronomy experiences for properties (AstroTrain), and Nakshatra Scopes telescopes.',
+  locale: 'en_IN',
+  logo: '/logo.svg',
+  ogImage: '/icon-512.png',
+} as const
+
+/** Absolute URL for any site-relative path. */
+export function absoluteUrl(path = '/'): string {
+  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
+}
 
 export const CONTACT = {
   brand: 'Astris Space',

@@ -1,3 +1,4 @@
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 import {
   WorkshopHero,
   WorkshopPromise,
@@ -19,7 +20,8 @@ import {
   workshopWeekends,
 } from '@/lib/workshop-delhi-data'
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 function StructuredData() {
   const weekends = workshopWeekends()

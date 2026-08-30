@@ -3,6 +3,7 @@ import { Fraunces } from 'next/font/google'
 import SpitiNav from '@/components/spiti/nav'
 import SpitiFooter from '@/components/spiti/footer'
 import { SPITI } from '@/lib/spiti-data'
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 
 /**
  * Premium display serif for headlines, exposed via the `--font-fraunces`
@@ -14,7 +15,8 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
 })
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

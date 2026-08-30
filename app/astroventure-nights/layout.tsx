@@ -3,6 +3,7 @@ import { Fraunces } from 'next/font/google'
 import AstroNav from '@/components/astroventure/nav'
 import AstroFooter from '@/components/astroventure/footer'
 import { SITE } from '@/lib/astroventure-data'
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 
 /**
  * Premium display serif for headlines. Loaded only on the Astroventure
@@ -16,8 +17,8 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
 })
 
-// TODO: set this to your production domain so OG/canonical URLs resolve absolutely.
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

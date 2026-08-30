@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { SITE_URL } from '@/lib/site-config'
 
 /**
  * ============================================================================
@@ -268,8 +269,7 @@ export async function POST(req: Request) {
   const origin =
     req.headers.get('origin') ||
     (host ? `https://${host}` : '') ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    'https://www.astriseducation.in'
+    SITE_URL
 
   try {
     const result = await sendEmail(data, origin)

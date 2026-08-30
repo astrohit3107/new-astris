@@ -11,8 +11,10 @@ import Testimonials from '@/components/astroventure/testimonials'
 import Faq from '@/components/astroventure/faq'
 import FinalCta from '@/components/astroventure/final-cta'
 import { SITE, activeDestinations, destinations, upcomingEvents, faqs } from '@/lib/astroventure-data'
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 function StructuredData() {
   const jsonLd = {

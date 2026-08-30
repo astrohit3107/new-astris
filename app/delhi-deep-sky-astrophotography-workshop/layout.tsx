@@ -3,6 +3,7 @@ import { Fraunces } from 'next/font/google'
 import WorkshopNav from '@/components/workshop-delhi/nav'
 import WorkshopFooter from '@/components/workshop-delhi/footer'
 import { WORKSHOP } from '@/lib/workshop-delhi-data'
+import { SITE_URL as CANONICAL_SITE_URL } from '@/lib/site-config'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -10,7 +11,8 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
 })
 
-const SITE_URL = 'https://astrisspace.com'
+// Canonical production domain — see lib/site-config.ts
+const SITE_URL = CANONICAL_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
