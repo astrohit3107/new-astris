@@ -511,3 +511,37 @@ html { scroll-behavior: smooth; }
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   HERO SLIDER
+   ========================================================================== */
+
+/* Slow drift on the active slide. Scale never returns to 1 so the image
+   always fully covers, even mid-animation. */
+@keyframes hero-drift {
+  0%   { transform: scale(1.08) translate3d(0, 0, 0); }
+  100% { transform: scale(1.16) translate3d(-1.2%, -0.8%, 0); }
+}
+.animate-hero-drift {
+  animation: hero-drift 9s ease-out both;
+  will-change: transform;
+}
+
+/* The progress bar under the active slide. Duration is set inline from the
+   same constant that drives the timer, so the two can never drift apart. */
+@keyframes hero-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+.animate-hero-progress {
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-drift,
+  .animate-hero-progress {
+    animation: none !important;
+  }
+}
