@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/site-config'
 import { activeDestinations } from '@/lib/astroventure-data'
+import { experiences as nakshatraalayExperiences } from '@/lib/nakshatraalay-data'
 
 /**
  * XML sitemap — canonical production URLs only.
@@ -18,6 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/astrotrain', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/nakshatraalay/gurgaon', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/first-light', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/experiences', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/sky-calendar', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/groups', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/schools', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/astroventure-nights', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/astroventure-spiti-26', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/astroventure-astrophotography', priority: 0.8, changeFrequency: 'monthly' },
@@ -33,7 +38,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'weekly' as const,
   }))
 
-  return [...staticRoutes, ...destinationRoutes].map((r) => ({
+  const experienceRoutes = nakshatraalayExperiences.map((e) => ({
+    path: `/experiences/${e.slug}`,
+    priority: 0.7,
+    changeFrequency: 'monthly' as const,
+  }))
+
+  return [...staticRoutes, ...destinationRoutes, ...experienceRoutes].map((r) => ({
     url: `${SITE_URL}${r.path === '/' ? '/' : r.path}`,
     lastModified: now,
     changeFrequency: r.changeFrequency,

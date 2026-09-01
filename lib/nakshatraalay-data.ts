@@ -29,11 +29,39 @@ export interface NakshatraalayExperience {
   kind: 'public_event' | 'workshop' | 'private' | 'family'
   title: string
   summary: string
+  /** Longer copy for the detail page. */
+  description?: string
   /** Null renders "on enquiry" — never a placeholder number. */
   fromPriceLabel: string | null
   durationLabel: string
+  /** What the evening actually consists of, in order. */
+  runOfNight?: { time: string; title: string; detail: string }[]
+  includes?: string[]
+  bring?: string[]
+  ageGuidance?: string
+  skillLevel?: string
+  equipmentProvided?: string[]
+  /**
+   * Group size we plan for. A label, never a live seat count — this site has
+   * no booking database and must not imply one.
+   */
+  groupSizeLabel?: string
   /** Illustrative programming, clearly badged so it reads as a sample. */
   sample: boolean
+}
+
+/**
+ * A dated night. Configured here rather than generated, so nothing appears on
+ * the calendar that has not actually been planned.
+ *
+ * `date` is ISO (YYYY-MM-DD). Past dates are filtered out at render time, so
+ * the calendar shrinks by itself rather than showing stale nights.
+ */
+export interface ScheduledNight {
+  date: string
+  experienceSlug: string
+  /** Optional note, e.g. 'Perseid peak'. */
+  note?: string
 }
 
 export interface StayType {
@@ -91,6 +119,18 @@ export const experiences: NakshatraalayExperience[] = [
       'The flagship weekend night: telescope observation, deep-sky targets when conditions allow, and the option to stay over.',
     fromPriceLabel: null,
     durationLabel: 'Evening into night',
+    description:
+      'The full weekend night. We start while there is still light in the sky, set up, and work through the evening as objects rise — the Moon if it is up, the planets that are visible, then star clusters and whatever deep sky the conditions allow. You can stay over and carry on until you are done.',
+    runOfNight: [
+      { time: 'Dusk', title: 'Arrival & setup', detail: 'Settle in, meet the group, and watch the telescopes go up while the light drops.' },
+      { time: 'Early evening', title: 'Naked-eye sky tour', detail: 'Learning to actually read the sky — the bright stars, the constellations that anchor the season, and how to find your way around.' },
+      { time: 'Evening', title: 'Telescope observation', detail: 'The Moon and visible planets first, while the sky finishes darkening.' },
+      { time: 'Night', title: 'Deep sky', detail: 'Star clusters, and nebulae or galaxies where the conditions and the Moon allow.' },
+    ],
+    includes: ['Guided observation throughout', 'Use of telescopes', 'Sky orientation for beginners'],
+    bring: ['Warm layers — it gets colder than you expect', 'A red-light torch if you have one', 'Flat shoes'],
+    ageGuidance: 'All ages. Children welcome with an adult.',
+    groupSizeLabel: 'Small group',
     sample: true,
   },
   {
@@ -101,6 +141,19 @@ export const experiences: NakshatraalayExperience[] = [
       'Learn to photograph the night sky from scratch — camera settings, focus, tracking, and a first real image to take home.',
     fromPriceLabel: null,
     durationLabel: 'One night',
+    description:
+      'A hands-on introduction to photographing the night sky. We start with what your camera can already do, get you to a real exposure, and work through focus, tracking and stacking — so you leave with an image you took, and the understanding to take the next one alone.',
+    runOfNight: [
+      { time: 'Evening', title: 'Camera fundamentals', detail: 'Manual mode, ISO, aperture, shutter — and why the night sky breaks the rules you learned in daylight.' },
+      { time: 'Dusk', title: 'Focus & framing', detail: 'Getting genuinely sharp stars, which is where most first attempts fall down.' },
+      { time: 'Night', title: 'Shooting', detail: 'Wide-field night sky, star trails, and tracked exposures where conditions permit.' },
+      { time: 'Late', title: 'Stacking & processing', detail: 'Turning a stack of frames into a single finished image.' },
+    ],
+    includes: ['Hands-on guidance all night', 'Use of tripods and tracking where available', 'Processing walkthrough'],
+    bring: ['A camera with manual mode (DSLR, mirrorless — or ask us)', 'Any lens you own, ideally a fast wide one', 'A tripod if you have one', 'Spare batteries — cold drains them fast'],
+    skillLevel: 'Beginner — no prior astrophotography needed',
+    equipmentProvided: ['Telescopes', 'Tripods and tracking mounts, subject to availability'],
+    groupSizeLabel: 'Small group, so everyone gets hands-on time',
     sample: true,
   },
   {
@@ -111,6 +164,11 @@ export const experiences: NakshatraalayExperience[] = [
       'A private telescope evening for two, with a guide who stays as long as the sky is worth watching.',
     fromPriceLabel: null,
     durationLabel: 'Private evening',
+    description:
+      'A private evening with a telescope and a guide who is there for the two of you — no group, no schedule beyond what the sky is doing. Tell us the occasion and we will build the night around it.',
+    includes: ['Private guide for the evening', 'Dedicated telescope time', 'The night paced to you'],
+    bring: ['Warm layers', 'Anything you would like set up for the occasion — tell us in advance'],
+    groupSizeLabel: 'Private — just your party',
     sample: true,
   },
   {
@@ -121,6 +179,17 @@ export const experiences: NakshatraalayExperience[] = [
       'Built for curious kids and the adults they drag along — the Moon through a telescope, and questions taken seriously.',
     fromPriceLabel: null,
     durationLabel: 'Evening',
+    description:
+      'An evening built for children who ask a lot of questions. The Moon through a telescope is usually the moment it lands — craters and mountains, sharp enough to feel real — and we take every question seriously, including the hard ones.',
+    runOfNight: [
+      { time: 'Early evening', title: 'Finding your way', detail: 'The brightest things up tonight, and how to spot them without a telescope.' },
+      { time: 'Evening', title: 'The Moon and planets', detail: 'The bit everyone remembers — the Moon at high magnification, and Jupiter or Saturn when they are up.' },
+      { time: 'Later', title: 'Questions', detail: 'How far, how old, how do we know. Answered properly.' },
+    ],
+    includes: ['Guided observation', 'Use of telescopes', 'Astronomy suited to younger explorers'],
+    bring: ['Warm layers for everyone', 'Curiosity'],
+    ageGuidance: 'Designed for families. Younger children welcome with an adult.',
+    groupSizeLabel: 'Small group',
     sample: true,
   },
 ]
@@ -145,6 +214,44 @@ export const EXPERIENCE_KIND_LABEL: Record<NakshatraalayExperience['kind'], stri
   workshop: 'Workshop',
   private: 'Private',
   family: 'Family',
+}
+
+/* ---------------------------------------------------------------------------
+ * Policies
+ *
+ * Astronomy depends on weather. These are written once and shown wherever a
+ * booking decision is made, because the honest version of this product says
+ * plainly that a clear sky cannot be promised.
+ * ------------------------------------------------------------------------- */
+export const POLICIES = {
+  weather:
+    'Observation is always subject to cloud and sky conditions. If the sky closes in we run the session indoors — telescope walkthroughs, astrophotography theory and sky planning — and use every clear window we get. We never promise a specific object on a specific night.',
+  cancellation:
+    'Tell us as early as you can if your plans change and we will do our best to move you to another night. Exact terms are confirmed when your booking is confirmed on WhatsApp.',
+  capacity:
+    'Groups are deliberately small so everybody gets real time at the eyepiece. Availability is confirmed by message — this page does not show live seat counts.',
+} as const
+
+/* ---------------------------------------------------------------------------
+ * Scheduled nights
+ *
+ * EMPTY BY DESIGN. Add entries as dates are fixed, e.g.
+ *   { date: '2026-11-14', experienceSlug: 'saturday-under-the-stars' }
+ * The events page and the sky calendar both read this list, and both handle
+ * "nothing scheduled yet" as a real state rather than showing invented dates.
+ * ------------------------------------------------------------------------- */
+export const scheduledNights: ScheduledNight[] = []
+
+/** Upcoming nights only, earliest first. */
+export function upcomingNights(from: Date = new Date()): ScheduledNight[] {
+  const today = from.toISOString().slice(0, 10)
+  return scheduledNights
+    .filter((n) => n.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))
+}
+
+export function getExperience(slug: string): NakshatraalayExperience | undefined {
+  return experiences.find((e) => e.slug === slug)
 }
 
 /* ---------------------------------------------------------------------------

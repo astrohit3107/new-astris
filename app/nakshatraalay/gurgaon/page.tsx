@@ -9,7 +9,6 @@ import {
   stayTypes,
   EXPERIENCE_KIND_LABEL,
   bookHref,
-  experienceHref,
   groupHref,
 } from '@/lib/nakshatraalay-data'
 import { moonPhase } from '@/lib/moon-phase'
@@ -110,12 +109,12 @@ export default function NakshatraalayGurgaonPage() {
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#experiences"
+            <Link
+              href="/experiences"
               className="rounded-full bg-white px-7 py-3.5 text-center text-sm font-semibold text-black transition hover:bg-[var(--av-gold)]"
             >
               Explore experiences
-            </a>
+            </Link>
             {isOpen ? (
               <a
                 href={bookHref}
@@ -168,6 +167,13 @@ export default function NakshatraalayGurgaonPage() {
             </div>
           </div>
 
+          <Link
+            href="/sky-calendar"
+            className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--av-gold)] hover:underline"
+          >
+            See the best nights to come <ArrowRight size={14} />
+          </Link>
+
           <p className="mt-5 max-w-2xl text-xs leading-relaxed text-white/35">
             Moon phase is calculated, not forecast. What you actually see on the night also depends
             on cloud and haze — astronomy never comes with a guarantee, and we won&rsquo;t pretend
@@ -207,15 +213,12 @@ export default function NakshatraalayGurgaonPage() {
                     {exp.durationLabel} ·{' '}
                     {exp.fromPriceLabel ? `from ${exp.fromPriceLabel}` : 'on enquiry'}
                   </span>
-                  <a
-                    href={experienceHref(exp)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Enquire about ${exp.title} on WhatsApp`}
+                  <Link
+                    href={`/experiences/${exp.slug}`}
                     className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--av-gold)] hover:underline"
                   >
-                    Enquire <ArrowRight size={12} />
-                  </a>
+                    Details <ArrowRight size={12} />
+                  </Link>
                 </div>
               </article>
             ))}
