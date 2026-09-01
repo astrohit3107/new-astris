@@ -49,28 +49,38 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Company
+              Four links, as before. Three of the previous four pointed at
+              href="#" — dead links that went nowhere for visitors and were
+              read as broken by crawlers. They are replaced by real
+              destinations, and "#about" is now "/#about" so it works from
+              every route rather than only from the homepage.
+
+              This is also the ONE discreet entry point into the guides layer.
+              The primary navigation is deliberately left untouched: guides are
+              meant to be found through search, breadcrumbs and contextual
+              links, not by cluttering the header. */}
           <div>
             <h4 className="font-semibold text-foreground mb-4">Company</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#about" className="text-sm text-foreground/70 hover:text-foreground transition">
+                <a href="/#about" className="text-sm text-foreground/70 hover:text-foreground transition">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition">
-                  Our Impact
+                <a href="/guides" className="text-sm text-foreground/70 hover:text-foreground transition">
+                  Guides
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition">
-                  Success Stories
+                <a href="/stargazing" className="text-sm text-foreground/70 hover:text-foreground transition">
+                  Stargazing guides
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition">
-                  Blog
+                <a href="/astronomy-education" className="text-sm text-foreground/70 hover:text-foreground transition">
+                  Astronomy for schools
                 </a>
               </li>
             </ul>
@@ -102,21 +112,26 @@ export default function Footer() {
         {/* Bottom section */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-foreground/60">
-            © 2024 Astris Space. All rights reserved. | Bringing the universe closer.
+            © {new Date().getFullYear()} Astris Space. All rights reserved. | Bringing the universe
+            closer.
           </p>
 
-          {/* Social links placeholder */}
-          <div className="flex space-x-4">
-            <a href="#" className="text-sm text-foreground/60 hover:text-foreground transition">
-              Twitter
+          {/* The social row previously rendered three links pointing at href="#".
+              They went nowhere and read as broken links. Rather than invent
+              profile URLs, the row is removed until the real handles are
+              supplied — then restore it here with actual hrefs and
+              rel="noopener noreferrer". */}
+          <p className="text-sm text-foreground/50">
+            <a href="/astroventure-nights/privacy" className="hover:text-foreground transition">
+              Privacy
             </a>
-            <a href="#" className="text-sm text-foreground/60 hover:text-foreground transition">
-              LinkedIn
+            <span aria-hidden="true" className="px-2 text-foreground/25">
+              ·
+            </span>
+            <a href="/astroventure-nights/terms" className="hover:text-foreground transition">
+              Terms
             </a>
-            <a href="#" className="text-sm text-foreground/60 hover:text-foreground transition">
-              Instagram
-            </a>
-          </div>
+          </p>
         </div>
       </div>
     </footer>

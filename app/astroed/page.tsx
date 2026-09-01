@@ -21,7 +21,7 @@ import {
   ASTROED_OUTCOMES,
   ASTROED_SEO,
 } from '@/lib/astroed-data'
-import { ENQUIRY } from '@/lib/site-config'
+import { ENQUIRY, SITE_URL } from '@/lib/site-config'
 
 const ICONS: Record<string, LucideIcon> = {
   Building2,
@@ -53,15 +53,34 @@ export const metadata: Metadata = {
 }
 
 export default function AstroEdPage() {
+  // The Service was previously emitted alone, with the provider as a loose
+  // Organization node. It now sits in a @graph that references the
+  // Organization declared once in app/layout.tsx by @id, so the whole site
+  // resolves to a single entity — and carries a BreadcrumbList, which this
+  // page was missing. Nothing visible on the page changes.
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'AstroEd — Space Lab & Astronomy Curriculum for Schools',
-    serviceType: 'School astronomy programme',
-    description: ASTROED_SEO.description,
-    provider: { '@type': 'Organization', name: 'Astris Space' },
-    areaServed: 'IN',
-    audience: { '@type': 'EducationalAudience', educationalRole: 'school' },
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE_URL}${ASTROED_SEO.path}#service`,
+        name: 'AstroEd — Space Lab & Astronomy Curriculum for Schools',
+        serviceType: 'School astronomy programme',
+        description: ASTROED_SEO.description,
+        url: `${SITE_URL}${ASTROED_SEO.path}`,
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: 'IN',
+        audience: { '@type': 'EducationalAudience', educationalRole: 'school' },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE_URL}${ASTROED_SEO.path}#breadcrumbs`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Astris Space', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'AstroEd', item: `${SITE_URL}${ASTROED_SEO.path}` },
+        ],
+      },
+    ],
   }
 
   return (

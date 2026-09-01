@@ -28,7 +28,15 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/'],
       },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    // The index plus each segment. Listing the segments as well as the index
+    // is redundant for Googlebot but makes the set explicit for every other
+    // crawler, and costs nothing.
+    sitemap: [
+      `${SITE_URL}/sitemap.xml`,
+      `${SITE_URL}/sitemap-pages.xml`,
+      `${SITE_URL}/sitemap-experiences.xml`,
+      `${SITE_URL}/sitemap-guides.xml`,
+    ],
     host: SITE_URL,
   }
 }

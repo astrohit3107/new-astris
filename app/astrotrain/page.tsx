@@ -20,7 +20,7 @@ import {
   ASTROTRAIN_CONDITIONS_NOTE,
   ASTROTRAIN_SEO,
 } from '@/lib/astrotrain-data'
-import { ENQUIRY } from '@/lib/site-config'
+import { ENQUIRY, SITE_URL } from '@/lib/site-config'
 
 const ICONS: Record<string, LucideIcon> = {
   Telescope,
@@ -51,14 +51,31 @@ export const metadata: Metadata = {
 }
 
 export default function AstroTrainPage() {
+  // Same change as /astroed: the Service now references the site
+  // Organization by @id instead of restating it, and the page gains the
+  // BreadcrumbList it was missing. No visible change to the page.
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'AstroTrain — Astronomy Experiences for Properties',
-    serviceType: 'Astronomy experience enablement for hospitality',
-    description: ASTROTRAIN_SEO.description,
-    provider: { '@type': 'Organization', name: 'Astris Space' },
-    areaServed: 'IN',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE_URL}${ASTROTRAIN_SEO.path}#service`,
+        name: 'AstroTrain — Astronomy Experiences for Properties',
+        serviceType: 'Astronomy experience enablement for hospitality',
+        description: ASTROTRAIN_SEO.description,
+        url: `${SITE_URL}${ASTROTRAIN_SEO.path}`,
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE_URL}${ASTROTRAIN_SEO.path}#breadcrumbs`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Astris Space', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'AstroTrain', item: `${SITE_URL}${ASTROTRAIN_SEO.path}` },
+        ],
+      },
+    ],
   }
 
   return (
