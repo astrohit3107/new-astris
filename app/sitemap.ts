@@ -16,6 +16,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/', priority: 1.0, changeFrequency: 'weekly' },
     { path: '/astroed', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/astrotrain', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/nakshatraalay/gurgaon', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/first-light', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/astroventure-nights', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/astroventure-spiti-26', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/astroventure-astrophotography', priority: 0.8, changeFrequency: 'monthly' },

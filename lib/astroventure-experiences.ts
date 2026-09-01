@@ -71,6 +71,21 @@ export const activeExperiences: AstroventureExperience[] = [
     order: 1,
   },
   {
+    id: 'nakshatraalay-gurgaon',
+    name: 'Nakshatraalay Gurgaon',
+    blurb: 'Delhi NCR’s home under the stars — telescope nights, workshops and stays.',
+    href: '/nakshatraalay/gurgaon',
+    image: `${AV}/rajasthan/tijara.jpg`,
+    imageAlt: 'A dark sky over the Aravalli country near Delhi NCR',
+    category: 'Destination',
+    kind: 'weekend',
+    badge: 'Opening',
+    meta: ['Gurgaon', 'Stay + stargazing', 'Opening soon'],
+    icon: 'MapPin',
+    featuredHome: true,
+    order: 2,
+  },
+  {
     id: 'sambhar-lake',
     name: 'Sambhar Lake',
     blurb: 'An affordable weekend astronomy escape on India’s largest salt lake.',
@@ -83,7 +98,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2D · 1N', 'Delhi / Jaipur', 'Up to 30'],
     icon: 'Moon',
     featuredHome: true,
-    order: 2,
+    order: 3,
   },
   {
     id: 'tijara',
@@ -98,7 +113,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2D · 1N', 'Delhi / Jaipur', 'Up to 30'],
     icon: 'Moon',
     featuredHome: true,
-    order: 3,
+    order: 4,
   },
   {
     id: 'delhi-deep-sky',
@@ -113,7 +128,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2 nights', 'Sep–Oct 2026', 'Delhi'],
     icon: 'Camera',
     featuredHome: true,
-    order: 4,
+    order: 5,
   },
   {
     id: 'ladakh-astro',
@@ -127,7 +142,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['6D · 5N', 'Ladakh'],
     icon: 'Camera',
     featuredHome: false,
-    order: 5,
+    order: 6,
   },
 ]
 
