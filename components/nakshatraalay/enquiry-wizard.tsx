@@ -4,7 +4,16 @@ import { useState } from 'react'
 import { MessageCircle, ArrowRight, ArrowLeft, Check } from 'lucide-react'
 
 import { whatsappHref } from '@/lib/site-config'
-import { NAKSHATRAALAY, experiences, POLICIES } from '@/lib/nakshatraalay-data'
+import {
+  NAKSHATRAALAY,
+  experiences,
+  packages,
+  formatINR,
+  priceFor,
+  isWeekendNight,
+  isClosed,
+  POLICIES,
+} from '@/lib/nakshatraalay-data'
 
 /**
  * The booking flow, without a booking database.
@@ -36,14 +45,17 @@ export default function EnquiryWizard({
   const [flexible, setFlexible] = useState(false)
   const [guests, setGuests] = useState(2)
   const [wantsStay, setWantsStay] = useState(false)
+  const [packageId, setPackageId] = useState('')
   const [note, setNote] = useState('')
 
   const experience = experiences.find((e) => e.slug === experienceSlug)
+  const chosenPackage = packages.find((p) => p.id === packageId)
+  const dateClosed = date !== '' && isClosed(date)
   const today = new Date().toISOString().slice(0, 10)
 
   const canAdvance =
     (step === 0 && experienceSlug !== '') ||
-    (step === 1 && (flexible || date !== '')) ||
+    (step === 1 && (flexible || (date !== '' && !dateClosed))) ||
     step === 2 ||
     step === 3
 
@@ -54,6 +66,11 @@ export default function EnquiryWizard({
     `Preferred date: ${flexible ? "I'm flexible" : date || 'Not sure yet'}`,
     `Guests: ${guests}`,
     `Overnight stay: ${wantsStay ? 'Yes, please' : 'No, evening only'}`,
+    wantsStay && chosenPackage
+      ? `Package: ${chosenPackage.name} (${chosenPackage.occupancyLabel}) — ${formatINR(
+          priceFor(chosenPackage, flexible ? undefined : date || undefined),
+        )} per night`
+      : '',
     note ? `\nNote: ${note}` : '',
   ]
     .filter(Boolean)
@@ -141,6 +158,13 @@ export default function EnquiryWizard({
               className={`${box} disabled:opacity-40 [color-scheme:dark]`}
             />
           </div>
+          {dateClosed && (
+            <p role="alert" className="mt-3 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100/90">
+              That night is already full. Try another date, or tick &ldquo;I&rsquo;m flexible&rdquo;
+              and we&rsquo;ll suggest one.
+            </p>
+          )}
+
           <label className="mt-4 flex cursor-pointer items-center gap-3 text-sm text-white/70">
             <input
               type="checkbox"
@@ -153,23 +177,12 @@ export default function EnquiryWizard({
         </div>
       )}
 
-      {/* Step 3 — guests */}
+      {/* Step 3 — party & package */}
       {step === 2 && (
         <div>
           <h3 className="font-display text-xl font-semibold text-white">Who&rsquo;s coming?</h3>
-          <div className="mt-5">
-            <label className={label} htmlFor="ew-guests">Number of guests</label>
-            <input
-              id="ew-guests"
-              type="number"
-              min={1}
-              max={60}
-              value={guests}
-              onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
-              className={box}
-            />
-          </div>
-          <label className="mt-4 flex cursor-pointer items-center gap-3 text-sm text-white/70">
+
+          <label className="mt-5 flex cursor-pointer items-center gap-3 text-sm text-white/70">
             <input
               type="checkbox"
               checked={wantsStay}
@@ -178,6 +191,63 @@ export default function EnquiryWizard({
             />
             We&rsquo;d like to stay overnight
           </label>
+
+          {wantsStay ? (
+            <div className="mt-5 space-y-2">
+              <span className={label}>Package — stay with the full experience</span>
+              {packages.map((pkg) => {
+                const price = priceFor(pkg, flexible ? undefined : date || undefined)
+                const active = packageId === pkg.id
+                return (
+                  <button
+                    key={pkg.id}
+                    type="button"
+                    onClick={() => {
+                      setPackageId(pkg.id)
+                      setGuests(pkg.guests)
+                    }}
+                    aria-pressed={active}
+                    className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition ${
+                      active
+                        ? 'border-[var(--av-gold)] bg-[var(--av-gold)]/10'
+                        : 'border-white/12 bg-white/[0.02] hover:border-white/30'
+                    }`}
+                  >
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-white">{pkg.name}</span>
+                      <span className="mt-0.5 block text-xs text-white/50">{pkg.occupancyLabel}</span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block text-sm font-semibold text-white">
+                        {formatINR(price)}
+                      </span>
+                      <span className="block text-[10px] uppercase tracking-wide text-white/40">
+                        {!flexible && date
+                          ? isWeekendNight(date) ? 'weekend' : 'weekday'
+                          : 'weekday rate'}
+                      </span>
+                    </span>
+                  </button>
+                )
+              })}
+              <p className="pt-1 text-xs text-white/40">
+                Per night, experience included. Weekend rates apply Friday and Saturday.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-5">
+              <label className={label} htmlFor="ew-guests">Number of guests</label>
+              <input
+                id="ew-guests"
+                type="number"
+                min={1}
+                max={60}
+                value={guests}
+                onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
+                className={box}
+              />
+            </div>
+          )}
           <div className="mt-5">
             <label className={label} htmlFor="ew-note">Anything else? <span className="normal-case text-white/30">(optional)</span></label>
             <textarea
@@ -202,6 +272,17 @@ export default function EnquiryWizard({
               ['Date', flexible ? "Flexible" : date || 'Not sure yet'],
               ['Guests', String(guests)],
               ['Stay', wantsStay ? 'Overnight' : 'Evening only'],
+              ...(wantsStay && chosenPackage
+                ? ([
+                    ['Package', chosenPackage.name],
+                    [
+                      'Price',
+                      `${formatINR(
+                        priceFor(chosenPackage, flexible ? undefined : date || undefined),
+                      )} / night`,
+                    ],
+                  ] as [string, string][])
+                : []),
             ].map(([k, v]) => (
               <div key={k} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
                 <dt className="text-white/45">{k}</dt>

@@ -7,6 +7,8 @@ import {
   NAKSHATRAALAY,
   experiences,
   stayTypes,
+  packages,
+  formatINR,
   EXPERIENCE_KIND_LABEL,
   bookHref,
   groupHref,
@@ -241,9 +243,57 @@ export default function NakshatraalayGurgaonPage() {
               </div>
             ))}
           </div>
-          <p className="mt-6 text-sm text-white/40">
-            Rooms and tents open for booking with First Light.
-          </p>
+          {/* Packages — room + the complete experience, per night */}
+          <div className="mt-12">
+            <h3 className="font-display text-xl font-semibold">What a night costs</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
+              Each package is a stay <em>with</em> the complete astronomy experience included —
+              not a room with the night sold separately. Prices are per night.
+            </p>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {packages.map((pkg) => (
+                <div
+                  key={pkg.id}
+                  className="rounded-2xl border border-white/12 bg-white/[0.03] p-6"
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h4 className="font-display text-lg font-semibold">{pkg.name}</h4>
+                    <span className="text-xs text-white/45">{pkg.occupancyLabel}</span>
+                  </div>
+
+                  <dl className="mt-5 grid grid-cols-2 gap-3">
+                    <div className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
+                      <dt className="text-[10px] uppercase tracking-wider text-white/45">Weekday</dt>
+                      <dd className="font-display mt-1 text-xl font-light">
+                        {formatINR(pkg.weekdayPrice)}
+                      </dd>
+                    </div>
+                    <div className="rounded-xl border border-[var(--av-gold)]/25 bg-[var(--av-gold)]/[0.07] px-4 py-3">
+                      <dt className="text-[10px] uppercase tracking-wider text-white/45">Weekend</dt>
+                      <dd className="font-display mt-1 text-xl font-light text-[var(--av-gold)]">
+                        {formatINR(pkg.weekendPrice)}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <ul className="mt-5 space-y-2">
+                    {pkg.includes.map((item) => (
+                      <li key={item} className="flex gap-2 text-sm text-white/60">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--av-gold)]" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-4 text-xs text-white/35">
+              Weekend rates apply to Friday and Saturday nights. Availability is confirmed by
+              message — we don&rsquo;t show live seat counts.
+            </p>
+          </div>
         </div>
       </section>
 

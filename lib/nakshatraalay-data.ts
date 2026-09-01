@@ -90,10 +90,13 @@ export const NAKSHATRAALAY = {
     'Close enough for a Saturday. Far enough that the sky comes back. A place to spend a night with real telescopes, a dark horizon, and people who know what they are pointing at.',
 
   /**
-   * When First Light happens. NULL until the business commits to a date.
-   * Set to an ISO string with offset, e.g. '2026-11-15T18:30:00+05:30'.
+   * First Light: 15 September 2026.
+   *
+   * The evening time is set to 18:00 IST because a first night at an
+   * astronomy property begins at dusk, not at midnight — change the time here
+   * if the opening is meant to land at a different hour.
    */
-  opensAt: null as string | null,
+  opensAt: '2026-09-15T18:00:00+05:30' as string | null,
   status: 'announced' as 'announced' | 'open',
 
   roomsPlanned: 5,
@@ -193,6 +196,94 @@ export const experiences: NakshatraalayExperience[] = [
     sample: true,
   },
 ]
+
+/* ---------------------------------------------------------------------------
+ * PACKAGES — the real, confirmed pricing
+ *
+ * A package is a room (or rooms) WITH the complete astronomy experience
+ * included; it is not a room rate with the night sold separately. Prices are
+ * per package per night, not per person.
+ *
+ * WEEKDAY vs WEEKEND is decided by `isWeekendNight()` below — Friday and
+ * Saturday nights carry the weekend rate. Change that function if the
+ * property treats Sunday as a weekend night too.
+ * ------------------------------------------------------------------------- */
+
+export interface StayPackage {
+  id: string
+  name: string
+  occupancyLabel: string
+  rooms: number
+  guests: number
+  /** Whole rupees, per package per night. */
+  weekdayPrice: number
+  weekendPrice: number
+  includes: string[]
+}
+
+export const packages: StayPackage[] = [
+  {
+    id: 'couple',
+    name: 'Couple',
+    occupancyLabel: '2 guests · 1 room',
+    rooms: 1,
+    guests: 2,
+    weekdayPrice: 8000,
+    weekendPrice: 12000,
+    includes: [
+      'One room for the night',
+      'The complete astronomy experience',
+      'Guided telescope observation',
+    ],
+  },
+  {
+    id: 'family-of-four',
+    name: 'Family of four',
+    occupancyLabel: '4 guests · 2 rooms',
+    rooms: 2,
+    guests: 4,
+    weekdayPrice: 15000,
+    weekendPrice: 20000,
+    includes: [
+      'Two rooms for the night',
+      'The complete astronomy experience',
+      'Guided telescope observation',
+    ],
+  },
+]
+
+/** ₹8,000 — Indian grouping, no decimals. */
+export function formatINR(rupees: number): string {
+  return `₹${rupees.toLocaleString('en-IN')}`
+}
+
+/**
+ * Friday and Saturday nights carry the weekend rate. `date` is an ISO
+ * YYYY-MM-DD string, read in UTC so it does not shift by timezone.
+ */
+export function isWeekendNight(date: string): boolean {
+  const day = new Date(`${date}T00:00:00Z`).getUTCDay()
+  return day === 5 || day === 6
+}
+
+export function priceFor(pkg: StayPackage, date?: string): number {
+  return date && isWeekendNight(date) ? pkg.weekendPrice : pkg.weekdayPrice
+}
+
+/* ---------------------------------------------------------------------------
+ * MANUALLY CLOSED NIGHTS
+ *
+ * There is no booking database here, so availability is managed by hand: add
+ * an ISO date to this list as a night fills up and it is shown as full
+ * everywhere — the sky calendar, and the enquiry wizard's date picker.
+ *
+ * e.g. closedDates = ['2026-09-19', '2026-09-20']
+ * ------------------------------------------------------------------------- */
+export const closedDates: string[] = []
+
+export function isClosed(date: string): boolean {
+  return closedDates.includes(date)
+}
 
 export const stayTypes: StayType[] = [
   {

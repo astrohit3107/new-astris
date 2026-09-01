@@ -3,7 +3,12 @@ import Link from 'next/link'
 import { Moon, ArrowRight } from 'lucide-react'
 
 import { SITE_URL, whatsappHref } from '@/lib/site-config'
-import { NAKSHATRAALAY, upcomingNights as scheduled, getExperience } from '@/lib/nakshatraalay-data'
+import {
+  NAKSHATRAALAY,
+  upcomingNights as scheduled,
+  getExperience,
+  isClosed,
+} from '@/lib/nakshatraalay-data'
 import { bestNights, upcomingNights } from '@/lib/sky-calendar'
 
 const PATH = '/sky-calendar'
@@ -95,16 +100,20 @@ export default function SkyCalendarPage() {
                     </span>
                   ))}
                 </div>
-                <a
-                  href={whatsappHref(
-                    `Hello Astris Space — I'd like to come to ${NAKSHATRAALAY.name} on ${formatDate(night.date)} (${night.date}). Is that night available?`,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--av-gold)] hover:underline"
-                >
-                  Ask about this night <ArrowRight size={12} />
-                </a>
+                {isClosed(night.date) ? (
+                  <p className="mt-5 text-xs font-semibold text-white/40">Fully booked</p>
+                ) : (
+                  <a
+                    href={whatsappHref(
+                      `Hello Astris Space — I'd like to come to ${NAKSHATRAALAY.name} on ${formatDate(night.date)} (${night.date}). Is that night available?`,
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--av-gold)] hover:underline"
+                  >
+                    Ask about this night <ArrowRight size={12} />
+                  </a>
+                )}
               </article>
             ))}
           </div>
