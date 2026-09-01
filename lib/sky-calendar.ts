@@ -1,4 +1,14 @@
 import { moonPhase, type MoonPhase } from '@/lib/moon-phase'
+import {
+  PLANETS,
+  DEEP_SKY,
+  planetPosition,
+  altitude,
+  dsoAltitude,
+  type PlanetName,
+  type DeepSkyObject,
+} from '@/lib/ephemeris'
+import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 
 /**
  * Which nights are worth coming for.
@@ -90,4 +100,75 @@ export function bestNights(limit = 6, days = 90, from: Date = new Date()): SkyNi
   const weekends = all.filter((n) => n.isWeekend && n.darkScore >= 55)
   const pool = weekends.length >= limit ? weekends : all.filter((n) => n.darkScore >= 55)
   return pool.sort((a, b) => b.darkScore - a.darkScore).slice(0, limit)
+}
+
+
+/* ---------------------------------------------------------------------------
+ * WHAT IS ACTUALLY UP ON A GIVEN NIGHT
+ *
+ * Sampled at 22:00 IST — late enough to be properly dark in Delhi NCR through
+ * the year, and a fixed reference so a date always reports the same sky.
+ *
+ * Everything below is geometry, and geometry is exact. Whether any of it is
+ * SEEN depends on cloud, haze and the Moon, which this cannot know — so the UI
+ * says "above the horizon", never "visible".
+ * ------------------------------------------------------------------------- */
+
+export interface SkyBody {
+  name: string
+  /** Degrees above the horizon at 22:00 IST. */
+  altitude: number
+}
+
+export interface DsoUp extends SkyBody {
+  id: string
+  catalogue: string
+  kind: DeepSkyObject['kind']
+  blurb: string
+  magnitude: number
+}
+
+export interface NightSky {
+  date: string
+  moon: MoonPhase
+  planets: SkyBody[]
+  dsos: DsoUp[]
+}
+
+/** 22:00 IST on the given ISO date, as a UTC instant. */
+function observingMoment(isoDate: string): Date {
+  return new Date(`${isoDate}T22:00:00+05:30`)
+}
+
+/**
+ * The sky over the destination on one night.
+ *
+ * A body counts as "up" above 15°: below that it is in the worst of the
+ * atmosphere and, near Delhi, in the worst of the light dome — listing it
+ * would be technically true and practically useless.
+ */
+export function skyOn(isoDate: string): NightSky {
+  const at = observingMoment(isoDate)
+  const { latitude, longitude } = NAKSHATRAALAY
+
+  const planets = PLANETS.map((name: PlanetName) => ({
+    name,
+    altitude: altitude(planetPosition(name, at), at, latitude, longitude),
+  }))
+    .filter((p) => p.altitude > 15)
+    .sort((a, b) => b.altitude - a.altitude)
+
+  const dsos = DEEP_SKY.map((d) => ({
+    id: d.id,
+    name: d.name,
+    catalogue: d.catalogue,
+    kind: d.kind,
+    blurb: d.blurb,
+    magnitude: d.magnitude,
+    altitude: dsoAltitude(d, at, latitude, longitude),
+  }))
+    .filter((d) => d.altitude > 15)
+    .sort((a, b) => b.altitude - a.altitude)
+
+  return { date: isoDate, moon: moonPhase(at), planets, dsos }
 }

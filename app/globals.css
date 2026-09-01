@@ -481,3 +481,33 @@ html { scroll-behavior: smooth; }
   .logo-marquee-track { animation: none; }
   .logo-marquee { overflow-x: auto; }
 }
+
+/* ==========================================================================
+   NAKSHATRAALAY — page motion
+   ========================================================================== */
+@keyframes nk-fade-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+.animate-fade-up {
+  animation: nk-fade-up 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* A very slow drift on hero imagery — enough to feel alive, not enough to
+   distract from the text sitting on top of it. */
+@keyframes nk-slow-drift {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
+  100% { transform: scale(1.06) translate3d(0, 0, 0); }
+}
+.animate-slow-drift {
+  animation: nk-slow-drift 38s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-slow-drift {
+    animation: none !important;
+  }
+}
