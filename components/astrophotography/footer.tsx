@@ -72,8 +72,7 @@ export default function AstroFooter() {
                 </a>
               </li>
               <li><a href="/" className="transition-colors hover:text-white">Astris Space →</a></li>
-              <li><a href="/astroventure-spiti-26" className="transition-colors hover:text-white">Astroventure Spiti ’26 →</a></li>
-              <li><a href="/astroventure-nights" className="transition-colors hover:text-white">Astroventure Nights →</a></li>
+                            <li><a href="/astroventure-nights" className="transition-colors hover:text-white">Astroventure Nights →</a></li>
             </ul>
           </div>
         </div>

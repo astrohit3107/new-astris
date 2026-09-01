@@ -24,10 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/groups', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/schools', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/astroventure-nights', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/astroventure-spiti-26', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/astroventure-astrophotography', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/delhi-deep-sky-astrophotography-workshop', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/spiti-countdown', priority: 0.6, changeFrequency: 'weekly' },
     { path: '/astroventure-nights/privacy', priority: 0.2, changeFrequency: 'yearly' },
     { path: '/astroventure-nights/terms', priority: 0.2, changeFrequency: 'yearly' },
   ]

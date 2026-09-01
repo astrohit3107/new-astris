@@ -10,7 +10,7 @@
  *    • the header "Astroventure" dropdown (components/header)
  *
  *  Each product otherwise keeps its own rich content file
- *  (spiti-data, astroventure-data, astrophotography-data, workshop-delhi-data);
+ *  (astroventure-data, astrophotography-data, workshop-delhi-data);
  *  this registry only carries what a card / menu item needs, plus ordering and
  *  an `active` flag. Add a new active experience here and it appears
  *  consistently across the homepage and the navigation — no other edits.
@@ -56,21 +56,6 @@ const AV = '/astroventure-assets'
 
 export const activeExperiences: AstroventureExperience[] = [
   {
-    id: 'spiti',
-    name: 'Astroventure Spiti ’26',
-    blurb: 'Our flagship high-altitude dark-sky expedition into the Spiti Valley.',
-    href: '/astroventure-spiti-26',
-    image: `${AV}/spiti-real/nights-milkyway.jpg`,
-    imageAlt: 'The Milky Way over the Spiti Valley at night',
-    category: 'Flagship Expedition',
-    kind: 'expedition',
-    badge: 'Flagship',
-    meta: ['8 days', 'Himalaya', 'Bortle 1–2'],
-    icon: 'Sparkles',
-    featuredHome: true,
-    order: 1,
-  },
-  {
     id: 'sambhar-lake',
     name: 'Sambhar Lake',
     blurb: 'An affordable weekend astronomy escape on India’s largest salt lake.',
@@ -83,7 +68,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2D · 1N', 'Delhi / Jaipur', 'Up to 30'],
     icon: 'Moon',
     featuredHome: true,
-    order: 2,
+    order: 1,
   },
   {
     id: 'tijara',
@@ -98,7 +83,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2D · 1N', 'Delhi / Jaipur', 'Up to 30'],
     icon: 'Moon',
     featuredHome: true,
-    order: 3,
+    order: 2,
   },
   {
     id: 'delhi-deep-sky',
@@ -113,7 +98,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['2 nights', 'Sep–Oct 2026', 'Delhi'],
     icon: 'Camera',
     featuredHome: true,
-    order: 4,
+    order: 3,
   },
   {
     id: 'ladakh-astro',
@@ -127,7 +112,7 @@ export const activeExperiences: AstroventureExperience[] = [
     meta: ['6D · 5N', 'Ladakh'],
     icon: 'Camera',
     featuredHome: false,
-    order: 5,
+    order: 4,
   },
 ]
 

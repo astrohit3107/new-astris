@@ -1,7 +1,6 @@
 import Header from '@/components/header'
 import AnnouncementBar from '@/components/announcement-bar'
 import Hero from '@/components/hero'
-import SpitiFeatured from '@/components/spiti-featured'
 import AstroventureLineup from '@/components/astroventure-lineup'
 import NakshatraalayFeatured from '@/components/nakshatraalay-featured'
 import NakshatraalayPopup from '@/components/nakshatraalay-popup'
@@ -18,7 +17,6 @@ export default function Home() {
       <AnnouncementBar />
       <Header />
       <Hero />
-      <SpitiFeatured />
       <AstroventureLineup />
       <NakshatraalayFeatured />
       <ProgramTeasers />

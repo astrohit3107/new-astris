@@ -18,7 +18,7 @@ import ScrollReveal from './scroll-reveal'
 import { cn } from '@/lib/utils'
 
 // Official Astris contact line — the same number used across the site
-// (footer, Spiti, astrophotography). Do NOT use unrelated fallback numbers.
+// (footer, astrophotography). Do NOT use unrelated fallback numbers.
 const PHONE_DISPLAY = '+91 75818 21834'
 const PHONE_TEL = '+917581821834'
 
