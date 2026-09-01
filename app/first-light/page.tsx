@@ -6,6 +6,7 @@ import { SITE_URL } from '@/lib/site-config'
 import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 import FirstLightCountdown from '@/components/nakshatraalay/first-light-countdown'
 import FirstLightSignup from '@/components/nakshatraalay/first-light-signup'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 /**
  * NAKSHATRAALAY FIRST LIGHT — the opening campaign.
@@ -72,6 +73,7 @@ export default function FirstLightPage() {
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <NakshatraalayNav backHref="/" backLabel="Astris Space" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

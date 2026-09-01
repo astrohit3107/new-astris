@@ -93,9 +93,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', 'Inter Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --font-display: var(--font-fraunces), 'Fraunces Fallback', Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
   /* Astroventure premium cosmic palette */
   --color-aurora: var(--av-aurora);
   --color-nebula: var(--av-nebula);

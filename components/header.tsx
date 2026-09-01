@@ -19,6 +19,9 @@ export default function Header() {
 
   // AstroEd and AstroTrain are real routes now, not homepage anchors.
   const navLinks = [
+    // Nakshatraalay is a physical destination, not an Astroventure expedition,
+    // so it sits at the top level rather than inside that dropdown.
+    { label: 'Nakshatraalay', href: '/nakshatraalay/gurgaon' },
     { label: 'AstroEd', href: '/astroed' },
     { label: 'AstroTrain', href: '/astrotrain' },
     { label: 'Telescopes', href: '/#telescopes' },

@@ -7,6 +7,7 @@ import { bestNights } from '@/lib/sky-calendar'
 import SkyCalendarInteractive from '@/components/nakshatraalay/sky-calendar-interactive'
 import Reveal from '@/components/nakshatraalay/reveal'
 import { MoonGlyph } from '@/components/nakshatraalay/celestial-icons'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 const PATH = '/sky-calendar'
 const TITLE = 'Sky Calendar — The Best Nights to Look Up near Delhi'
@@ -41,8 +42,9 @@ export default function SkyCalendarPage() {
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <NakshatraalayNav backHref="/nakshatraalay/gurgaon" backLabel="Nakshatraalay" />
       {/* ---------------------------------------------------- hero ---- */}
-      <section className="relative overflow-hidden px-5 pb-16 pt-32 sm:px-6 sm:pb-20">
+      <section className="relative overflow-hidden px-5 pb-16 pt-36 sm:px-6 sm:pb-20">
         <div aria-hidden="true" className="absolute inset-0">
           <img
             src="/nakshatraalay/hero-milkyway.jpg"

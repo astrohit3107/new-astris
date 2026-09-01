@@ -1,4 +1,5 @@
 import { MessageCircle, Check } from 'lucide-react'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 /**
  * Shared layout for the two enquiry-led pages (groups, schools). Both convert
@@ -24,7 +25,8 @@ export default function LeadPage({
 }) {
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
-      <section className="border-b border-white/10 px-5 pb-14 pt-32 sm:px-6">
+      <NakshatraalayNav backHref="/nakshatraalay/gurgaon" backLabel="Nakshatraalay" />
+      <section className="border-b border-white/10 px-5 pb-14 pt-36 sm:px-6">
         <div className="mx-auto max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">{eyebrow}</p>
           <h1 className="font-display mt-5 text-balance text-4xl font-light leading-tight sm:text-6xl">

@@ -4,6 +4,7 @@ import { SITE_URL } from '@/lib/site-config'
 import { NAKSHATRAALAY, experiences, POLICIES } from '@/lib/nakshatraalay-data'
 import ExperienceCard from '@/components/nakshatraalay/experience-card'
 import Reveal from '@/components/nakshatraalay/reveal'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 const PATH = '/experiences'
 const TITLE = 'Astronomy Experiences near Delhi — Nakshatraalay Gurgaon'
@@ -39,9 +40,10 @@ export default function ExperiencesPage() {
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <NakshatraalayNav backHref="/nakshatraalay/gurgaon" backLabel="Nakshatraalay" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className="border-b border-white/10 px-5 pb-12 pt-28 sm:px-6">
+      <section className="border-b border-white/10 px-5 pb-12 pt-36 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
             {NAKSHATRAALAY.name}

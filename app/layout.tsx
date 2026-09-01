@@ -1,13 +1,44 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Inter, Geist_Mono } from 'next/font/google'
+import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SITE, SITE_URL, absoluteUrl } from '@/lib/site-config'
 import './globals.css'
 
-const _inter = Inter({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+/**
+ * Typography.
+ *
+ * These were previously constructed and then thrown away — assigned to unused
+ * `_inter` / `_geistMono` bindings while `--font-sans` pointed at the bare
+ * string 'Inter'. next/font self-hosts under a generated family name, so a
+ * literal 'Inter' never matched and the whole site silently rendered in the
+ * system UI font. Likewise `--font-display` referenced `--font-fraunces`,
+ * which only existed inside the Astroventure Nights layout, so display
+ * headings elsewhere fell back to Georgia.
+ *
+ * Each face now exposes a CSS variable, and the variables are applied to
+ * <html> so every route gets them.
+ */
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+/** Display serif for headlines — optical sizing gives it real presence large. */
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-fraunces',
+  axes: ['SOFT', 'WONK'],
+})
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono-face',
+})
 
 const TITLE = "Astris Space - India's Leading Astronomy & Space Education Ecosystem"
 const DESCRIPTION =
@@ -106,7 +137,11 @@ export default function RootLayout({
     // suppressHydrationWarning: next-themes writes the theme class onto <html>
     // before React hydrates — that inline write is what prevents a flash of the
     // wrong theme on first paint.
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${fraunces.variable} ${mono.variable}`}
+    >
       <head>
         <SiteIdentitySchema />
         {/* Scroll-reveal blocks ship hidden and are revealed by an observer.

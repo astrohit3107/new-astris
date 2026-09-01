@@ -14,6 +14,7 @@ import {
   fromPrice,
 } from '@/lib/nakshatraalay-data'
 import EnquiryWizard from '@/components/nakshatraalay/enquiry-wizard'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 type Params = { slug: string }
 
@@ -75,9 +76,10 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <NakshatraalayNav backHref="/experiences" backLabel="All experiences" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className="border-b border-white/10 px-5 pb-14 pt-32 sm:px-6">
+      <section className="border-b border-white/10 px-5 pb-14 pt-36 sm:px-6">
         <div className="mx-auto max-w-3xl">
           <Link
             href="/experiences"

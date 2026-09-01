@@ -15,6 +15,7 @@ import {
   groupHref,
 } from '@/lib/nakshatraalay-data'
 import { moonPhase } from '@/lib/moon-phase'
+import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 /**
  * Nakshatraalay Gurgaon — the destination page.
@@ -88,17 +89,25 @@ export default function NakshatraalayGurgaonPage() {
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <NakshatraalayNav backHref="/" backLabel="Astris Space" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Hero ----------------------------------------------------------- */}
-      <section className="relative flex min-h-[92svh] items-end overflow-hidden px-5 pb-16 pt-28 sm:px-6">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_95%_at_50%_0%,#171f36_0%,#080a12_55%,#05060a_100%)]"
-        />
+      <section className="relative flex min-h-[92svh] items-end overflow-hidden px-5 pb-16 pt-36 sm:px-6">
+        {/* Real photography behind the hero, with a gradient heavy enough that
+            the headline keeps its contrast over the bright galactic core. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <img
+            src="/nakshatraalay/hero-milkyway.jpg"
+            alt=""
+            className="animate-slow-drift h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#05060a]/70 via-[#05060a]/75 to-[#05060a]" />
+          <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent_0%,rgba(5,6,10,0.55)_70%,#05060a_100%)]" />
+        </div>
         <div className="relative mx-auto w-full max-w-5xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
             {NAKSHATRAALAY.brand} · {NAKSHATRAALAY.region}

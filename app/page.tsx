@@ -3,7 +3,8 @@ import AnnouncementBar from '@/components/announcement-bar'
 import Hero from '@/components/hero'
 import SpitiFeatured from '@/components/spiti-featured'
 import AstroventureLineup from '@/components/astroventure-lineup'
-import SpitiPromoPopup from '@/components/spiti-promo-popup'
+import NakshatraalayFeatured from '@/components/nakshatraalay-featured'
+import NakshatraalayPopup from '@/components/nakshatraalay-popup'
 import ProgramTeasers from '@/components/program-teasers'
 import NakshatraScopes from '@/components/nakshatra-scopes'
 import PartnersMarquee from '@/components/partners-marquee'
@@ -19,13 +20,14 @@ export default function Home() {
       <Hero />
       <SpitiFeatured />
       <AstroventureLineup />
+      <NakshatraalayFeatured />
       <ProgramTeasers />
       <NakshatraScopes />
       <PartnersMarquee />
       <WhyAstris />
       <FinalCTA />
       <Footer />
-      <SpitiPromoPopup />
+      <NakshatraalayPopup />
     </main>
   )
 }
