@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 
 import { SITE_URL } from '@/lib/site-config'
-import { NAKSHATRAALAY, experiences, EXPERIENCE_KIND_LABEL, POLICIES } from '@/lib/nakshatraalay-data'
+import { NAKSHATRAALAY, experiences, POLICIES } from '@/lib/nakshatraalay-data'
+import ExperienceCard from '@/components/nakshatraalay/experience-card'
+import Reveal from '@/components/nakshatraalay/reveal'
 
 const PATH = '/experiences'
 const TITLE = 'Astronomy Experiences near Delhi — Nakshatraalay Gurgaon'
@@ -41,7 +41,7 @@ export default function ExperiencesPage() {
     <main className="dark min-h-screen bg-[#05060a] text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className="border-b border-white/10 px-5 pb-16 pt-32 sm:px-6">
+      <section className="border-b border-white/10 px-5 pb-12 pt-28 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
             {NAKSHATRAALAY.name}
@@ -56,41 +56,21 @@ export default function ExperiencesPage() {
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2">
-          {experiences.map((exp) => (
-            <Link
-              key={exp.slug}
-              href={`${PATH}/${exp.slug}`}
-              className="group flex flex-col rounded-2xl border border-white/12 bg-white/[0.03] p-6 transition hover:-translate-y-0.5 hover:border-white/30"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-white/45">
-                  {EXPERIENCE_KIND_LABEL[exp.kind]}
-                </span>
-                {exp.sample && (
-                  <span className="rounded-full border border-amber-300/30 bg-amber-300/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber-200/80">
-                    Sample
-                  </span>
-                )}
-              </div>
-              <h2 className="font-display mt-3 text-xl font-semibold">{exp.title}</h2>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-white/55">{exp.summary}</p>
-              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                <span className="text-xs text-white/40">
-                  {exp.durationLabel} · {exp.fromPriceLabel ? `from ${exp.fromPriceLabel}` : 'on enquiry'}
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--av-gold)]">
-                  Details <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+      <section className="px-5 py-12 sm:px-6 sm:py-16">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid gap-5 sm:grid-cols-2">
+            {experiences.map((exp) => (
+              <ExperienceCard key={exp.slug} experience={exp} />
+            ))}
+          </div>
 
-        <p className="mx-auto mt-10 max-w-5xl text-xs leading-relaxed text-white/35">
-          {POLICIES.weather}
-        </p>
+          <Reveal className="mt-14 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+            <p className="text-xs leading-relaxed text-white/45">
+              <span className="font-semibold text-white/70">Weather — </span>
+              {POLICIES.weather}
+            </p>
+          </Reveal>
+        </div>
       </section>
     </main>
   )

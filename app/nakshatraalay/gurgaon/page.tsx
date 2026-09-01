@@ -3,12 +3,13 @@ import Link from 'next/link'
 import { ArrowRight, MessageCircle, Moon, Users } from 'lucide-react'
 
 import { SITE_URL } from '@/lib/site-config'
+import ExperienceCard from '@/components/nakshatraalay/experience-card'
 import {
   NAKSHATRAALAY,
   experiences,
   stayTypes,
-  packages,
   formatINR,
+  fromPrice,
   EXPERIENCE_KIND_LABEL,
   bookHref,
   groupHref,
@@ -192,37 +193,9 @@ export default function NakshatraalayGurgaonPage() {
             Nights built around what the sky is actually doing — not a fixed script.
           </p>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
             {experiences.map((exp) => (
-              <article
-                key={exp.slug}
-                className="flex flex-col rounded-2xl border border-white/12 bg-white/[0.03] p-6 transition hover:border-white/25"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/45">
-                    {EXPERIENCE_KIND_LABEL[exp.kind]}
-                  </span>
-                  {exp.sample && (
-                    <span className="rounded-full border border-amber-300/30 bg-amber-300/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber-200/80">
-                      Sample
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-display mt-3 text-lg font-semibold">{exp.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-white/55">{exp.summary}</p>
-                <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
-                  <span className="text-xs text-white/40">
-                    {exp.durationLabel} ·{' '}
-                    {exp.fromPriceLabel ? `from ${exp.fromPriceLabel}` : 'on enquiry'}
-                  </span>
-                  <Link
-                    href={`/experiences/${exp.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--av-gold)] hover:underline"
-                  >
-                    Details <ArrowRight size={12} />
-                  </Link>
-                </div>
-              </article>
+              <ExperienceCard key={exp.slug} experience={exp} />
             ))}
           </div>
         </div>
@@ -243,55 +216,43 @@ export default function NakshatraalayGurgaonPage() {
               </div>
             ))}
           </div>
-          {/* Packages — room + the complete experience, per night */}
+          {/* Pricing — one row per experience, cheapest way in */}
           <div className="mt-12">
             <h3 className="font-display text-xl font-semibold">What a night costs</h3>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
-              Each package is a stay <em>with</em> the complete astronomy experience included —
-              not a room with the night sold separately. Prices are per night.
+              Every price includes the astronomy experience and your stay — these are not room
+              rates with the night sold separately.
             </p>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {packages.map((pkg) => (
-                <div
-                  key={pkg.id}
-                  className="rounded-2xl border border-white/12 bg-white/[0.03] p-6"
+            <div className="mt-6 overflow-hidden rounded-2xl border border-white/12">
+              {experiences.map((exp, i) => (
+                <Link
+                  key={exp.slug}
+                  href={`/experiences/${exp.slug}`}
+                  className={`group flex items-center justify-between gap-5 bg-white/[0.02] px-5 py-4 transition-colors hover:bg-white/[0.06] ${
+                    i > 0 ? 'border-t border-white/10' : ''
+                  }`}
                 >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h4 className="font-display text-lg font-semibold">{pkg.name}</h4>
-                    <span className="text-xs text-white/45">{pkg.occupancyLabel}</span>
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-white">{exp.title}</p>
+                    <p className="mt-0.5 text-xs text-white/45">{exp.durationLabel}</p>
                   </div>
-
-                  <dl className="mt-5 grid grid-cols-2 gap-3">
-                    <div className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
-                      <dt className="text-[10px] uppercase tracking-wider text-white/45">Weekday</dt>
-                      <dd className="font-display mt-1 text-xl font-light">
-                        {formatINR(pkg.weekdayPrice)}
-                      </dd>
-                    </div>
-                    <div className="rounded-xl border border-[var(--av-gold)]/25 bg-[var(--av-gold)]/[0.07] px-4 py-3">
-                      <dt className="text-[10px] uppercase tracking-wider text-white/45">Weekend</dt>
-                      <dd className="font-display mt-1 text-xl font-light text-[var(--av-gold)]">
-                        {formatINR(pkg.weekendPrice)}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <ul className="mt-5 space-y-2">
-                    {pkg.includes.map((item) => (
-                      <li key={item} className="flex gap-2 text-sm text-white/60">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--av-gold)]" />
-                        {item}
-                      </li>
+                  <div className="shrink-0 text-right">
+                    {exp.priceTiers.map((tier) => (
+                      <p key={tier.label} className="text-sm text-white/70">
+                        <span className="font-semibold text-white">{formatINR(tier.amount)}</span>
+                        <span className="ml-1.5 text-xs text-white/40">
+                          {tier.perPerson ? 'pp' : 'total'} · {tier.label}
+                        </span>
+                      </p>
                     ))}
-                  </ul>
-                </div>
+                  </div>
+                </Link>
               ))}
             </div>
 
             <p className="mt-4 text-xs text-white/35">
-              Weekend rates apply to Friday and Saturday nights. Availability is confirmed by
-              message — we don&rsquo;t show live seat counts.
+              Availability is confirmed by message — we don&rsquo;t show live seat counts.
             </p>
           </div>
         </div>

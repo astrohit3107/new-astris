@@ -7,12 +7,10 @@ import { whatsappHref } from '@/lib/site-config'
 import {
   NAKSHATRAALAY,
   experiences,
-  packages,
   formatINR,
-  priceFor,
-  isWeekendNight,
   isClosed,
   POLICIES,
+  type PriceTier,
 } from '@/lib/nakshatraalay-data'
 
 /**
@@ -44,12 +42,12 @@ export default function EnquiryWizard({
   const [date, setDate] = useState('')
   const [flexible, setFlexible] = useState(false)
   const [guests, setGuests] = useState(2)
-  const [wantsStay, setWantsStay] = useState(false)
-  const [packageId, setPackageId] = useState('')
+  const [tierLabelSel, setTierLabelSel] = useState('')
   const [note, setNote] = useState('')
 
   const experience = experiences.find((e) => e.slug === experienceSlug)
-  const chosenPackage = packages.find((p) => p.id === packageId)
+  const tiers: PriceTier[] = experience?.priceTiers ?? []
+  const chosenTier = tiers.find((t) => t.label === tierLabelSel) ?? tiers[0]
   const dateClosed = date !== '' && isClosed(date)
   const today = new Date().toISOString().slice(0, 10)
 
@@ -65,11 +63,15 @@ export default function EnquiryWizard({
     `Experience: ${experience?.title ?? 'Not sure yet'}`,
     `Preferred date: ${flexible ? "I'm flexible" : date || 'Not sure yet'}`,
     `Guests: ${guests}`,
-    `Overnight stay: ${wantsStay ? 'Yes, please' : 'No, evening only'}`,
-    wantsStay && chosenPackage
-      ? `Package: ${chosenPackage.name} (${chosenPackage.occupancyLabel}) — ${formatINR(
-          priceFor(chosenPackage, flexible ? undefined : date || undefined),
-        )} per night`
+    chosenTier
+      ? `Option: ${chosenTier.label} — ${formatINR(chosenTier.amount)} ${
+          chosenTier.perPerson ? 'per person' : 'total'
+        }`
+      : '',
+    chosenTier
+      ? `Estimated total: ${formatINR(
+          chosenTier.perPerson ? chosenTier.amount * guests : chosenTier.amount,
+        )}`
       : '',
     note ? `\nNote: ${note}` : '',
   ]
@@ -177,77 +179,64 @@ export default function EnquiryWizard({
         </div>
       )}
 
-      {/* Step 3 — party & package */}
+      {/* Step 3 — party & rate */}
       {step === 2 && (
         <div>
           <h3 className="font-display text-xl font-semibold text-white">Who&rsquo;s coming?</h3>
 
-          <label className="mt-5 flex cursor-pointer items-center gap-3 text-sm text-white/70">
+          <div className="mt-5">
+            <label className={label} htmlFor="ew-guests">Number of guests</label>
             <input
-              type="checkbox"
-              checked={wantsStay}
-              onChange={(e) => setWantsStay(e.target.checked)}
-              className="h-4 w-4 rounded border-white/30 bg-white/5 accent-[var(--av-gold)]"
+              id="ew-guests"
+              type="number"
+              min={1}
+              max={60}
+              value={guests}
+              onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
+              className={box}
             />
-            We&rsquo;d like to stay overnight
-          </label>
+          </div>
 
-          {wantsStay ? (
-            <div className="mt-5 space-y-2">
-              <span className={label}>Package — stay with the full experience</span>
-              {packages.map((pkg) => {
-                const price = priceFor(pkg, flexible ? undefined : date || undefined)
-                const active = packageId === pkg.id
+          {tiers.length > 0 && (
+            <div className="mt-6 space-y-2">
+              <span className={label}>
+                {tiers.length > 1 ? 'How would you like to stay?' : 'Price'}
+              </span>
+              {tiers.map((tier) => {
+                const active = chosenTier?.label === tier.label
+                const total = tier.perPerson ? tier.amount * guests : tier.amount
                 return (
                   <button
-                    key={pkg.id}
+                    key={tier.label}
                     type="button"
-                    onClick={() => {
-                      setPackageId(pkg.id)
-                      setGuests(pkg.guests)
-                    }}
+                    onClick={() => setTierLabelSel(tier.label)}
                     aria-pressed={active}
-                    className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition ${
+                    className={`flex w-full items-start justify-between gap-3 rounded-xl border px-4 py-3 text-left transition ${
                       active
                         ? 'border-[var(--av-gold)] bg-[var(--av-gold)]/10'
                         : 'border-white/12 bg-white/[0.02] hover:border-white/30'
                     }`}
                   >
                     <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-white">{pkg.name}</span>
-                      <span className="mt-0.5 block text-xs text-white/50">{pkg.occupancyLabel}</span>
+                      <span className="block text-sm font-semibold text-white">{tier.label}</span>
+                      <span className="mt-0.5 block text-xs text-white/50">
+                        {formatINR(tier.amount)} {tier.perPerson ? 'per person' : 'total'}
+                      </span>
                     </span>
                     <span className="shrink-0 text-right">
                       <span className="block text-sm font-semibold text-white">
-                        {formatINR(price)}
+                        {formatINR(total)}
                       </span>
                       <span className="block text-[10px] uppercase tracking-wide text-white/40">
-                        {!flexible && date
-                          ? isWeekendNight(date) ? 'weekend' : 'weekday'
-                          : 'weekday rate'}
+                        {tier.perPerson ? `for ${guests}` : 'total'}
                       </span>
                     </span>
                   </button>
                 )
               })}
-              <p className="pt-1 text-xs text-white/40">
-                Per night, experience included. Weekend rates apply Friday and Saturday.
-              </p>
-            </div>
-          ) : (
-            <div className="mt-5">
-              <label className={label} htmlFor="ew-guests">Number of guests</label>
-              <input
-                id="ew-guests"
-                type="number"
-                min={1}
-                max={60}
-                value={guests}
-                onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
-                className={box}
-              />
             </div>
           )}
+
           <div className="mt-5">
             <label className={label} htmlFor="ew-note">Anything else? <span className="normal-case text-white/30">(optional)</span></label>
             <textarea
@@ -271,15 +260,14 @@ export default function EnquiryWizard({
               ['Experience', experience?.title ?? 'Not sure yet'],
               ['Date', flexible ? "Flexible" : date || 'Not sure yet'],
               ['Guests', String(guests)],
-              ['Stay', wantsStay ? 'Overnight' : 'Evening only'],
-              ...(wantsStay && chosenPackage
+              ...(chosenTier
                 ? ([
-                    ['Package', chosenPackage.name],
+                    ['Option', chosenTier.label],
                     [
-                      'Price',
-                      `${formatINR(
-                        priceFor(chosenPackage, flexible ? undefined : date || undefined),
-                      )} / night`,
+                      'Estimated total',
+                      formatINR(
+                        chosenTier.perPerson ? chosenTier.amount * guests : chosenTier.amount,
+                      ),
                     ],
                   ] as [string, string][])
                 : []),

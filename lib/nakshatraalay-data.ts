@@ -31,8 +31,12 @@ export interface NakshatraalayExperience {
   summary: string
   /** Longer copy for the detail page. */
   description?: string
-  /** Null renders "on enquiry" — never a placeholder number. */
-  fromPriceLabel: string | null
+  /**
+   * Confirmed pricing. An experience may be sold on more than one basis
+   * (double sharing vs single room, or workshop-only vs workshop-with-stay),
+   * so price is a list of tiers rather than a single number.
+   */
+  priceTiers: PriceTier[]
   durationLabel: string
   /** What the evening actually consists of, in order. */
   runOfNight?: { time: string; title: string; detail: string }[]
@@ -46,7 +50,11 @@ export interface NakshatraalayExperience {
    * no booking database and must not imply one.
    */
   groupSizeLabel?: string
-  /** Illustrative programming, clearly badged so it reads as a sample. */
+  /**
+   * True only while a programme is still illustrative. All five current
+   * experiences are confirmed — names, itineraries and pricing supplied by
+   * the property — so nothing is badged as a sample.
+   */
   sample: boolean
 }
 
@@ -103,6 +111,35 @@ export const NAKSHATRAALAY = {
   tentsExpandable: true,
 } as const
 
+/**
+ * One way to buy an experience.
+ *
+ * `perPerson` matters: a workshop bed is priced per head, while a private
+ * evening for two is one price for the party. Getting this wrong doubles or
+ * halves someone's expected bill, so it is explicit rather than inferred.
+ */
+export interface PriceTier {
+  label: string
+  amount: number
+  perPerson: boolean
+  note?: string
+}
+
+/** ₹8,000 — Indian digit grouping, no decimals. */
+export function formatINR(rupees: number): string {
+  return `₹${rupees.toLocaleString('en-IN')}`
+}
+
+/** "₹5,000 per person" / "₹14,000 total". */
+export function tierLabel(tier: PriceTier): string {
+  return `${formatINR(tier.amount)} ${tier.perPerson ? 'per person' : 'total'}`
+}
+
+/** The cheapest way in, for cards and list pages. */
+export function fromPrice(exp: NakshatraalayExperience): PriceTier | undefined {
+  return [...exp.priceTiers].sort((a, b) => a.amount - b.amount)[0]
+}
+
 export const experiences: NakshatraalayExperience[] = [
   {
     slug: 'cosmic-friday',
@@ -110,9 +147,30 @@ export const experiences: NakshatraalayExperience[] = [
     title: 'Cosmic Friday',
     summary:
       'An evening of guided stargazing — the Moon, whichever planets are up, and a proper tour of the night sky.',
-    fromPriceLabel: null,
-    durationLabel: 'Evening',
-    sample: true,
+    priceTiers: [
+      { label: 'Double sharing room', amount: 5000, perPerson: true },
+      { label: 'Single room', amount: 8000, perPerson: true },
+    ],
+    durationLabel: 'Evening & overnight',
+    description:
+      'The Friday night. Drive out after work, arrive as the light goes, and spend the evening at the eyepiece — the Moon if it is up, the planets that are visible, and a proper tour of the sky. Everything is included, and you stay the night rather than driving back tired.',
+    runOfNight: [
+      { time: 'Dusk', title: 'Arrival', detail: 'Get in, settle into your room, and watch the telescopes go up while the light drops.' },
+      { time: 'Early evening', title: 'Naked-eye sky tour', detail: 'The bright stars, the constellations that anchor the season, and how to find your way around without any equipment.' },
+      { time: 'Evening', title: 'Telescope observation', detail: 'The Moon and visible planets while the sky finishes darkening.' },
+      { time: 'Night', title: 'Deep sky', detail: 'Star clusters, and nebulae or galaxies where the Moon and conditions allow.' },
+      { time: 'Overnight', title: 'Your room', detail: 'Stay the night — no drive home in the dark.' },
+    ],
+    includes: [
+      'Guided observation throughout the night',
+      'Use of telescopes',
+      'Sky orientation for beginners',
+      'Your room for the night',
+    ],
+    bring: ['Warm layers — it gets colder than you expect', 'A red-light torch if you have one', 'Flat shoes'],
+    ageGuidance: 'All ages. Children welcome with an adult.',
+    groupSizeLabel: 'Small group',
+    sample: false,
   },
   {
     slug: 'saturday-under-the-stars',
@@ -120,8 +178,11 @@ export const experiences: NakshatraalayExperience[] = [
     title: 'Saturday Under The Stars',
     summary:
       'The flagship weekend night: telescope observation, deep-sky targets when conditions allow, and the option to stay over.',
-    fromPriceLabel: null,
-    durationLabel: 'Evening into night',
+    priceTiers: [
+      { label: 'Double sharing room', amount: 5000, perPerson: true },
+      { label: 'Single room', amount: 8000, perPerson: true },
+    ],
+    durationLabel: 'Evening & overnight',
     description:
       'The full weekend night. We start while there is still light in the sky, set up, and work through the evening as objects rise — the Moon if it is up, the planets that are visible, then star clusters and whatever deep sky the conditions allow. You can stay over and carry on until you are done.',
     runOfNight: [
@@ -130,49 +191,104 @@ export const experiences: NakshatraalayExperience[] = [
       { time: 'Evening', title: 'Telescope observation', detail: 'The Moon and visible planets first, while the sky finishes darkening.' },
       { time: 'Night', title: 'Deep sky', detail: 'Star clusters, and nebulae or galaxies where the conditions and the Moon allow.' },
     ],
-    includes: ['Guided observation throughout', 'Use of telescopes', 'Sky orientation for beginners'],
+    includes: [
+      'Guided observation throughout the night',
+      'Use of telescopes',
+      'Sky orientation for beginners',
+      'Your room for the night',
+    ],
     bring: ['Warm layers — it gets colder than you expect', 'A red-light torch if you have one', 'Flat shoes'],
     ageGuidance: 'All ages. Children welcome with an adult.',
     groupSizeLabel: 'Small group',
-    sample: true,
+    sample: false,
   },
   {
-    slug: 'beginner-astrophotography-workshop',
+    slug: 'astrophotography-workshop',
     kind: 'workshop',
-    title: 'Beginner Astrophotography Workshop',
+    title: 'Astrophotography Workshop',
     summary:
       'Learn to photograph the night sky from scratch — camera settings, focus, tracking, and a first real image to take home.',
-    fromPriceLabel: null,
-    durationLabel: 'One night',
-    description:
-      'A hands-on introduction to photographing the night sky. We start with what your camera can already do, get you to a real exposure, and work through focus, tracking and stacking — so you leave with an image you took, and the understanding to take the next one alone.',
-    runOfNight: [
-      { time: 'Evening', title: 'Camera fundamentals', detail: 'Manual mode, ISO, aperture, shutter — and why the night sky breaks the rules you learned in daylight.' },
-      { time: 'Dusk', title: 'Focus & framing', detail: 'Getting genuinely sharp stars, which is where most first attempts fall down.' },
-      { time: 'Night', title: 'Shooting', detail: 'Wide-field night sky, star trails, and tracked exposures where conditions permit.' },
-      { time: 'Late', title: 'Stacking & processing', detail: 'Turning a stack of frames into a single finished image.' },
+    priceTiers: [
+      {
+        label: 'Workshop only',
+        amount: 12000,
+        perPerson: true,
+        note: 'No accommodation — join for the sessions and the shooting nights.',
+      },
+      {
+        label: 'With stay · double sharing',
+        amount: 23000,
+        perPerson: true,
+        note: 'Three nights at the property.',
+      },
+      {
+        label: 'With stay · single occupancy',
+        amount: 30000,
+        perPerson: true,
+        note: 'Three nights at the property.',
+      },
     ],
-    includes: ['Hands-on guidance all night', 'Use of tripods and tracking where available', 'Processing walkthrough'],
-    bring: ['A camera with manual mode (DSLR, mirrorless — or ask us)', 'Any lens you own, ideally a fast wide one', 'A tripod if you have one', 'Spare batteries — cold drains them fast'],
-    skillLevel: 'Beginner — no prior astrophotography needed',
-    equipmentProvided: ['Telescopes', 'Tripods and tracking mounts, subject to availability'],
-    groupSizeLabel: 'Small group, so everyone gets hands-on time',
-    sample: true,
+    durationLabel: '3 days · 3 nights',
+    description:
+      'Three days and three nights of deep-sky imaging, run to the same curriculum as our Delhi Deep-Sky Astrophotography Workshop — acquisition, calibration, stacking and processing, including narrowband technique for shooting through light pollution. You shoot at night and process by day; once the day’s post-processing is done your time is your own.',
+    runOfNight: [
+      { time: 'Day 1 · Afternoon', title: 'Foundations & equipment', detail: 'What deep-sky imaging actually demands: telescope, mount, camera, filters and guiding — and why light pollution is the problem the whole workflow is built around.' },
+      { time: 'Day 1 · Night', title: 'Setup & first acquisition', detail: 'Polar alignment, focus, framing and guiding, then a real acquisition run on a chosen target.' },
+      { time: 'Day 2 · Afternoon', title: 'Narrowband & calibration', detail: 'H-alpha, OIII and SII — why narrowband cuts through a city sky. Light, dark, flat and bias frames, and what each one removes.' },
+      { time: 'Day 2 · Night', title: 'Full imaging session', detail: 'A complete night of data collection on the target, start to finish.' },
+      { time: 'Day 3 · Daytime', title: 'Stacking & processing', detail: 'Registration, integration, stretching, background extraction, colour mapping and star handling — raw frames through to a finished image.' },
+      { time: 'Day 3 · Night', title: 'Final session', detail: 'A last night to apply the whole workflow yourself, with the trainer alongside.' },
+    ],
+    includes: [
+      'Three days of instruction and three shooting nights',
+      'Use of imaging telescopes, mounts and narrowband filters',
+      'Complete acquisition-to-processing workflow',
+      'Your own processed deep-sky image to take away',
+    ],
+    bring: [
+      'A camera with manual mode, if you have one — a setup can be shared otherwise',
+      'A laptop for the processing sessions',
+      'Spare batteries and storage',
+      'Warm layers for the nights',
+    ],
+    skillLevel: 'Beginner to intermediate — no prior astrophotography required',
+    equipmentProvided: ['Imaging telescopes and tracking mounts', 'Narrowband filters (H-alpha, OIII, SII)', 'Guiding and acquisition setup'],
+    groupSizeLabel: 'Small group, so everyone gets real time on the rig',
+    ageGuidance: 'Suited to adults and older teenagers.',
+    sample: false,
   },
   {
-    slug: 'date-with-the-universe',
+    slug: 'date-with-the-stars',
     kind: 'private',
-    title: 'Date With The Universe',
+    title: 'Date With The Stars',
     summary:
       'A private telescope evening for two, with a guide who stays as long as the sky is worth watching.',
-    fromPriceLabel: null,
-    durationLabel: 'Private evening',
+    priceTiers: [
+      {
+        label: 'For two · one room, one night',
+        amount: 14000,
+        perPerson: false,
+        note: 'The whole experience, including the room, bonfire and dinner.',
+      },
+    ],
+    durationLabel: 'Private evening & overnight',
     description:
-      'A private evening with a telescope and a guide who is there for the two of you — no group, no schedule beyond what the sky is doing. Tell us the occasion and we will build the night around it.',
-    includes: ['Private guide for the evening', 'Dedicated telescope time', 'The night paced to you'],
+      'A private night for two. It starts with your own sky observation session and a guide who is there only for you, moves to a bonfire as the night settles, and ends with dinner under the sky. A room for the night is included.',
+    runOfNight: [
+      { time: 'Evening', title: 'Private sky observation', detail: 'Your own telescope and a personal guide — the Moon, the planets that are up, and as much deep sky as the night allows. No group, no schedule but yours.' },
+      { time: 'Night', title: 'Bonfire', detail: 'The fire goes on once your eyes have had the sky. Warm, quiet, and still under the stars.' },
+      { time: 'Later', title: 'Dinner', detail: 'Dinner served under the open sky.' },
+      { time: 'Overnight', title: 'Your room', detail: 'A room for the night, so nobody has to drive home afterwards.' },
+    ],
+    includes: [
+      'Private sky observation with a personal guide',
+      'Bonfire for the evening',
+      'Dinner',
+      'One room for the night',
+    ],
     bring: ['Warm layers', 'Anything you would like set up for the occasion — tell us in advance'],
-    groupSizeLabel: 'Private — just your party',
-    sample: true,
+    groupSizeLabel: 'Private — for two',
+    sample: false,
   },
   {
     slug: 'family-under-the-stars',
@@ -180,95 +296,35 @@ export const experiences: NakshatraalayExperience[] = [
     title: 'Family Under The Stars',
     summary:
       'Built for curious kids and the adults they drag along — the Moon through a telescope, and questions taken seriously.',
-    fromPriceLabel: null,
-    durationLabel: 'Evening',
-    description:
-      'An evening built for children who ask a lot of questions. The Moon through a telescope is usually the moment it lands — craters and mountains, sharp enough to feel real — and we take every question seriously, including the hard ones.',
-    runOfNight: [
-      { time: 'Early evening', title: 'Finding your way', detail: 'The brightest things up tonight, and how to spot them without a telescope.' },
-      { time: 'Evening', title: 'The Moon and planets', detail: 'The bit everyone remembers — the Moon at high magnification, and Jupiter or Saturn when they are up.' },
-      { time: 'Later', title: 'Questions', detail: 'How far, how old, how do we know. Answered properly.' },
+    priceTiers: [
+      {
+        label: 'For four · two rooms, one night',
+        amount: 20000,
+        perPerson: false,
+        note: 'Two double-occupancy rooms, and the full evening.',
+      },
     ],
-    includes: ['Guided observation', 'Use of telescopes', 'Astronomy suited to younger explorers'],
+    durationLabel: 'Evening & overnight',
+    description:
+      'The same night as Date With The Stars, built for a family of four: your own sky observation session with a personal guide, then a bonfire, then dinner under the open sky — with two double-occupancy rooms for the night.',
+    runOfNight: [
+      { time: 'Evening', title: 'Private sky observation', detail: 'Your own telescope and a personal guide. The Moon at high magnification is usually the moment it lands for children — craters sharp enough to feel real.' },
+      { time: 'Night', title: 'Bonfire', detail: 'The fire goes on once everyone has had the sky. Questions welcome — how far, how old, how do we know.' },
+      { time: 'Later', title: 'Dinner', detail: 'Dinner served under the open sky.' },
+      { time: 'Overnight', title: 'Your rooms', detail: 'Two double-occupancy rooms for the night.' },
+    ],
+    includes: [
+      'Private sky observation with a personal guide',
+      'Bonfire for the evening',
+      'Dinner',
+      'Two double-occupancy rooms for the night',
+    ],
     bring: ['Warm layers for everyone', 'Curiosity'],
     ageGuidance: 'Designed for families. Younger children welcome with an adult.',
-    groupSizeLabel: 'Small group',
-    sample: true,
+    groupSizeLabel: 'Private — for four',
+    sample: false,
   },
 ]
-
-/* ---------------------------------------------------------------------------
- * PACKAGES — the real, confirmed pricing
- *
- * A package is a room (or rooms) WITH the complete astronomy experience
- * included; it is not a room rate with the night sold separately. Prices are
- * per package per night, not per person.
- *
- * WEEKDAY vs WEEKEND is decided by `isWeekendNight()` below — Friday and
- * Saturday nights carry the weekend rate. Change that function if the
- * property treats Sunday as a weekend night too.
- * ------------------------------------------------------------------------- */
-
-export interface StayPackage {
-  id: string
-  name: string
-  occupancyLabel: string
-  rooms: number
-  guests: number
-  /** Whole rupees, per package per night. */
-  weekdayPrice: number
-  weekendPrice: number
-  includes: string[]
-}
-
-export const packages: StayPackage[] = [
-  {
-    id: 'couple',
-    name: 'Couple',
-    occupancyLabel: '2 guests · 1 room',
-    rooms: 1,
-    guests: 2,
-    weekdayPrice: 8000,
-    weekendPrice: 12000,
-    includes: [
-      'One room for the night',
-      'The complete astronomy experience',
-      'Guided telescope observation',
-    ],
-  },
-  {
-    id: 'family-of-four',
-    name: 'Family of four',
-    occupancyLabel: '4 guests · 2 rooms',
-    rooms: 2,
-    guests: 4,
-    weekdayPrice: 15000,
-    weekendPrice: 20000,
-    includes: [
-      'Two rooms for the night',
-      'The complete astronomy experience',
-      'Guided telescope observation',
-    ],
-  },
-]
-
-/** ₹8,000 — Indian grouping, no decimals. */
-export function formatINR(rupees: number): string {
-  return `₹${rupees.toLocaleString('en-IN')}`
-}
-
-/**
- * Friday and Saturday nights carry the weekend rate. `date` is an ISO
- * YYYY-MM-DD string, read in UTC so it does not shift by timezone.
- */
-export function isWeekendNight(date: string): boolean {
-  const day = new Date(`${date}T00:00:00Z`).getUTCDay()
-  return day === 5 || day === 6
-}
-
-export function priceFor(pkg: StayPackage, date?: string): number {
-  return date && isWeekendNight(date) ? pkg.weekendPrice : pkg.weekdayPrice
-}
 
 /* ---------------------------------------------------------------------------
  * MANUALLY CLOSED NIGHTS

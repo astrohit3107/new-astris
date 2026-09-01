@@ -10,6 +10,8 @@ import {
   getExperience,
   EXPERIENCE_KIND_LABEL,
   POLICIES,
+  formatINR,
+  fromPrice,
 } from '@/lib/nakshatraalay-data'
 import EnquiryWizard from '@/components/nakshatraalay/enquiry-wizard'
 
@@ -116,9 +118,15 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
                 {exp.skillLevel}
               </span>
             )}
-            <span className="rounded-full border border-white/15 px-3 py-1.5 text-white/70">
-              {exp.fromPriceLabel ? `From ${exp.fromPriceLabel}` : 'Pricing on enquiry'}
-            </span>
+            {(() => {
+              const cheapest = fromPrice(exp)
+              return cheapest ? (
+                <span className="rounded-full border border-[var(--av-gold)]/30 bg-[var(--av-gold)]/10 px-3 py-1.5 font-semibold text-[var(--av-gold)]">
+                  {exp.priceTiers.length > 1 ? 'From ' : ''}
+                  {formatINR(cheapest.amount)} {cheapest.perPerson ? 'per person' : 'total'}
+                </span>
+              ) : null
+            })()}
           </div>
         </div>
       </section>
@@ -128,7 +136,9 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
           <div className="space-y-12">
             {exp.runOfNight && exp.runOfNight.length > 0 && (
               <div>
-                <h2 className="font-display text-2xl font-light">How the night runs</h2>
+                <h2 className="font-display text-2xl font-light">
+                  {exp.kind === 'workshop' ? 'How the workshop runs' : 'How the night runs'}
+                </h2>
                 <ol className="mt-6 space-y-5 border-l border-white/12 pl-6">
                   {exp.runOfNight.map((item) => (
                     <li key={item.title} className="relative">
@@ -192,6 +202,34 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
                 {exp.ageGuidance}
               </p>
             )}
+
+            {/* Pricing — every way to book this experience */}
+            <div>
+              <h2 className="font-display text-2xl font-light">What it costs</h2>
+              <div className="mt-5 space-y-3">
+                {exp.priceTiers.map((tier) => (
+                  <div
+                    key={tier.label}
+                    className="group flex items-start justify-between gap-5 rounded-2xl border border-white/12 bg-white/[0.03] px-5 py-4 transition-colors hover:border-white/25"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white">{tier.label}</p>
+                      {tier.note && (
+                        <p className="mt-1 text-xs leading-relaxed text-white/45">{tier.note}</p>
+                      )}
+                    </div>
+                    <p className="shrink-0 text-right">
+                      <span className="font-display block text-xl font-light text-white">
+                        {formatINR(tier.amount)}
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wider text-white/40">
+                        {tier.perPerson ? 'per person' : 'total'}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="space-y-3 border-t border-white/10 pt-8 text-xs leading-relaxed text-white/40">
               <p><span className="font-semibold text-white/60">Weather — </span>{POLICIES.weather}</p>
