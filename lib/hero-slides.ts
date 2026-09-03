@@ -57,7 +57,7 @@ export const heroSlides: HeroSlide[] = [
     eyebrow: 'Flagship workshop',
     headline: 'Photograph deep sky',
     headlineAccent: 'from a city sky.',
-    body: 'Narrowband imaging is how modern astrophotographers pull nebulae out of light pollution. Three days and three nights, acquisition through to a finished image.',
+    body: 'Narrowband imaging is how modern astrophotographers pull nebulae out of light pollution. Two days and two nights, acquisition through to a finished image.',
     image: '/hero/deep-sky.jpg',
     imageAlt: 'The Orion Nebula imaged in narrowband',
     objectPosition: 'center',
