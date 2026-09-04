@@ -18,6 +18,14 @@ export async function POST(request: Request) {
   const signature = request.headers.get('x-razorpay-signature') ?? ''
   const raw = await request.text()
 
+  // A missing secret rejects every webhook exactly like a forged one, which
+  // would silently kill the safety net. Answer 503 instead: Razorpay retries
+  // 5xx for ~24h, so the booking still lands once the secret is set.
+  if (!process.env.RAZORPAY_WEBHOOK_SECRET) {
+    console.error('[reservations/webhook] RAZORPAY_WEBHOOK_SECRET is not set — asking Razorpay to retry')
+    return NextResponse.json({ error: 'webhook not configured' }, { status: 503 })
+  }
+
   if (!verifyWebhookSignature(raw, signature)) {
     // 400, not 401: Razorpay retries on 5xx, and a bad signature is not
     // something a retry will fix.
