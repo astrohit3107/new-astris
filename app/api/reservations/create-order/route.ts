@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { reservationSchema, quoteFor } from '@/lib/reservations'
+import { reservationSchema, quoteFor, friendlyIssue } from '@/lib/reservations'
 import { createOrder, isRazorpayConfigured, razorpayKeyId } from '@/lib/razorpay'
 
 export const runtime = 'nodejs'
@@ -50,14 +50,19 @@ export async function POST(request: Request) {
   const parsed = reservationSchema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? 'Please check the form.' },
+      { error: parsed.error.issues[0] ? friendlyIssue(parsed.error.issues[0]) : 'Please check the form.' },
       { status: 422 }
     )
   }
   const data = parsed.data
 
-  // Honeypot: accept silently so a bot learns nothing, but charge nothing.
-  if (data.company) return NextResponse.json({ ok: true, skipped: true })
+  // Honeypot: answer 200 so a bot learns nothing from the status code, but
+  // open no order. Logged loudly, because a false positive here costs a real
+  // booking and the client deliberately does NOT show success for it.
+  if (data.refCode) {
+    console.error('[reservations] honeypot tripped', { ip, email: data.email })
+    return NextResponse.json({ ok: true, skipped: true })
+  }
 
   const quote = quoteFor(data)
   if (!quote) {

@@ -48,9 +48,41 @@ export const reservationSchema = z.object({
   gearNotes: z.string().trim().max(500).optional().or(z.literal('')),
   notes: z.string().trim().max(800).optional().or(z.literal('')),
 
-  /** Honeypot — real people leave it empty. */
-  company: z.string().max(0).optional().or(z.literal('')),
+  /**
+   * Honeypot. Deliberately NOT length-limited: a `max(0)` here made zod reject
+   * the whole request before the honeypot branch could run, so a real customer
+   * whose browser autofilled it saw a raw validation error instead of paying.
+   * It is now accepted by the schema and judged explicitly by the route.
+   *
+   * The name is meaningless on purpose. It was called `company`, with a
+   * matching <label>Company</label>, and Chrome's autofill fills such a field
+   * from the saved address profile regardless of autocomplete="off".
+   */
+  refCode: z.string().max(200).optional().or(z.literal('')),
 })
+
+/**
+ * Human-readable validation message, keyed by field.
+ *
+ * Zod's own text ("String must contain at most 0 character(s)") is written for
+ * developers and must never reach a customer.
+ */
+export function friendlyIssue(issue: { path: PropertyKey[]; message: string }): string {
+  const field = String(issue.path[0] ?? '')
+  const byField: Record<string, string> = {
+    date: 'Please choose a date.',
+    fullName: 'Please enter your name.',
+    email: 'Please enter a valid email address.',
+    phone: 'Please enter a valid phone number.',
+    guests: 'Please choose how many guests are coming.',
+    tierLabel: 'Please choose a package.',
+    experienceSlug: 'Something went wrong loading this experience. Please refresh the page.',
+    gear: 'Please re-select your equipment.',
+    gearNotes: 'Your equipment note is too long — please shorten it.',
+    notes: 'Your note is too long — please shorten it.',
+  }
+  return byField[field] ?? 'Please check the form and try again.'
+}
 
 export type ReservationInput = z.infer<typeof reservationSchema>
 

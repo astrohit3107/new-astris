@@ -58,7 +58,7 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
   const [gear, setGear] = useState<string[]>([])
   const [gearNotes, setGearNotes] = useState('')
   const [notes, setNotes] = useState('')
-  const [company, setCompany] = useState('')
+  const [refCode, setRefCode] = useState('')
 
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
@@ -74,7 +74,7 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
     return {
       experienceSlug, tierLabel, guests, date,
       fullName, email, phone,
-      gear, gearNotes, notes, company,
+      gear, gearNotes, notes, refCode,
     }
   }
 
@@ -94,7 +94,13 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
       })
       const order = await res.json()
       if (!res.ok || !order.ok) throw new Error(order.error || 'Could not start the payment.')
-      if (order.skipped) { setStatus('done'); return }
+      // Never show a receipt for a booking that was never charged. If the trap
+      // ever misfires on a real person, give them a way through instead.
+      if (order.skipped) {
+        setStatus('error')
+        setError('We could not verify this form automatically. Please message us on WhatsApp and we will hold your place.')
+        return
+      }
 
       setStatus('paying')
       const rzp = new window.Razorpay!({
@@ -177,10 +183,20 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
       <h3 className="font-display text-xl font-semibold text-white">Reserve your spot</h3>
       <p className="mt-1.5 text-sm text-white/50">Secure your place with payment — confirmed instantly.</p>
 
-      {/* Honeypot */}
+      {/* Honeypot. No label and a meaningless name, so browser autofill has
+          nothing to match — a visible "Company" label made Chrome fill it from
+          the saved address profile and blocked real customers. */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
-        <label htmlFor="rf-company">Company</label>
-        <input id="rf-company" tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} />
+        <input
+          id="rf-refcode"
+          name="refCode"
+          tabIndex={-1}
+          autoComplete="off"
+          data-1p-ignore
+          data-lpignore="true"
+          value={refCode}
+          onChange={(e) => setRefCode(e.target.value)}
+        />
       </div>
 
       <div className="mt-6 space-y-5">
