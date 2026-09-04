@@ -13,7 +13,7 @@ import {
   formatINR,
   fromPrice,
 } from '@/lib/nakshatraalay-data'
-import EnquiryWizard from '@/components/nakshatraalay/enquiry-wizard'
+import ReservationForm from '@/components/nakshatraalay/reservation-form'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 type Params = { slug: string }
@@ -241,7 +241,7 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
 
           {/* Enquiry */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <EnquiryWizard initialExperienceSlug={exp.slug} />
+            <ReservationForm experienceSlug={exp.slug} />
           </div>
         </div>
       </section>
