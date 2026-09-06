@@ -124,7 +124,10 @@ export function dateProblem(date: string, now: Date = new Date()): string | null
 
   const earliest = earliestBookableDate(now)
   if (date < earliest) {
+    // Format in IST explicitly. The servers run UTC, so without this the
+    // instant is correct but the rendered day is the one before.
     const opening = new Date(`${earliest}T00:00:00+05:30`).toLocaleDateString('en-IN', {
+      timeZone: 'Asia/Kolkata',
       day: 'numeric',
       month: 'long',
       year: 'numeric',

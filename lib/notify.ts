@@ -160,7 +160,15 @@ function prettyDate(iso: string): string {
   const d = new Date(`${iso}T00:00:00+05:30`)
   return Number.isNaN(d.getTime())
     ? iso
-    : d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : // Explicitly IST: the servers run UTC, and a booking date rendered a day
+      // early in a guest's own confirmation email is not a cosmetic problem.
+      d.toLocaleDateString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
 }
 
 export function confirmationSubject(c: BookingConfirmation): string {
