@@ -55,6 +55,11 @@ export function pageEntries(): SitemapEntry[] {
     { path: '/astroventure-astrophotography', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/delhi-deep-sky-astrophotography-workshop', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/guides', priority: 0.8, changeFrequency: 'weekly' },
+    // Nakshatraalay booking terms. Razorpay requires these to be publicly
+    // reachable, and a guest paying online must be able to find them.
+    { path: '/nakshatraalay/gurgaon/cancellation', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/nakshatraalay/gurgaon/rescheduling', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/nakshatraalay/gurgaon/privacy', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/astroventure-nights/privacy', priority: 0.2, changeFrequency: 'yearly' },
     { path: '/astroventure-nights/terms', priority: 0.2, changeFrequency: 'yearly' },
   ].map((e) => ({ ...e, lastModified: BUILT }) as SitemapEntry)

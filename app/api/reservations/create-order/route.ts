@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { reservationSchema, quoteFor, friendlyIssue } from '@/lib/reservations'
+import { reservationSchema, quoteFor, friendlyIssue, dateProblem } from '@/lib/reservations'
 import { createOrder, isRazorpayConfigured, razorpayKeyId } from '@/lib/razorpay'
 
 export const runtime = 'nodejs'
@@ -63,6 +63,11 @@ export async function POST(request: Request) {
     console.error('[reservations] honeypot tripped', { ip, email: data.email })
     return NextResponse.json({ ok: true, skipped: true })
   }
+
+  // Refuse the date before pricing it: no order should exist for a night we
+  // cannot honour.
+  const badDate = dateProblem(data.date)
+  if (badDate) return NextResponse.json({ error: badDate }, { status: 400 })
 
   const quote = quoteFor(data)
   if (!quote) {

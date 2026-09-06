@@ -8,6 +8,8 @@ import {
   formatINR,
   isClosed,
   POLICIES,
+  earliestBookableDate,
+  MAPS,
   type PriceTier,
 } from '@/lib/nakshatraalay-data'
 import { GEAR_OPTIONS, asksForGear } from '@/lib/reservations'
@@ -62,11 +64,13 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
 
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
-  const [receipt, setReceipt] = useState<{ paymentId: string; amountLabel: string } | null>(null)
+  const [receipt, setReceipt] = useState<{ paymentId: string; amountLabel: string; emailed: boolean } | null>(null)
 
   const tier = tiers.find((t) => t.label === tierLabel)
   const preview = tier ? (tier.perPerson ? tier.amount * guests : tier.amount) : 0
-  const today = new Date().toISOString().slice(0, 10)
+  // Opening day, or today once opening has passed. Booking a night before the
+  // property opens would take real money for a date that cannot happen.
+  const earliest = earliestBookableDate()
   const dateClosed = date !== '' && isClosed(date)
   const busy = status === 'starting' || status === 'paying' || status === 'confirming'
 
@@ -134,7 +138,7 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
             })
             const cj = await cres.json()
             if (!cres.ok || !cj.ok) throw new Error(cj.error || 'We could not verify the payment.')
-            setReceipt({ paymentId: cj.paymentId, amountLabel: cj.amountLabel })
+            setReceipt({ paymentId: cj.paymentId, amountLabel: cj.amountLabel, emailed: !!cj.emailed })
             setStatus('done')
           } catch (err) {
             setStatus('error')
@@ -163,12 +167,28 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
         </span>
         <h3 className="font-display mt-5 text-2xl font-semibold text-white">Your spot is booked</h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-white/65">
-          {receipt ? `We've received ${receipt.amountLabel}.` : 'Payment received.'} A confirmation
-          is on its way to {email}. We&rsquo;ll be in touch before the night with directions and
-          what to expect.
+          {receipt ? `We've received ${receipt.amountLabel}.` : 'Payment received.'}{' '}
+          {receipt?.emailed
+            ? `A confirmation with your booking details is on its way to ${email}.`
+            : `We'll message you on ${phone} with your confirmation and directions shortly.`}
         </p>
         {receipt && (
-          <p className="mt-4 font-mono text-xs text-white/45">Payment ID · {receipt.paymentId}</p>
+          <>
+            <p className="mt-4 font-mono text-xs text-white/45">
+              Payment ID · {receipt.paymentId}
+            </p>
+            <p className="mt-1.5 text-xs text-white/40">
+              Keep this — it identifies your booking if you need to change the date.
+            </p>
+            <a
+              href={MAPS.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-medium text-white/85 transition hover:border-white/40 hover:bg-white/5"
+            >
+              Get directions
+            </a>
+          </>
         )}
       </div>
     )
@@ -234,7 +254,7 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={label} htmlFor="rf-date">Date</label>
-            <input id="rf-date" type="date" min={today} required value={date}
+            <input id="rf-date" type="date" min={earliest} required value={date}
               onChange={(e) => setDate(e.target.value)} className={`${field} [color-scheme:dark]`} />
             {dateClosed && (
               <p className="mt-1.5 text-xs text-amber-200/90">That night is full — please pick another.</p>
@@ -326,6 +346,23 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
 
         <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-white/35">
           <ShieldCheck size={12} /> Payment handled by Razorpay. We never see your card details.
+        </p>
+        {/* The terms a guest is agreeing to by paying must be reachable from
+            the point of payment, not buried in a footer. */}
+        <p className="text-center text-[11px] leading-relaxed text-white/35">
+          By paying you accept our{' '}
+          <a href="/nakshatraalay/gurgaon/cancellation" className="underline hover:text-white/70">
+            cancellation &amp; refund terms
+          </a>
+          ,{' '}
+          <a href="/nakshatraalay/gurgaon/rescheduling" className="underline hover:text-white/70">
+            rescheduling policy
+          </a>{' '}
+          and{' '}
+          <a href="/nakshatraalay/gurgaon/privacy" className="underline hover:text-white/70">
+            privacy policy
+          </a>
+          .
         </p>
         <p className="text-center text-[11px] leading-relaxed text-white/30">
           {POLICIES.weather}{' '}

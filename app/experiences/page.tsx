@@ -1,7 +1,14 @@
 import type { Metadata } from 'next'
 
 import { SITE_URL } from '@/lib/site-config'
-import { NAKSHATRAALAY, experiences, POLICIES } from '@/lib/nakshatraalay-data'
+import {
+  NAKSHATRAALAY,
+  experiences,
+  everydayExperiences,
+  specialExperiences,
+  POLICIES,
+  BOOKING_OPENS_ON,
+} from '@/lib/nakshatraalay-data'
 import ExperienceCard from '@/components/nakshatraalay/experience-card'
 import Reveal from '@/components/nakshatraalay/reveal'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
@@ -52,16 +59,38 @@ export default function ExperiencesPage() {
             The experiences
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-white/65">
-            Nights built around what the sky is actually doing — from a first look through a
-            telescope to photographing it properly.
+            Two ways in: turn up any night for a guided session, or book one of the longer
+            programmes built around a particular sky.
           </p>
         </div>
       </section>
 
       <section className="px-5 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-5xl">
-          <div className="grid gap-5 sm:grid-cols-2">
-            {experiences.map((exp) => (
+          <h2 className="font-display text-2xl font-light sm:text-3xl">Any night</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/55">
+            Bookable on any date from{' '}
+            {new Date(BOOKING_OPENS_ON).toLocaleDateString('en-IN', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
+            . Pick a date, pay, and you are booked.
+          </p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {everydayExperiences.map((exp) => (
+              <ExperienceCard key={exp.slug} experience={exp} />
+            ))}
+          </div>
+
+          <h2 className="font-display mt-20 text-2xl font-light sm:text-3xl">
+            Special experiences &amp; workshops
+          </h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/55">
+            Longer programmes, deeper instruction, and a room for the night.
+          </p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {specialExperiences.map((exp) => (
               <ExperienceCard key={exp.slug} experience={exp} />
             ))}
           </div>

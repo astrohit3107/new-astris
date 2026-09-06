@@ -2,20 +2,25 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, MessageCircle, Moon, Users } from 'lucide-react'
 
-import { SITE_URL } from '@/lib/site-config'
+import { SITE_URL, CONTACT } from '@/lib/site-config'
 import ExperienceCard from '@/components/nakshatraalay/experience-card'
 import {
   NAKSHATRAALAY,
   experiences,
+  everydayExperiences,
+  specialExperiences,
+  MAPS,
   stayTypes,
   formatINR,
   fromPrice,
   EXPERIENCE_KIND_LABEL,
   bookHref,
+  BOOKING_OPENS_ON,
   groupHref,
 } from '@/lib/nakshatraalay-data'
 import { moonPhase } from '@/lib/moon-phase'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
+import FindUs from '@/components/nakshatraalay/find-us'
 
 /**
  * Nakshatraalay Gurgaon — the destination page.
@@ -70,12 +75,23 @@ export default function NakshatraalayGurgaonPage() {
         description: DESCRIPTION,
         url: `${SITE_URL}${PATH}`,
         touristType: 'Astronomy enthusiasts, families, photographers',
+        // The name Google holds for us, so the listing and this page resolve
+        // to a single place rather than two similarly-named ones.
+        alternateName: MAPS.placeName,
         address: {
           '@type': 'PostalAddress',
           addressLocality: NAKSHATRAALAY.city,
           addressRegion: 'Haryana',
           addressCountry: 'IN',
         },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: NAKSHATRAALAY.latitude,
+          longitude: NAKSHATRAALAY.longitude,
+        },
+        hasMap: MAPS.placeUrl,
+        sameAs: [MAPS.placeUrl],
+        telephone: CONTACT.phone,
       },
       {
         '@type': 'BreadcrumbList',
@@ -197,18 +213,42 @@ export default function NakshatraalayGurgaonPage() {
       {/* Experiences ---------------------------------------------------- */}
       <section id="experiences" className="scroll-mt-16 border-t border-white/10 px-5 py-20 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-display text-3xl font-light sm:text-4xl">The experience</h2>
+          <h2 className="font-display text-3xl font-light sm:text-4xl">Book any night</h2>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
-            Nights built around what the sky is actually doing — not a fixed script.
+            No fixed dates and nothing to wait for — pick a night from{' '}
+            {new Date(BOOKING_OPENS_ON).toLocaleDateString('en-IN', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}{' '}
+            onwards and book it.
           </p>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            {experiences.map((exp) => (
+            {everydayExperiences.map((exp) => (
               <ExperienceCard key={exp.slug} experience={exp} />
             ))}
           </div>
+
+          <div className="mt-20">
+            <h2 className="font-display text-3xl font-light sm:text-4xl">
+              Special experiences &amp; workshops
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
+              Longer, more deliberate programmes — built around what the sky is actually doing, not
+              a fixed script.
+            </p>
+
+            <div className="mt-10 grid gap-5 sm:grid-cols-2">
+              {specialExperiences.map((exp) => (
+                <ExperienceCard key={exp.slug} experience={exp} />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
+      <FindUs />
 
       {/* Stay ----------------------------------------------------------- */}
       <section id="stays" className="scroll-mt-16 border-t border-white/10 px-5 py-20 sm:px-6 sm:py-28">
@@ -318,6 +358,29 @@ export default function NakshatraalayGurgaonPage() {
           )}
         </div>
       </section>
+
+      {/* Booking terms — reachable from the destination page, not buried. */}
+      <footer className="border-t border-white/10 px-5 py-10 sm:px-6">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
+          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/cancellation">
+            Cancellation &amp; refunds
+          </Link>
+          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/rescheduling">
+            Rescheduling
+          </Link>
+          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/privacy">
+            Privacy
+          </Link>
+          <a
+            className="hover:text-white/70"
+            href={MAPS.shortUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Find us on Google Maps
+          </a>
+        </div>
+      </footer>
     </main>
   )
 }

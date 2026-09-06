@@ -1,6 +1,13 @@
 import { z } from 'zod'
 
-import { experiences, getExperience, formatINR, type PriceTier } from '@/lib/nakshatraalay-data'
+import {
+  experiences,
+  getExperience,
+  formatINR,
+  earliestBookableDate,
+  isClosed,
+  type PriceTier,
+} from '@/lib/nakshatraalay-data'
 
 /**
  * Reservations for Nakshatraalay Gurgaon.
@@ -102,6 +109,38 @@ export interface Quote {
  * tier does not exist, which is treated as a rejected request rather than a
  * zero-rupee booking.
  */
+/**
+ * Is this a date we can actually sell?
+ *
+ * The form sets `min` on the date input and greys out closed nights, but that
+ * is a courtesy to the guest, not a control — anything can be posted to the
+ * API directly. Money must never be taken for a night that cannot happen, so
+ * the same rules are enforced here and applied on every pricing path.
+ *
+ * Returns a message to show the guest, or null when the date is fine.
+ */
+export function dateProblem(date: string, now: Date = new Date()): string | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return 'Please choose a date.'
+
+  const earliest = earliestBookableDate(now)
+  if (date < earliest) {
+    const opening = new Date(`${earliest}T00:00:00+05:30`).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+    return `We are not taking bookings for that date. The earliest available night is ${opening}.`
+  }
+
+  // A year out is far beyond anything we plan, and is almost always a typo.
+  const limit = new Date(now.getTime() + 400 * 86_400_000).toISOString().slice(0, 10)
+  if (date > limit) return 'That date is too far ahead. Please message us to arrange it.'
+
+  if (isClosed(date)) return 'That night is already full. Please pick another date.'
+
+  return null
+}
+
 export function quoteFor(input: {
   experienceSlug: string
   tierLabel: string

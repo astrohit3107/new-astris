@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { reservationSchema, quoteFor } from '@/lib/reservations'
+import { reservationSchema, quoteFor, dateProblem } from '@/lib/reservations'
 import { verifyPaymentSignature, fetchPayment, isRazorpayConfigured } from '@/lib/razorpay'
-import { sendNotification } from '@/lib/notify'
+import { sendNotification, sendCustomerConfirmation } from '@/lib/notify'
+import { getExperience, MAPS } from '@/lib/nakshatraalay-data'
+import { SITE_URL } from '@/lib/site-config'
 
 export const runtime = 'nodejs'
 
@@ -76,12 +78,45 @@ export async function POST(request: Request) {
   const host = request.headers.get('host')
   const origin = request.headers.get('origin') || (host ? `https://${host}` : undefined)
 
+  // Confirm to the guest and record it for ourselves. Both are attempted even
+  // if one fails: the guest's confirmation and our booking record are separate
+  // obligations, and neither is a reason to skip the other.
+  const experience = getExperience(d.experienceSlug)
+  const customer = await sendCustomerConfirmation({
+    to: d.email,
+    firstName: d.fullName.trim().split(/\s+/)[0] || 'there',
+    experienceTitle: quote.experienceTitle,
+    tierLabel: quote.tier.label,
+    date: d.date,
+    guests: d.guests,
+    amountLabel: quote.amountLabel,
+    breakdown: quote.breakdown,
+    paymentId: d.razorpayPaymentId,
+    bring: experience?.bring,
+    souvenir: experience?.includes?.some((i) => /souvenir|print/i.test(i)) ?? false,
+    directionsUrl: MAPS.directionsUrl,
+    siteUrl: SITE_URL,
+  })
+  if (!customer.sent) {
+    console.error('[reservations] guest confirmation NOT sent', {
+      payment: d.razorpayPaymentId,
+      email: d.email,
+      reason: customer.reason,
+    })
+  }
+
   const result = await sendNotification({
     subject: `PAID · ${quote.experienceTitle} · ${d.date} · ${d.fullName}`,
     replyTo: d.email,
     origin,
     rows: [
       ['Status', `PAID (${payment.status})`],
+      [
+        'Guest emailed',
+        customer.sent
+          ? 'Yes — confirmation delivered'
+          : `NO — CONTACT THEM (${customer.reason ?? 'unknown'})`,
+      ],
       ['Amount', `${quote.amountLabel} — ${quote.breakdown}`],
       ['Experience', quote.experienceTitle],
       ['Package', quote.tier.label],
@@ -114,5 +149,7 @@ export async function POST(request: Request) {
     paymentId: d.razorpayPaymentId,
     amountLabel: quote.amountLabel,
     notified: result.sent,
+    // The form tells the guest to expect an email only when one actually went.
+    emailed: customer.sent,
   })
 }

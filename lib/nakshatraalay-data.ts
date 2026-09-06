@@ -26,7 +26,7 @@ import { whatsappHref } from '@/lib/site-config'
 
 export interface NakshatraalayExperience {
   slug: string
-  kind: 'public_event' | 'workshop' | 'private' | 'family'
+  kind: 'public_event' | 'workshop' | 'private' | 'family' | 'everyday'
   title: string
   summary: string
   /** Longer copy for the detail page. */
@@ -91,8 +91,11 @@ export const NAKSHATRAALAY = {
 
   /** Centre of Gurgaon — the exact site is not public yet. Used only to
    *  describe the Moon tonight, which is accurate to within a few km. */
-  latitude: 28.4595,
-  longitude: 77.0266,
+  // Taken from the Google Business listing, not from the city centre. These
+  // feed the map, the directions link and the LocalBusiness structured data,
+  // so a placeholder here would send guests to the wrong place.
+  latitude: 28.3114065,
+  longitude: 77.0121846,
 
   intro:
     'Close enough for a Saturday. Far enough that the sky comes back. A place to spend a night with real telescopes, a dark horizon, and people who know what they are pointing at.',
@@ -118,6 +121,44 @@ export const NAKSHATRAALAY = {
  * evening for two is one price for the party. Getting this wrong doubles or
  * halves someone's expected bill, so it is explicit rather than inferred.
  */
+/**
+ * The Google Business listing.
+ *
+ * `placeName` is the name as it is actually registered on Google, which is
+ * spelled differently from our own brand name. Both are kept: the site says
+ * "Nakshatraalay", Google says "NAKSHATRALAYA by ASTRIS", and the structured
+ * data declares the second as an alternate so the two resolve to one place.
+ */
+export const MAPS = {
+  placeName: 'NAKSHATRALAYA by ASTRIS',
+  shortUrl: 'https://maps.app.goo.gl/dq613FBoiDem4qYd6',
+  placeUrl:
+    'https://www.google.com/maps/place/NAKSHATRALAYA+by+ASTRIS/@28.3114065,77.0121846,17z/data=!4m6!3m5!1s0x390d259a9794c949:0x2dc4e2ded2255a5c',
+  /** Stable Google place identifier, from the listing's own data parameter. */
+  cid: '0x390d259a9794c949:0x2dc4e2ded2255a5c',
+  /**
+   * Turn-by-turn from wherever the guest is. Addressed by coordinates rather
+   * than a place id, because the coordinates come straight from the listing
+   * and are verifiable; a place id would have to be guessed.
+   */
+  directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=28.3114065%2C77.0121846',
+  /** Keyless embed. The API-key embed is not needed for a single pin. */
+  embedUrl:
+    'https://www.google.com/maps?q=28.3114065,77.0121846&z=15&output=embed',
+} as const
+
+/**
+ * Nothing can be booked before the property opens, whatever today's date is.
+ * The reservation form and the API both clamp to this.
+ */
+export const BOOKING_OPENS_ON = '2026-09-15'
+
+/** Earliest date a guest may select: opening day, or today once that passes. */
+export function earliestBookableDate(now: Date = new Date()): string {
+  const today = new Date(now.getTime() + 5.5 * 3600_000).toISOString().slice(0, 10)
+  return today > BOOKING_OPENS_ON ? today : BOOKING_OPENS_ON
+}
+
 export interface PriceTier {
   label: string
   amount: number
@@ -141,6 +182,83 @@ export function fromPrice(exp: NakshatraalayExperience): PriceTier | undefined {
 }
 
 export const experiences: NakshatraalayExperience[] = [
+  /* ------------------------------------------------------------------ *
+   *  EVERYDAY BOOKINGS
+   *  Available any night from opening, with no fixed date. These are the
+   *  ordinary way in; the dated programmes below are the special ones.
+   *  Room rates follow the same per-person convention as every other
+   *  experience here: sharing costs less per head than sole occupancy.
+   * ------------------------------------------------------------------ */
+  {
+    slug: 'stargazing-experience',
+    kind: 'everyday',
+    title: 'Stargazing Experience',
+    summary:
+      'A guided evening at the telescope, any night of the week. The Moon, the planets that are up, and a proper tour of the sky.',
+    priceTiers: [
+      { label: 'Experience only', amount: 1500, perPerson: true, note: 'Evening session — you head home afterwards.' },
+      { label: 'With room · double sharing', amount: 7500, perPerson: true, note: 'Experience plus a shared room for the night.' },
+      { label: 'With room · single occupancy', amount: 9500, perPerson: true, note: 'Experience plus a room to yourself.' },
+    ],
+    durationLabel: 'Any evening · about 3 hours',
+    description:
+      'The straightforward way to spend an evening under the sky with us. You do not need to wait for a scheduled night and you do not need to know anything about astronomy — turn up, and we will show you what is actually overhead. What you see depends on the date and the sky, which is the honest answer: the Moon when it is up, whichever planets are visible, and the brightest clusters and nebulae the conditions allow.',
+    runOfNight: [
+      { time: 'Dusk', title: 'Arrival', detail: 'Settle in and watch the telescopes go up as the light drops.' },
+      { time: 'Early evening', title: 'Naked-eye sky tour', detail: 'The bright stars and the constellations of the season, and how to find your way without any equipment.' },
+      { time: 'Evening', title: 'At the eyepiece', detail: 'The Moon and whichever planets are up, then clusters, nebulae or galaxies as the sky darkens.' },
+      { time: 'Late', title: 'Questions', detail: 'Whatever you want to ask, for as long as the sky holds.' },
+    ],
+    includes: [
+      'Guided observation with an astronomer',
+      'Use of our telescopes',
+      'Sky orientation for complete beginners',
+      'Hot drinks through the evening',
+    ],
+    bring: ['Warm layers — it gets colder than you expect', 'Flat shoes', 'A red-light torch if you have one'],
+    ageGuidance: 'All ages. Children welcome with an adult.',
+    groupSizeLabel: 'Small group',
+    sample: false,
+  },
+  {
+    slug: 'one-night-astrophotography',
+    kind: 'everyday',
+    title: 'One-Night Astrophotography Workshop',
+    summary:
+      'Shoot the night sky and take a print home. A single night, any night, with a souvenir of a frame you took yourself.',
+    priceTiers: [
+      { label: 'Experience only', amount: 3000, perPerson: true, note: 'The full night — you head home in the morning.' },
+      { label: 'With room · double sharing', amount: 9000, perPerson: true, note: 'Workshop plus a shared room for the night.' },
+      { label: 'With room · single occupancy', amount: 11000, perPerson: true, note: 'Workshop plus a room to yourself.' },
+    ],
+    durationLabel: 'Any night · dusk to late',
+    description:
+      'One night, start to finish: setting a camera up for the dark, framing a sky you cannot properly see through the viewfinder, tracking, stacking, and pulling an image out of the frames you shot. You leave with a photograph you took yourself — we print one on the spot as a souvenir before you go. Bring a camera if you have one; if you do not, you can work on ours.',
+    runOfNight: [
+      { time: 'Dusk', title: 'Setup', detail: 'Cameras on tripods, focus set on a bright star, and the settings that actually matter after dark.' },
+      { time: 'Early night', title: 'Wide-field shooting', detail: 'Constellations, the Milky Way when the season and Moon allow, and how to expose for them.' },
+      { time: 'Night', title: 'Tracked frames', detail: 'Using a star tracker for longer exposures, and what changes when you do.' },
+      { time: 'Late', title: 'Processing', detail: 'Stacking your frames and working the image up on a laptop.' },
+      { time: 'Before you go', title: 'Your print', detail: 'We print one of your own frames as a souvenir to take home.' },
+    ],
+    includes: [
+      'Hands-on instruction through the whole night',
+      'Use of a star tracker',
+      'Stacking and processing walkthrough',
+      'A printed souvenir of your own photograph',
+      'Hot drinks through the night',
+    ],
+    bring: [
+      'A camera that shoots manual, if you have one — otherwise use ours',
+      'A tripod if you have one',
+      'Spare batteries — cold nights drain them fast',
+      'A laptop if you want to process your own frames',
+    ],
+    ageGuidance: 'Suited to adults and older teenagers.',
+    skillLevel: 'Complete beginners welcome — no prior astrophotography needed.',
+    groupSizeLabel: 'Small group, so everyone gets hands-on time',
+    sample: false,
+  },
   {
     slug: 'cosmic-friday',
     kind: 'public_event',
@@ -358,6 +476,7 @@ export const stayTypes: StayType[] = [
 
 export const EXPERIENCE_KIND_LABEL: Record<NakshatraalayExperience['kind'], string> = {
   public_event: 'Public night',
+  everyday: 'Any night',
   workshop: 'Workshop',
   private: 'Private',
   family: 'Family',
@@ -396,6 +515,12 @@ export function upcomingNights(from: Date = new Date()): ScheduledNight[] {
     .filter((n) => n.date >= today)
     .sort((a, b) => a.date.localeCompare(b.date))
 }
+
+/** Bookable any night, no fixed date. */
+export const everydayExperiences = experiences.filter((e) => e.kind === 'everyday')
+
+/** The curated, dated programmes. */
+export const specialExperiences = experiences.filter((e) => e.kind !== 'everyday')
 
 export function getExperience(slug: string): NakshatraalayExperience | undefined {
   return experiences.find((e) => e.slug === slug)

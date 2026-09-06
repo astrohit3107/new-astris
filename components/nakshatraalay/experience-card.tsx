@@ -18,6 +18,7 @@ import {
  */
 
 const KIND_ICON = {
+  everyday: Telescope,
   public_event: Telescope,
   workshop: Camera,
   private: Heart,
@@ -27,6 +28,7 @@ const KIND_ICON = {
 /** Each kind gets its own accent so the grid reads at a glance. */
 const KIND_ACCENT = {
   public_event: 'from-sky-400/20 via-transparent',
+  everyday: 'from-emerald-400/20 via-transparent',
   workshop: 'from-violet-400/20 via-transparent',
   private: 'from-rose-400/20 via-transparent',
   family: 'from-amber-400/20 via-transparent',
