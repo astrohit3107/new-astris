@@ -58,6 +58,21 @@ export function isCashfreeConfigured(): boolean {
   return Boolean(process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET_KEY && cashfreeEnv())
 }
 
+/**
+ * Should the site show the "payments are down" notice instead of a pay button?
+ *
+ * Driven by whether Cashfree is actually usable, so it clears itself the
+ * moment real credentials are added — there is no flag to remember to turn
+ * off, and therefore no way to leave the notice up by accident.
+ *
+ * PAYMENTS_MAINTENANCE=1 forces it on regardless, for a gateway outage that
+ * happens while the keys are perfectly valid.
+ */
+export function paymentsUnderMaintenance(): boolean {
+  if (process.env.PAYMENTS_MAINTENANCE === '1') return true
+  return !isCashfreeConfigured()
+}
+
 function secret(): string {
   const s = process.env.CASHFREE_SECRET_KEY
   if (!s) throw new Error('CASHFREE_SECRET_KEY is not set')

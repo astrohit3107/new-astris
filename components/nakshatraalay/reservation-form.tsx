@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { CreditCard, Check, AlertCircle, Loader2, ShieldCheck } from 'lucide-react'
+import { CreditCard, Check, AlertCircle, Loader2, ShieldCheck, MessageCircle, Wrench } from 'lucide-react'
 
 import {
   getExperience,
@@ -13,7 +13,7 @@ import {
   type PriceTier,
 } from '@/lib/nakshatraalay-data'
 import { GEAR_OPTIONS, asksForGear } from '@/lib/reservations'
-import { whatsappHref } from '@/lib/site-config'
+import { whatsappHref, CONTACT } from '@/lib/site-config'
 
 /**
  * Reserve and pay.
@@ -57,7 +57,14 @@ function useCashfreeScript() {
 
 type Status = 'idle' | 'starting' | 'paying' | 'confirming' | 'done' | 'error'
 
-export default function ReservationForm({ experienceSlug }: { experienceSlug: string }) {
+export default function ReservationForm({
+  experienceSlug,
+  maintenance = false,
+}: {
+  experienceSlug: string
+  /** Card payments are unavailable — show the WhatsApp route instead. */
+  maintenance?: boolean
+}) {
   const experience = getExperience(experienceSlug)
   const tiers: PriceTier[] = useMemo(() => experience?.priceTiers ?? [], [experience])
   const scriptReady = useCashfreeScript()
@@ -226,6 +233,87 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
   const field =
     'w-full rounded-xl border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[var(--av-gold)]/60 focus:bg-white/[0.07]'
   const label = 'mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-white/50'
+
+  /* ---------------------------------------------------------------- *
+   *  Card payments unavailable.
+   *
+   *  Shown INSTEAD of the form, not above it. Letting someone fill in
+   *  eight fields and only then discover nothing can be charged is worse
+   *  than saying so at the top. Prices stay visible so the page still
+   *  answers "what does this cost", and the WhatsApp message arrives
+   *  pre-written with the experience already named.
+   * ---------------------------------------------------------------- */
+  if (maintenance) {
+    const enquiry = whatsappHref(
+      `Hi Nakshatraalay — I'd like to book ${experience.title}. ` +
+        `(Your website says online payment is temporarily unavailable.)`
+    )
+    return (
+      <div className="rounded-3xl border border-white/12 bg-white/[0.03] p-6 sm:p-8">
+        <h3 className="font-display text-xl font-semibold text-white">Reserve your spot</h3>
+
+        <div className="mt-5 flex gap-3 rounded-2xl border border-amber-300/25 bg-amber-300/[0.07] p-4">
+          <Wrench size={16} className="mt-0.5 shrink-0 text-amber-200" />
+          <div>
+            <p className="text-sm font-semibold text-amber-100">
+              Online payment is temporarily under maintenance
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-amber-100/70">
+              We are still taking bookings — message us on WhatsApp and we will confirm your night
+              and take payment directly. It usually takes a few minutes.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <span className={label}>What it costs</span>
+          <div className="space-y-2">
+            {tiers.map((t) => (
+              <div
+                key={t.label}
+                className="flex items-center justify-between gap-3 rounded-xl border border-white/12 px-4 py-3"
+              >
+                <span>
+                  <span className="block text-sm font-semibold text-white">{t.label}</span>
+                  {t.note && <span className="mt-0.5 block text-xs text-white/45">{t.note}</span>}
+                </span>
+                <span className="shrink-0 text-sm font-semibold text-white">
+                  {formatINR(t.amount)}
+                  <span className="ml-1 text-[10px] font-normal uppercase text-white/40">
+                    {t.perPerson ? 'pp' : 'total'}
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <a
+          href={enquiry}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
+        >
+          <MessageCircle size={16} /> Book on WhatsApp
+        </a>
+        <p className="mt-3 text-center text-[11px] text-white/35">
+          Or call {CONTACT.phone}. Nothing is charged on this page while payment is down.
+        </p>
+
+        <p className="mt-5 text-center text-[11px] leading-relaxed text-white/30">
+          Our{' '}
+          <a href="/nakshatraalay/gurgaon/cancellation" className="underline hover:text-white/70">
+            cancellation &amp; refund terms
+          </a>{' '}
+          and{' '}
+          <a href="/nakshatraalay/gurgaon/privacy" className="underline hover:text-white/70">
+            privacy policy
+          </a>{' '}
+          apply to bookings made this way too.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <form onSubmit={onSubmit} noValidate className="rounded-3xl border border-white/12 bg-white/[0.03] p-6 sm:p-8">

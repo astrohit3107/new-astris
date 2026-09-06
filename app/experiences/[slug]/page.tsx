@@ -14,6 +14,7 @@ import {
   fromPrice,
 } from '@/lib/nakshatraalay-data'
 import ReservationForm from '@/components/nakshatraalay/reservation-form'
+import { paymentsUnderMaintenance } from '@/lib/cashfree'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 type Params = { slug: string }
@@ -241,7 +242,7 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
 
           {/* Enquiry */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <ReservationForm experienceSlug={exp.slug} />
+            <ReservationForm experienceSlug={exp.slug} maintenance={paymentsUnderMaintenance()} />
           </div>
         </div>
       </section>
