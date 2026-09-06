@@ -51,6 +51,14 @@ export interface NakshatraalayExperience {
    */
   groupSizeLabel?: string
   /**
+   * How many people we can take on one night of this experience.
+   *
+   * `null` means the experience is not sold by the seat — the private and
+   * family nights book the property for one group, so a "3 of 10 left"
+   * counter would be meaningless on them.
+   */
+  slotsPerNight: number | null
+  /**
    * True only while a programme is still illustrative. All five current
    * experiences are confirmed — names, itineraries and pricing supplied by
    * the property — so nothing is badged as a sample.
@@ -218,6 +226,7 @@ export const experiences: NakshatraalayExperience[] = [
     bring: ['Warm layers — it gets colder than you expect', 'Flat shoes', 'A red-light torch if you have one'],
     ageGuidance: 'All ages. Children welcome with an adult.',
     groupSizeLabel: 'Small group',
+    slotsPerNight: 10,
     sample: false,
   },
   {
@@ -257,6 +266,7 @@ export const experiences: NakshatraalayExperience[] = [
     ageGuidance: 'Suited to adults and older teenagers.',
     skillLevel: 'Complete beginners welcome — no prior astrophotography needed.',
     groupSizeLabel: 'Small group, so everyone gets hands-on time',
+    slotsPerNight: 10,
     sample: false,
   },
   {
@@ -288,6 +298,7 @@ export const experiences: NakshatraalayExperience[] = [
     bring: ['Warm layers — it gets colder than you expect', 'A red-light torch if you have one', 'Flat shoes'],
     ageGuidance: 'All ages. Children welcome with an adult.',
     groupSizeLabel: 'Small group',
+    slotsPerNight: 10,
     sample: false,
   },
   {
@@ -318,6 +329,7 @@ export const experiences: NakshatraalayExperience[] = [
     bring: ['Warm layers — it gets colder than you expect', 'A red-light torch if you have one', 'Flat shoes'],
     ageGuidance: 'All ages. Children welcome with an adult.',
     groupSizeLabel: 'Small group',
+    slotsPerNight: 10,
     sample: false,
   },
   {
@@ -373,6 +385,7 @@ export const experiences: NakshatraalayExperience[] = [
     equipmentProvided: ['Imaging telescopes and tracking mounts', 'Narrowband filters (H-alpha, OIII, SII)', 'Guiding and acquisition setup'],
     groupSizeLabel: 'Small group, so everyone gets real time on the rig',
     ageGuidance: 'Suited to adults and older teenagers.',
+    slotsPerNight: 10,
     sample: false,
   },
   {
@@ -406,6 +419,7 @@ export const experiences: NakshatraalayExperience[] = [
     ],
     bring: ['Warm layers', 'Anything you would like set up for the occasion — tell us in advance'],
     groupSizeLabel: 'Private — for two',
+    slotsPerNight: null,
     sample: false,
   },
   {
@@ -440,6 +454,7 @@ export const experiences: NakshatraalayExperience[] = [
     bring: ['Warm layers for everyone', 'Curiosity'],
     ageGuidance: 'Designed for families. Younger children welcome with an adult.',
     groupSizeLabel: 'Private — for four',
+    slotsPerNight: null,
     sample: false,
   },
 ]

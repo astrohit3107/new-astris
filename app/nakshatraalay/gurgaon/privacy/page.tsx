@@ -41,34 +41,39 @@ export default function PrivacyPage() {
 
       <Clause heading="Your card details never reach us">
         <p>
-          Payment is handled entirely by Razorpay, on Razorpay's own checkout. Card numbers, UPI
+          Payment is handled entirely by Cashfree Payments, on Cashfree's own checkout. Card numbers, UPI
           IDs, CVVs and bank credentials are entered there and are never sent to this website, never
           stored by us, and never visible to us. What we receive back is a payment identifier, the
           amount, and whether it succeeded.
         </p>
         <p>
-          Razorpay processes that payment under its own privacy policy, as the payment processor for
-          this booking.
+          Cashfree processes that payment under its own privacy policy, as the payment processor
+          for this booking.
         </p>
       </Clause>
 
       <Clause heading="Where your booking is kept">
         <p>
-          This website has no customer database. When you book, your details are emailed to our own
-          inbox, and that email is the booking record. There is no account to log into, no profile
-          being built, and nothing about you stored on this site between visits.
+          This website has no customer database. When you book, your details are written to a
+          private Google Sheet that we use as our booking diary, and emailed to our own inbox.
+          There is no account to log into, no profile being built, and nothing about you stored on
+          this site between visits.
         </p>
         <p>
-          The practical consequence, stated plainly: your booking lives in an email inbox and in
-          Razorpay's transaction record, and nowhere else.
+          That sheet is what tells the website how many places are left on a given night. Only the
+          counts ever reach the public site — never your name, email or phone number.
+        </p>
+        <p>
+          The practical consequence, stated plainly: your booking lives in our booking sheet, in an
+          email inbox, and in Cashfree's transaction record, and nowhere else.
         </p>
       </Clause>
 
       <Clause heading="Who else is involved">
         <ul className="mt-2 space-y-1.5">
           <li>
-            <span className="text-white/85">Razorpay</span> — takes the payment and holds the
-            transaction record.
+            <span className="text-white/85">Cashfree Payments</span> — takes the payment and holds
+            the transaction record.
           </li>
           <li>
             <span className="text-white/85">Our email provider</span> — carries the booking to our
@@ -77,6 +82,10 @@ export default function PrivacyPage() {
           <li>
             <span className="text-white/85">Vercel</span> — hosts this site and keeps short-lived
             server logs, which include IP addresses, for security and debugging.
+          </li>
+          <li>
+            <span className="text-white/85">Google Sheets</span> — holds our booking diary, in a
+            private sheet only we can open.
           </li>
           <li>
             <span className="text-white/85">Google Maps</span> — the map on our location page is
@@ -93,7 +102,7 @@ export default function PrivacyPage() {
       <Clause heading="How long we keep it">
         <p>
           Booking emails are kept while they are useful for running the property and meeting tax and
-          accounting obligations, and are deleted after that. Razorpay retains its own transaction
+          accounting obligations, and are deleted after that. Cashfree retains its own transaction
           records for the period Indian financial regulation requires, which is outside our control.
         </p>
       </Clause>
@@ -101,7 +110,7 @@ export default function PrivacyPage() {
       <Clause heading="Having it deleted">
         <p>
           Email {CONTACT.email} and ask. We will delete the booking correspondence we hold, and
-          confirm when it is done. We cannot delete Razorpay's transaction record — that is a
+          confirm when it is done. We cannot delete Cashfree's transaction record — that is a
           financial record they are required to keep.
         </p>
         <p>

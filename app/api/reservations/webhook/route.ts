@@ -1,78 +1,111 @@
 import { NextResponse } from 'next/server'
 
-import { verifyWebhookSignature } from '@/lib/razorpay'
+import { verifyWebhookSignature, fetchOrder } from '@/lib/cashfree'
 import { sendNotification } from '@/lib/notify'
+import { appendBooking, readBookings } from '@/lib/sheets'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 /**
- * Razorpay webhook — the authoritative record of a payment.
+ * Cashfree's own account of what happened — the path home when the guest's
+ * browser dies between paying and confirming.
  *
- * The browser can close, lose signal or be closed deliberately between paying
- * and telling us. This is server-to-server, so a booking still lands.
+ * The raw body is read BEFORE anything parses it, because Cashfree signs the
+ * exact bytes it sent. Re-serialising parsed JSON produces a different string
+ * and every signature check would fail.
  *
- * The RAW body must be hashed, so it is read as text and only parsed after the
- * signature passes.
+ * Cashfree signs `timestamp + rawBody` with HMAC-SHA256, base64 encoded.
  */
 export async function POST(request: Request) {
-  const signature = request.headers.get('x-razorpay-signature') ?? ''
   const raw = await request.text()
+  const signature = request.headers.get('x-webhook-signature') ?? ''
+  const timestamp = request.headers.get('x-webhook-timestamp') ?? ''
 
-  // A missing secret rejects every webhook exactly like a forged one, which
-  // would silently kill the safety net. Answer 503 instead: Razorpay retries
-  // 5xx for ~24h, so the booking still lands once the secret is set.
-  if (!process.env.RAZORPAY_WEBHOOK_SECRET) {
-    console.error('[reservations/webhook] RAZORPAY_WEBHOOK_SECRET is not set — asking Razorpay to retry')
-    return NextResponse.json({ error: 'webhook not configured' }, { status: 503 })
-  }
-
-  if (!verifyWebhookSignature(raw, signature)) {
-    // 400, not 401: Razorpay retries on 5xx, and a bad signature is not
-    // something a retry will fix.
-    console.error('[reservations/webhook] bad signature')
-    return NextResponse.json({ error: 'invalid signature' }, { status: 400 })
+  if (!verifyWebhookSignature({ rawBody: raw, timestamp, signature })) {
+    // 400, not 500: this delivery is not worth retrying.
+    console.error('[webhook] bad signature')
+    return NextResponse.json({ error: 'bad signature' }, { status: 400 })
   }
 
   let event: {
-    event?: string
-    payload?: { payment?: { entity?: Record<string, unknown> } }
+    type?: string
+    data?: {
+      order?: { order_id?: string; order_amount?: number; order_tags?: Record<string, string> }
+      payment?: { cf_payment_id?: string | number; payment_status?: string; payment_group?: string }
+      customer_details?: { customer_name?: string; customer_email?: string; customer_phone?: string }
+    }
   }
   try {
     event = JSON.parse(raw)
   } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 })
+    return NextResponse.json({ ok: true, ignored: 'unparseable' })
   }
 
-  if (event.event !== 'payment.captured') {
-    // Acknowledge everything else so Razorpay stops retrying.
-    return NextResponse.json({ ok: true, ignored: event.event })
+  const type = event.type ?? ''
+  if (!/PAYMENT_SUCCESS/i.test(type)) {
+    // Everything else is acknowledged so Cashfree stops retrying it.
+    return NextResponse.json({ ok: true, ignored: type })
   }
 
-  const p = event.payload?.payment?.entity ?? {}
-  const notes = (p.notes ?? {}) as Record<string, string>
-  const amount = typeof p.amount === 'number' ? p.amount : 0
+  const orderId = event.data?.order?.order_id
+  if (!orderId) return NextResponse.json({ ok: true, ignored: 'no order id' })
 
-  const host = request.headers.get('host')
+  // Has the browser already recorded this? The ledger is the check, because
+  // there is no database to hold a "seen" flag.
+  const rows = await readBookings()
+  if (rows?.some((r) => r.bookingId === orderId)) {
+    return NextResponse.json({ ok: true, duplicate: true })
+  }
+
+  // Trust our own read of the order, not the webhook body.
+  const order = await fetchOrder(orderId)
+  if (!order || order.status !== 'PAID') {
+    return NextResponse.json({ ok: true, ignored: 'not paid on fetch' })
+  }
+
+  const t = order.tags
+  const guests = Number.parseInt(t.guests || '1', 10) || 1
+  const bookedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+  const paymentId = String(event.data?.payment?.cf_payment_id ?? orderId)
+
+  const ledger = await appendBooking({
+    bookingId: orderId,
+    bookedAt: `${bookedAt} IST`,
+    status: 'CONFIRMED',
+    experience: t.experience || '',
+    experienceSlug: t.slug || '',
+    packageLabel: t.tier || '',
+    date: t.date || '',
+    guests,
+    name: t.name || event.data?.customer_details?.customer_name || '',
+    email: event.data?.customer_details?.customer_email || '',
+    phone: t.phone || event.data?.customer_details?.customer_phone || '',
+    amount: `₹${order.amountRupees.toLocaleString('en-IN')}`,
+    paymentId,
+    gear: '',
+    notes: '',
+    source: 'Webhook (browser did not return)',
+  })
+
   await sendNotification({
-    subject: `PAID (webhook) · ${notes.experience ?? 'Nakshatraalay'} · ${notes.date ?? ''} · ${notes.name ?? ''}`,
-    replyTo: typeof p.email === 'string' ? p.email : undefined,
-    origin: host ? `https://${host}` : undefined,
+    subject: `PAID via webhook · ${t.experience || 'booking'} · ${t.date || ''}`,
     rows: [
-      ['Status', 'PAID — captured (webhook)'],
-      ['Amount', `₹${(amount / 100).toLocaleString('en-IN')}`],
-      ['Experience', notes.experience ?? '—'],
-      ['Package', notes.tier ?? '—'],
-      ['Date', notes.date ?? '—'],
-      ['Guests', notes.guests ?? '—'],
-      ['Name', notes.name ?? '—'],
-      ['Email', notes.email ?? (typeof p.email === 'string' ? p.email : '—')],
-      ['Phone', notes.phone ?? (typeof p.contact === 'string' ? p.contact : '—')],
-      ['Gear carried', notes.gear ?? '—'],
-      ['Razorpay payment', typeof p.id === 'string' ? p.id : '—'],
-      ['Razorpay order', typeof p.order_id === 'string' ? p.order_id : '—'],
+      ['Status', 'PAID — recorded by webhook, the guest never came back to the site'],
+      ['In the sheet', ledger.ok ? 'Yes' : `NO — ADD IT BY HAND (${ledger.reason ?? 'unknown'})`],
+      ['Guest emailed', 'NO — the browser never confirmed, so no email was sent. Contact them.'],
+      ['Experience', t.experience || '—'],
+      ['Package', t.tier || '—'],
+      ['Date', t.date || '—'],
+      ['Guests', String(guests)],
+      ['Name', t.name || '—'],
+      ['Phone', t.phone || '—'],
+      ['Amount', `₹${order.amountRupees.toLocaleString('en-IN')}`],
+      ['Cashfree order', orderId],
+      ['Cashfree payment', paymentId],
+      ['Recorded at', `${bookedAt} IST`],
     ],
   })
 
-  // Always 200 once handled, so Razorpay does not retry a booking we have.
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, recorded: ledger.ok })
 }

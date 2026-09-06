@@ -17,7 +17,7 @@
  *  match how you actually intend to trade — they are contractual the moment a
  *  customer pays against them.
  *
- *  Razorpay also requires a publicly reachable cancellation and refund policy
+ *  Cashfree also requires a publicly reachable cancellation and refund policy
  *  for merchant activation, which is what /nakshatraalay/gurgaon/cancellation
  *  exists to satisfy.
  * ============================================================================
@@ -58,7 +58,7 @@ export const REFUND_BANDS: RefundBand[] = [
 export const POLICY = {
   /** How long a refund actually takes to land. */
   refundTiming:
-    'Approved refunds are sent back to the card, account or UPI ID you paid from. Razorpay typically returns the money within 5–7 working days; we do not control that timing and cannot send it anywhere other than the original payment method.',
+    'Approved refunds are sent back to the card, account or UPI ID you paid from. Cashfree typically returns the money within 5–7 working days; we do not control that timing and cannot send it anywhere other than the original payment method.',
 
   gatewayFee:
     'The payment gateway charges a fee on every transaction and does not return it when a booking is cancelled. That fee is deducted from a full refund; it is not a charge we keep.',
@@ -86,7 +86,7 @@ export const POLICY = {
     'Under-18s are welcome on the stargazing experience and family nights, accompanied by an adult who stays for the session.',
 
   cancelHow:
-    'To cancel, message us on WhatsApp or reply to your confirmation email quoting your Razorpay payment ID. We will confirm in writing and start the refund on the same day where one is due.',
+    'To cancel, message us on WhatsApp or reply to your confirmation email quoting your payment ID. We will confirm in writing and start the refund on the same day where one is due.',
 } as const
 
 /** Last substantive change to these terms. Update when the wording changes. */

@@ -55,7 +55,7 @@ export default function ReschedulingPage() {
       <Clause heading="How to ask">
         <p>{POLICY.reschedulingHow}</p>
         <p>
-          Your Razorpay payment ID is in the confirmation email we sent when you booked, and on the
+          Your payment ID is in the confirmation email we sent when you booked, and on the
           screen you saw after paying. Quoting it is the fastest way for us to find your booking.
         </p>
       </Clause>

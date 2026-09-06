@@ -3,7 +3,7 @@
  *
  * This site has no database, so an email IS the booking record. That makes
  * delivery failure a real failure, not a cosmetic one — callers are expected
- * to surface it rather than swallow it. Razorpay's own dashboard remains the
+ * to surface it rather than swallow it. Cashfree's own dashboard remains the
  * source of truth for money.
  */
 

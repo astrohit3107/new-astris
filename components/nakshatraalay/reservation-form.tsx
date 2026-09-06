@@ -19,20 +19,32 @@ import { whatsappHref } from '@/lib/site-config'
  * Reserve and pay.
  *
  * The total shown here is a preview only — the server reprices from the
- * catalogue before it opens a Razorpay order, so editing anything in the page
+ * catalogue before it opens a Cashfree order, so editing anything in the page
  * changes what is displayed and nothing that is charged.
  */
 
-declare global {
-  interface Window { Razorpay?: new (options: Record<string, unknown>) => { open: () => void } }
+interface CashfreeCheckoutResult {
+  error?: { message?: string }
+  paymentDetails?: { paymentMessage?: string }
 }
 
-const CHECKOUT_SRC = 'https://checkout.razorpay.com/v1/checkout.js'
+declare global {
+  interface Window {
+    Cashfree?: (config: { mode: string }) => {
+      checkout: (opts: {
+        paymentSessionId: string
+        redirectTarget?: string
+      }) => Promise<CashfreeCheckoutResult>
+    }
+  }
+}
 
-function useRazorpayScript() {
+const CHECKOUT_SRC = 'https://sdk.cashfree.com/js/v3/cashfree.js'
+
+function useCashfreeScript() {
   const [ready, setReady] = useState(false)
   useEffect(() => {
-    if (window.Razorpay) { setReady(true); return }
+    if (window.Cashfree) { setReady(true); return }
     const existing = document.querySelector<HTMLScriptElement>(`script[src="${CHECKOUT_SRC}"]`)
     const el = existing ?? Object.assign(document.createElement('script'), { src: CHECKOUT_SRC, async: true })
     const onLoad = () => setReady(true)
@@ -48,7 +60,7 @@ type Status = 'idle' | 'starting' | 'paying' | 'confirming' | 'done' | 'error'
 export default function ReservationForm({ experienceSlug }: { experienceSlug: string }) {
   const experience = getExperience(experienceSlug)
   const tiers: PriceTier[] = useMemo(() => experience?.priceTiers ?? [], [experience])
-  const scriptReady = useRazorpayScript()
+  const scriptReady = useCashfreeScript()
   const wantsGear = asksForGear(experienceSlug)
 
   const [tierLabel, setTierLabel] = useState(tiers[0]?.label ?? '')
@@ -62,9 +74,35 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
   const [notes, setNotes] = useState('')
   const [refCode, setRefCode] = useState('')
 
+  // Seats left on the chosen night, read from the booking ledger. `null`
+  // means we have not asked yet or could not tell — never rendered as "free".
+  const [slots, setSlots] = useState<{ state: string; remaining: number | null; label: string } | null>(null)
+  const [slotsLoading, setSlotsLoading] = useState(false)
+
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
   const [receipt, setReceipt] = useState<{ paymentId: string; amountLabel: string; emailed: boolean } | null>(null)
+
+  // Ask about the chosen night only. A whole calendar of counts is a bigger
+  // read than this form needs.
+  useEffect(() => {
+    if (!date || experience?.slotsPerNight == null) { setSlots(null); return }
+    let cancelled = false
+    setSlotsLoading(true)
+    fetch(`/api/availability?slug=${encodeURIComponent(experienceSlug)}&from=${date}&days=1`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (cancelled) return
+        setSlots(j?.days?.[date] ?? null)
+      })
+      .catch(() => { if (!cancelled) setSlots(null) })
+      .finally(() => { if (!cancelled) setSlotsLoading(false) })
+    return () => { cancelled = true }
+  }, [date, experienceSlug, experience?.slotsPerNight])
+
+  const soldOut = slots?.state === 'full' || slots?.state === 'closed'
+  const notEnoughRoom =
+    slots?.state === 'open' && slots.remaining !== null && slots.remaining < guests
 
   const tier = tiers.find((t) => t.label === tierLabel)
   const preview = tier ? (tier.perPerson ? tier.amount * guests : tier.amount) : 0
@@ -88,6 +126,11 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
 
     if (!scriptReady) { setError('Payment is still loading — try again in a moment.'); return }
     if (dateClosed) { setError('That night is already full. Please pick another date.'); return }
+    if (soldOut) { setError('That night is fully booked. Please pick another date.'); return }
+    if (notEnoughRoom) {
+      setError(`Only ${slots?.remaining} place${slots?.remaining === 1 ? '' : 's'} left on that night.`)
+      return
+    }
 
     setStatus('starting')
     try {
@@ -107,53 +150,39 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
       }
 
       setStatus('paying')
-      const rzp = new window.Razorpay!({
-        key: order.keyId,
-        order_id: order.orderId,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Nakshatraalay Gurgaon',
-        description: `${order.quote.experienceTitle} — ${order.quote.tierLabel}`,
-        prefill: { name: fullName, email, contact: phone },
-        notes: { date, guests: String(guests) },
-        theme: { color: '#0b0b14' },
-        modal: {
-          ondismiss: () => {
-            setStatus('idle')
-            setError('Payment was cancelled. Nothing has been charged.')
-          },
-        },
-        handler: async (r: Record<string, string>) => {
-          setStatus('confirming')
-          try {
-            const cres = await fetch('/api/reservations/confirm', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                ...payload(),
-                razorpayOrderId: r.razorpay_order_id,
-                razorpayPaymentId: r.razorpay_payment_id,
-                razorpaySignature: r.razorpay_signature,
-              }),
-            })
-            const cj = await cres.json()
-            if (!cres.ok || !cj.ok) throw new Error(cj.error || 'We could not verify the payment.')
-            setReceipt({ paymentId: cj.paymentId, amountLabel: cj.amountLabel, emailed: !!cj.emailed })
-            setStatus('done')
-          } catch (err) {
-            setStatus('error')
-            setError(
-              err instanceof Error
-                ? `${err.message} If you have been charged, send us your payment ID and we will sort it out immediately.`
-                : 'Verification failed.'
-            )
-          }
-        },
+      const cashfree = window.Cashfree!({ mode: order.mode === 'production' ? 'production' : 'sandbox' })
+
+      // The modal resolves when checkout finishes — but "finished" is not
+      // "paid". Cashfree gives the browser no signature, so the server decides
+      // by asking Cashfree directly. This result only tells us to go and ask.
+      const outcome = await cashfree.checkout({
+        paymentSessionId: order.paymentSessionId,
+        redirectTarget: '_modal',
       })
-      rzp.open()
+
+      if (outcome?.error) {
+        setStatus('idle')
+        setError(outcome.error.message || 'Payment was not completed. Nothing has been charged.')
+        return
+      }
+
+      setStatus('confirming')
+      const cres = await fetch('/api/reservations/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload(), orderId: order.orderId }),
+      })
+      const cj = await cres.json()
+      if (!cres.ok || !cj.ok) throw new Error(cj.error || 'We could not verify the payment.')
+      setReceipt({ paymentId: cj.paymentId, amountLabel: cj.amountLabel, emailed: !!cj.emailed })
+      setStatus('done')
     } catch (err) {
       setStatus('error')
-      setError(err instanceof Error ? err.message : 'Something went wrong.')
+      setError(
+        err instanceof Error
+          ? `${err.message} If you have been charged, send us your order ID and we will sort it out immediately.`
+          : 'Something went wrong.'
+      )
     }
   }
 
@@ -256,9 +285,23 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
             <label className={label} htmlFor="rf-date">Date</label>
             <input id="rf-date" type="date" min={earliest} required value={date}
               onChange={(e) => setDate(e.target.value)} className={`${field} [color-scheme:dark]`} />
-            {dateClosed && (
+            {dateClosed ? (
               <p className="mt-1.5 text-xs text-amber-200/90">That night is full — please pick another.</p>
-            )}
+            ) : slotsLoading ? (
+              <p className="mt-1.5 text-xs text-white/35">Checking availability…</p>
+            ) : slots ? (
+              <p
+                className={`mt-1.5 text-xs ${
+                  slots.state === 'full' || slots.state === 'closed'
+                    ? 'text-amber-200/90'
+                    : slots.remaining !== null && slots.remaining <= 3
+                      ? 'text-[var(--av-gold)]'
+                      : 'text-white/45'
+                }`}
+              >
+                {slots.label}
+              </p>
+            ) : null}
           </div>
           <div>
             <label className={label} htmlFor="rf-guests">Guests</label>
@@ -337,15 +380,17 @@ export default function ReservationForm({ experienceSlug }: { experienceSlug: st
           </p>
         )}
 
-        <button type="submit" disabled={busy || dateClosed}
+        <button type="submit" disabled={busy || dateClosed || soldOut || notEnoughRoom}
           className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3.5 text-sm font-semibold text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60">
           {busy ? <><Loader2 size={16} className="animate-spin" />
             {status === 'confirming' ? 'Confirming payment…' : status === 'paying' ? 'Waiting for payment…' : 'Starting…'}</>
+            : soldOut ? 'Fully booked — choose another night'
+            : notEnoughRoom ? `Only ${slots?.remaining} left on that night`
             : <><CreditCard size={16} /> Pay {formatINR(preview)} & reserve</>}
         </button>
 
         <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-white/35">
-          <ShieldCheck size={12} /> Payment handled by Razorpay. We never see your card details.
+          <ShieldCheck size={12} /> Payment handled by Cashfree. We never see your card details.
         </p>
         {/* The terms a guest is agreeing to by paying must be reachable from
             the point of payment, not buried in a footer. */}

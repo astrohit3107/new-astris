@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server'
 
 import { reservationSchema, quoteFor, friendlyIssue, dateProblem } from '@/lib/reservations'
-import { createOrder, isRazorpayConfigured, razorpayKeyId } from '@/lib/razorpay'
+import { createOrder, isCashfreeConfigured, bookingHash, cashfreeEnv } from '@/lib/cashfree'
+import { availabilityFor, canAccept, availabilityLabel } from '@/lib/availability'
+import { SITE_URL } from '@/lib/site-config'
 
 export const runtime = 'nodejs'
 
 /**
- * Step 1 of a reservation: price it here, then open a Razorpay order.
+ * Step 1 of a reservation: price it here, check there is room, open an order.
  *
  * The amount is computed from our catalogue, never taken from the request.
  */
@@ -32,8 +34,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Too many attempts. Please wait a minute.' }, { status: 429 })
   }
 
-  if (!isRazorpayConfigured()) {
-    console.error('[reservations] Razorpay keys are not configured')
+  if (!isCashfreeConfigured()) {
+    console.error('[reservations] Cashfree is not configured (need APP_ID, SECRET_KEY and ENV)')
     return NextResponse.json(
       { error: 'Online payment is not available right now. Please contact us to book.' },
       { status: 503 }
@@ -74,30 +76,65 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'That option is no longer available.' }, { status: 400 })
   }
 
+  // Is there room? `unknown` (the ledger could not be read) is permissive —
+  // see lib/availability. A spreadsheet outage must not stop every sale, but
+  // it is recorded on the booking so a human can check it.
+  const availability = await availabilityFor(data.experienceSlug, data.date)
+  if (!canAccept(availability, data.guests)) {
+    return NextResponse.json(
+      {
+        error:
+          availability.state === 'full'
+            ? `That night is fully booked. ${availabilityLabel(availability)}.`
+            : availabilityLabel(availability),
+        soldOut: true,
+      },
+      { status: 409 }
+    )
+  }
+
+  const orderId = `nk_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+
   try {
     const order = await createOrder({
       amountPaise: quote.amountPaise,
-      receipt: `nk-${data.experienceSlug.slice(0, 14)}-${Date.now().toString(36)}`,
-      // Notes ride along to the Razorpay dashboard, so a payment there can be
-      // matched to a booking even if our confirmation email were to fail.
-      notes: {
+      orderId,
+      customer: {
+        // Cashfree wants a stable customer id; the phone is what we have.
+        id: `g_${data.phone.replace(/\D/g, '').slice(-10)}`,
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+      },
+      returnUrl: `${SITE_URL}/experiences/${data.experienceSlug}?order={order_id}`,
+      notifyUrl: `${SITE_URL}/api/reservations/webhook`,
+      // These ride along to the Cashfree dashboard, so a payment there can be
+      // matched to a booking even if everything else failed.
+      tags: {
+        booking_hash: bookingHash({
+          experienceSlug: data.experienceSlug,
+          tierLabel: data.tierLabel,
+          date: data.date,
+          guests: data.guests,
+          email: data.email,
+          amountPaise: quote.amountPaise,
+        }),
         experience: quote.experienceTitle,
+        slug: data.experienceSlug,
         tier: quote.tier.label,
         date: data.date,
         guests: String(data.guests),
         name: data.fullName,
-        email: data.email,
         phone: data.phone,
-        ...(data.gear.length ? { gear: data.gear.join(', ').slice(0, 480) } : {}),
+        availability: availability.state,
       },
     })
 
     return NextResponse.json({
       ok: true,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: razorpayKeyId(),
+      orderId: order.orderId,
+      paymentSessionId: order.paymentSessionId,
+      mode: cashfreeEnv(),
       quote: {
         amountLabel: quote.amountLabel,
         breakdown: quote.breakdown,
