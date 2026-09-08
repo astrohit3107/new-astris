@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
-import { SITE, SITE_URL, absoluteUrl } from '@/lib/site-config'
+import { SITE, SITE_URL, absoluteUrl, LEGAL_ENTITY } from '@/lib/site-config'
 import './globals.css'
 
 /**
@@ -103,6 +103,10 @@ function SiteIdentitySchema() {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         name: SITE.name,
+        // The registered company. `name` stays the trading name people search
+        // for; `legalName` is who actually contracts and holds the merchant
+        // account, which is what payment providers verify against.
+        legalName: LEGAL_ENTITY,
         alternateName: [SITE.shortName],
         url: `${SITE_URL}/`,
         description: SITE.description,

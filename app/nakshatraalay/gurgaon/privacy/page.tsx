@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
-import { CONTACT } from '@/lib/site-config'
+import { CONTACT, LEGAL_ENTITY } from '@/lib/site-config'
 import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 
 const TITLE = 'Privacy Policy — Nakshatraalay Gurgaon'
@@ -22,6 +22,13 @@ export default function PrivacyPage() {
       title="Privacy"
       standfirst="A short, specific account of what we ask for when you book, where it actually goes, and how to get it removed."
     >
+      <Clause heading="Who holds your details">
+        <p>
+          {LEGAL_ENTITY}, the company trading as Astris Space and operating Nakshatraalay Gurgaon.
+          &ldquo;We&rdquo; throughout this policy means that company.
+        </p>
+      </Clause>
+
       <Clause heading="What we ask for">
         <p>To take a booking we collect only what we need to hold your place and reach you:</p>
         <ul className="mt-2 space-y-1.5">

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
 import { REFUND_BANDS, POLICY } from '@/lib/policies'
 import { experiences, NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
-import { CONTACT } from '@/lib/site-config'
+import { CONTACT, LEGAL_ENTITY } from '@/lib/site-config'
 
 const TITLE = 'Cancellation & Refund Policy — Nakshatraalay Gurgaon'
 const DESCRIPTION =
@@ -22,6 +22,13 @@ export default function CancellationPolicyPage() {
       title="Cancellation & refunds"
       standfirst="What happens to your money if your plans change, and what happens if ours do. These terms apply to every experience listed below."
     >
+      <Clause heading="Who you are booking with">
+        <p>
+          Bookings at Nakshatraalay Gurgaon are made with {LEGAL_ENTITY}, the company trading as
+          Astris Space. Payments are collected by, and refunds are issued by, that company.
+        </p>
+      </Clause>
+
       <Clause heading="The short version">
         <p>
           Tell us as early as you can. How much comes back depends only on how much notice we

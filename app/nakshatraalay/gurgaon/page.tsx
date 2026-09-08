@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, MessageCircle, Moon, Users } from 'lucide-react'
 
-import { SITE_URL, CONTACT } from '@/lib/site-config'
+import { SITE_URL, CONTACT, LEGAL_ENTITY } from '@/lib/site-config'
 import ExperienceCard from '@/components/nakshatraalay/experience-card'
 import {
   NAKSHATRAALAY,
@@ -380,6 +380,9 @@ export default function NakshatraalayGurgaonPage() {
             Find us on Google Maps
           </a>
         </div>
+        <p className="mx-auto mt-6 max-w-5xl text-center text-[11px] text-white/30">
+          Nakshatraalay Gurgaon is operated by {LEGAL_ENTITY}, trading as Astris Space.
+        </p>
       </footer>
     </main>
   )

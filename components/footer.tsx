@@ -1,3 +1,4 @@
+import { LEGAL_ENTITY } from '@/lib/site-config'
 import { Mail, Phone, MapPin } from 'lucide-react'
 
 export default function Footer() {
@@ -112,8 +113,10 @@ export default function Footer() {
         {/* Bottom section */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-foreground/60">
-            © {new Date().getFullYear()} Astris Space. All rights reserved. | Bringing the universe
-            closer.
+            © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
+            <span className="block text-xs text-foreground/45">
+              Astris Space is a trading name of {LEGAL_ENTITY}.
+            </span>
           </p>
 
           {/* The social row previously rendered three links pointing at href="#".

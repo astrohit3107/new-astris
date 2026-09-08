@@ -38,6 +38,19 @@ export function absoluteUrl(path = '/'): string {
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+/**
+ * The registered legal entity behind Astris Space.
+ *
+ * "Astris Space" is the trading name; this is the company that actually
+ * contracts with customers and holds the payment-gateway merchant account.
+ * Payment providers verify that this name appears on the live site, so it is
+ * shown in the footer of every page and named as the contracting party in the
+ * booking terms.
+ *
+ * Spelled exactly as registered — do not "correct" SPACEED.
+ */
+export const LEGAL_ENTITY = 'ASTRIS SPACEED LLP'
+
 export const CONTACT = {
   brand: 'Astris Space',
   phone: '+91 75818 21834',

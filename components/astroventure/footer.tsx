@@ -1,3 +1,4 @@
+import { LEGAL_ENTITY } from '@/lib/site-config'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { SITE, destinations, TAILORED_PACKAGE_NOTE } from '@/lib/astroventure-data'
 
@@ -92,7 +93,7 @@ export default function AstroFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-white/45">
-            © {new Date().getFullYear()} {SITE.brand}. All rights reserved.
+            © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-white/45">
             <a href="/astroventure-nights/terms" className="transition-colors hover:text-white">
