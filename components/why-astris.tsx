@@ -41,7 +41,7 @@ export default function WhyAstris() {
         {/* Observatory image */}
         <div className="relative h-72 rounded-2xl overflow-hidden border border-foreground/20 group shadow-lg animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <img 
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Why%20Astris-NBH8iMndxxKMFV1SRjvl5lEYhWuZE1.jpeg" 
+            src="/home/why-astris.webp" 
             alt="Astris Space students with space exhibition" 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />

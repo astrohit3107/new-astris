@@ -109,14 +109,23 @@ function SiteIdentitySchema() {
         email: 'astriseducation@gmail.com',
         telephone: '+91 75818 21834',
         address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+        // A raster logo with explicit dimensions. Google accepts SVG, but the
+        // PNG is what it processes most reliably for the entity's icon.
         logo: {
           '@type': 'ImageObject',
           '@id': `${SITE_URL}/#logo`,
-          url: absoluteUrl(SITE.logo),
-          contentUrl: absoluteUrl(SITE.logo),
+          url: absoluteUrl('/icon-512.png'),
+          contentUrl: absoluteUrl('/icon-512.png'),
+          width: 512,
+          height: 512,
           caption: SITE.name,
         },
         image: { '@id': `${SITE_URL}/#logo` },
+        // Profiles we actually control. `sameAs` is how Google ties this site
+        // to the accounts already ranking beside it and resolves them to one
+        // entity — without it they are unrelated results that happen to share
+        // a name.
+        sameAs: ['https://www.instagram.com/astris.space/'],
       },
     ],
   }

@@ -58,7 +58,7 @@ export default function NakshatraScopes() {
               {/* Main image container */}
               <div className="relative h-96 md:h-[600px] rounded-3xl overflow-hidden border border-foreground/20 bg-secondary">
                 <img 
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-06-07%20at%2002.05.08-Ux2PkgtPcAVtoyCuDeyrI2oheSMzkj.jpeg" 
+                  src="/home/nakshatra-scopes.webp" 
                   alt="Nakshatra Scope telescope experience" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
