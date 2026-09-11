@@ -35,14 +35,34 @@ export const metadata: Metadata = {
 export default function ExperiencesPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Astronomy experiences at Nakshatraalay Gurgaon',
-    itemListElement: experiences.map((e, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: e.title,
-      url: `${SITE_URL}${PATH}/${e.slug}`,
-    })),
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        '@id': `${SITE_URL}${PATH}#list`,
+        name: 'Astronomy experiences at Nakshatraalay Gurgaon',
+        itemListElement: experiences.map((e, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: e.title,
+          url: `${SITE_URL}${PATH}/${e.slug}`,
+        })),
+      },
+      {
+        // This page was the only Nakshatraalay index without a trail back up.
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE_URL}${PATH}#breadcrumbs`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Astris Space', item: `${SITE_URL}/` },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Nakshatraalay Gurgaon',
+            item: `${SITE_URL}/nakshatraalay/gurgaon`,
+          },
+          { '@type': 'ListItem', position: 3, name: 'Experiences', item: `${SITE_URL}${PATH}` },
+        ],
+      },
+    ],
   }
 
   return (

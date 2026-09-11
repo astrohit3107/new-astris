@@ -73,6 +73,38 @@ export default function AstroEdPage() {
         audience: { '@type': 'EducationalAudience', educationalRole: 'school' },
       },
       {
+        // A school programme is a Course as well as a Service, and Course is
+        // the type Google has result treatments for. `hasCourseInstance` is
+        // required for those, and is described the only honest way available:
+        // a blended programme delivered on the school's own campus, with no
+        // invented cohort dates or a price we do not publish.
+        '@type': 'Course',
+        '@id': `${SITE_URL}${ASTROED_SEO.path}#course`,
+        name: 'AstroEd — Space Lab & Astronomy Curriculum for Schools',
+        description: ASTROED_SEO.description,
+        url: `${SITE_URL}${ASTROED_SEO.path}`,
+        provider: { '@id': `${SITE_URL}/#organization` },
+        inLanguage: 'en-IN',
+        educationalLevel: 'Grades 4–12',
+        teaches: [
+          'Telescope observation',
+          'Solar observation',
+          'Model rocketry',
+          'Space science and the Indian space programme',
+        ],
+        audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
+        hasCourseInstance: {
+          '@type': 'CourseInstance',
+          courseMode: 'onsite',
+          courseWorkload: 'PT1H',
+          location: {
+            '@type': 'Place',
+            name: 'The school’s own campus',
+            address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+          },
+        },
+      },
+      {
         '@type': 'BreadcrumbList',
         '@id': `${SITE_URL}${ASTROED_SEO.path}#breadcrumbs`,
         itemListElement: [

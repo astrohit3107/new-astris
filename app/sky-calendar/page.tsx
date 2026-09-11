@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
 import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
+import { SITE_URL } from '@/lib/site-config'
 import { bestNights } from '@/lib/sky-calendar'
 import SkyCalendarInteractive from '@/components/nakshatraalay/sky-calendar-interactive'
 import Reveal from '@/components/nakshatraalay/reveal'
@@ -37,11 +38,47 @@ function formatShort(isoDate: string) {
   })
 }
 
+/**
+ * The calendar is computed, not curated, so it is a WebPage rather than a set
+ * of Events — there is no scheduled occurrence here to mark up, and inventing
+ * Event nodes for "the moon will be 62% full" would be structured-data spam.
+ */
+function skyCalendarJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${SITE_URL}${PATH}#webpage`,
+        url: `${SITE_URL}${PATH}`,
+        name: TITLE,
+        description: DESCRIPTION,
+        inLanguage: 'en-IN',
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        about: { '@type': 'Thing', name: 'Night sky observing conditions in Delhi NCR' },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE_URL}${PATH}#breadcrumbs`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Astris Space', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Sky Calendar', item: `${SITE_URL}${PATH}` },
+        ],
+      },
+    ],
+  }
+}
+
 export default function SkyCalendarPage() {
   const best = bestNights(4)
 
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(skyCalendarJsonLd()) }}
+      />
       <NakshatraalayNav backHref="/nakshatraalay/gurgaon" backLabel="Nakshatraalay" />
       {/* ---------------------------------------------------- hero ---- */}
       <section className="relative overflow-hidden px-5 pb-16 pt-36 sm:px-6 sm:pb-20">
