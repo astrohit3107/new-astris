@@ -346,22 +346,23 @@ export const experiences: NakshatraalayExperience[] = [
         note: 'No accommodation — join for the sessions and the shooting nights.',
       },
       {
-        // Workshop (₹12,000) plus the property's standard nightly room rate.
+        // Workshop (₹12,000) plus two nights at the property, not one — the
+        // room covers Saturday and Sunday within this same price.
         label: 'With stay · double sharing',
         amount: 17000,
         perPerson: true,
-        note: 'One night at the property, Saturday.',
+        note: 'Two nights at the property, Saturday and Sunday.',
       },
       {
         label: 'With stay · single occupancy',
         amount: 20000,
         perPerson: true,
-        note: 'One night at the property, Saturday.',
+        note: 'Two nights at the property, Saturday and Sunday.',
       },
     ],
-    durationLabel: 'Saturday & Sunday · 1 night',
+    durationLabel: 'Saturday & Sunday · 2 nights',
     description:
-      'A weekend of deep-sky imaging, run to the same curriculum as our Delhi Deep-Sky Astrophotography Workshop — acquisition, calibration, stacking and processing, including narrowband technique for shooting through light pollution. You shoot on Saturday night and process on Sunday; once the post-processing is done your time is your own.',
+      'A weekend of deep-sky imaging, run to the same curriculum as our Delhi Deep-Sky Astrophotography Workshop — acquisition, calibration, stacking and processing, including narrowband technique for shooting through light pollution. You shoot on Saturday night and process on Sunday; once the post-processing is done your time is your own. The stay packages cover two nights, Saturday and Sunday, so there is no drive home after a night at the eyepiece.',
     runOfNight: [
       { time: 'Saturday · Afternoon', title: 'Foundations & equipment', detail: 'What deep-sky imaging actually demands: telescope, mount, camera, filters and guiding — and why light pollution is the problem the whole workflow is built around.' },
       { time: 'Saturday · Evening', title: 'Setup & alignment', detail: 'Polar alignment, focus, framing and guiding — getting the rig genuinely ready before the sky is worth shooting.' },
