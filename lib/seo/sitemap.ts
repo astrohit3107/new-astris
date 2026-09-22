@@ -21,6 +21,7 @@ import { SITE_URL } from '@/lib/site-config'
 import { activeDestinations } from '@/lib/astroventure-data'
 import { experiences as nakshatraalayExperiences } from '@/lib/nakshatraalay-data'
 import { guides } from '@/lib/seo/registry'
+import { LOCATIONS } from '@/lib/astronomy/observer'
 
 export interface SitemapEntry {
   path: string
@@ -49,6 +50,8 @@ export function pageEntries(): SitemapEntry[] {
     { path: '/first-light', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/experiences', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/sky-calendar', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/stargazing-calendar', priority: 0.9, changeFrequency: 'daily' },
+    { path: '/stargazing-calendar/methodology', priority: 0.4, changeFrequency: 'yearly' },
     { path: '/groups', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/schools', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/astroventure-nights', priority: 0.9, changeFrequency: 'weekly' },
@@ -72,6 +75,14 @@ export function experienceEntries(): SitemapEntry[] {
     ...activeDestinations.map((d) => ({
       path: `/astroventure-nights/${d.slug}`,
       priority: 0.8,
+      changeFrequency: 'weekly' as const,
+    })),
+    // One calendar page per observing site. Each is genuinely different —
+    // darkness length, moon altitude and event visibility are computed from
+    // that site's own coordinates — so these are not doorway pages.
+    ...LOCATIONS.map((l) => ({
+      path: `/stargazing-calendar/${l.slug}`,
+      priority: 0.6,
       changeFrequency: 'weekly' as const,
     })),
     ...nakshatraalayExperiences.map((e) => ({
