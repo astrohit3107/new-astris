@@ -133,8 +133,19 @@ export interface MoonInfo {
   rise: Date | null
   set: Date | null
   transit: Date | null
-  /** Altitude at the darkest point of the night — how much it interferes. */
+  /** Altitude at the darkest point of the night. */
   altitudeAtDarkest: number | null
+  /**
+   * Fraction of the dark window the Moon spends above the horizon, 0-1.
+   *
+   * Sampling a single instant is not enough: a crescent that sets two hours
+   * into a ten-hour night is genuinely different from one that never rises,
+   * and both look identical at the midpoint. This is what interference should
+   * actually be weighted by.
+   */
+  upFractionOfDark: number | null
+  /** Mean altitude across the part of the dark window it is up. */
+  meanAltitudeWhenUp: number | null
   distanceKm: number
 }
 
@@ -159,7 +170,12 @@ function phaseNameFor(angle: number): MoonPhaseName {
   return 'Waning Crescent'
 }
 
-export function moonFor(location: SkyLocation, isoDate: string, darkest?: Date | null): MoonInfo {
+export function moonFor(
+  location: SkyLocation,
+  isoDate: string,
+  darkest?: Date | null,
+  darkWindow?: { from: Date | null; to: Date | null }
+): MoonInfo {
   const ob = observerFor(location)
   const noon = anchorNoon(isoDate, location.longitude)
   const midnightish = new Date(noon.getTime() + 12 * 3600_000)
@@ -182,6 +198,27 @@ export function moonFor(location: SkyLocation, isoDate: string, darkest?: Date |
     altitudeAtDarkest = Horizon(darkest, ob, eq.ra, eq.dec, 'normal').altitude
   }
 
+  // Walk the dark window at 10-minute steps to find how much of it the Moon
+  // is actually up for, and how high it gets while it is.
+  let upFractionOfDark: number | null = null
+  let meanAltitudeWhenUp: number | null = null
+  if (darkWindow?.from && darkWindow.to && darkWindow.to > darkWindow.from) {
+    let samples = 0
+    let up = 0
+    let altSum = 0
+    for (let t = darkWindow.from.getTime(); t <= darkWindow.to.getTime(); t += 600_000) {
+      const at = new Date(t)
+      const eq = Equator(Body.Moon, at, ob, true, true)
+      const alt = Horizon(at, ob, eq.ra, eq.dec, 'normal').altitude
+      samples++
+      if (alt > 0) { up++; altSum += alt }
+    }
+    if (samples > 0) {
+      upFractionOfDark = up / samples
+      meanAltitudeWhenUp = up > 0 ? altSum / up : 0
+    }
+  }
+
   return {
     phaseAngle: elongation,
     phaseName: phaseNameFor(elongation),
@@ -190,6 +227,8 @@ export function moonFor(location: SkyLocation, isoDate: string, darkest?: Date |
     age: (elongation / 360) * SYNODIC_DAYS,
     rise, set, transit,
     altitudeAtDarkest,
+    upFractionOfDark,
+    meanAltitudeWhenUp,
     distanceKm: illum.geo_dist * 149_597_870.7,
   }
 }
@@ -317,7 +356,10 @@ export function nightFor(
     location,
     minAltitude,
     twilight: tw,
-    moon: moonFor(location, isoDate, darkest),
+    moon: moonFor(location, isoDate, darkest, {
+      from: tw.astronomicalEnd,
+      to: tw.astronomicalStart,
+    }),
     planets: planetsFor(
       location,
       isoDate,

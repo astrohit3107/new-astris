@@ -45,20 +45,26 @@ export function scoreNight(night: NightReport, events: SkyEvent[]): SkyScore {
 
   /* --- Moon, 45 --------------------------------------------------------- */
   const illum = night.moon.illumination
-  const moonAlt = night.moon.altitudeAtDarkest
-  // A Moon below the horizon during darkness costs nothing, however full.
-  const moonUp = moonAlt !== null && moonAlt > 0
-  const interference = moonUp ? (illum / 100) * Math.min(1, Math.sin((moonAlt * Math.PI) / 180) + 0.3) : 0
+  const upFrac = night.moon.upFractionOfDark
+  const meanAlt = night.moon.meanAltitudeWhenUp
+
+  // Interference is brightness x how much of the dark window it is up for x
+  // how high it climbs. Using a single altitude sample at the midpoint scored
+  // a 45%-lit crescent identically to a new moon whenever it happened to be
+  // below the horizon at that one instant.
+  const heightFactor = meanAlt && meanAlt > 0 ? Math.min(1, Math.sin((meanAlt * Math.PI) / 180) + 0.35) : 0
+  const interference = upFrac === null ? 0 : (illum / 100) * upFrac * heightFactor
+  const moonUp = (upFrac ?? 0) > 0
   const moonPoints = Math.round(45 * (1 - interference))
   components.push({
     label: 'Moon',
     points: moonPoints,
     outOf: 45,
     detail: moonUp
-      ? `${illum.toFixed(0)}% lit and ${moonAlt!.toFixed(0)}° up at the darkest point.`
+      ? `${illum.toFixed(0)}% lit, up for ${Math.round((upFrac ?? 0) * 100)}% of the dark window, averaging ${meanAlt!.toFixed(0)}° high.`
       : illum < 5
         ? 'New Moon — no interference at all.'
-        : `${illum.toFixed(0)}% lit, but below the horizon while it is dark.`,
+        : `${illum.toFixed(0)}% lit, but below the horizon throughout astronomical darkness.`,
   })
 
   /* --- Darkness, 25 ----------------------------------------------------- */
