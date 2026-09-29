@@ -42,11 +42,33 @@ export const ASTRO = {
   locationsLabel: 'Leh • Pangong • Hanle • Tso Moriri',
   region: 'Ladakh, India',
 
-  /** When — editable placeholder batch windows. */
-  batchesLabel: 'September & October New Moon Batches',
+  /**
+   * Departures.
+   *
+   * The October 2026 batch has confirmed dates. The "new moon" claim is not
+   * marketing: New Moon falls on 10 October, in the middle of the window, and
+   * on six of those eight nights the Moon is below the horizon for the whole
+   * of astronomical darkness — checked against the same ephemeris that drives
+   * /stargazing-calendar.
+   *
+   * NOTE the arithmetic: 6-13 October spans 8 days and 7 nights, while the
+   * programme above is 6 days and 5 nights. The extra time is the arrival and
+   * acclimatisation day at Leh (3,500 m) and the departure day, which is how
+   * a Ladakh trip has to be run — going high on day one is how people get
+   * altitude sickness. `programmeNote` says this on the page rather than
+   * leaving a customer to spot the discrepancy.
+   */
+  batchesLabel: 'October 2026 New Moon Batch',
   batches: [
-    { id: 'sep', label: 'September New Moon Batch', note: 'Aligned to the darkest skies' },
-    { id: 'oct', label: 'October New Moon Batch', note: 'Crisp autumn nights' },
+    {
+      id: 'oct-2026',
+      label: '6 – 13 October 2026',
+      note: 'New Moon on 10 October — six of the eight nights are moonless once it is properly dark.',
+      startDate: '2026-10-06',
+      endDate: '2026-10-13',
+      status: 'open' as const,
+      programmeNote: 'Arrive Leh 6 October to acclimatise; the six-day programme runs from 7 October; depart 13 October.',
+    },
   ],
 
   /** Group / level */
@@ -123,7 +145,7 @@ export interface AstroFact {
 export const astroHeroFacts: AstroFact[] = [
   { icon: 'Clock', value: '6 Days / 5 Nights' },
   { icon: 'MapPin', value: 'Leh • Pangong • Hanle • Tso Moriri' },
-  { icon: 'Moon', value: 'September & October New Moon Batches' },
+  { icon: 'Moon', value: '6 – 13 October 2026 · New Moon Batch' },
   { icon: 'UsersRound', value: 'Limited Small-Group Mentoring' },
   { icon: 'GraduationCap', value: 'Beginners & Intermediate Friendly' },
 ]

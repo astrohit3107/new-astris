@@ -46,9 +46,44 @@ const errCls = 'mt-1 flex items-center gap-1 text-xs text-red-300'
 
 const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/astriseducation@gmail.com'
 
+/**
+ * Enquiries go to WhatsApp, with email as the safety net.
+ *
+ * The email still fires because it is the only leg that cannot be abandoned:
+ * once fetch() is away the lead is captured whether or not the customer ever
+ * reaches WhatsApp. The WhatsApp hand-off is the leg that actually starts a
+ * conversation, so it is attempted first and, if the browser blocks the popup,
+ * offered as a plain link on the success screen — an anchor the customer taps
+ * is never blocked.
+ */
+function whatsappMessage(d: FormValues, tierLabel: string): string {
+  return [
+    `Hi Astris — I'd like to book the ${ASTRO.name}.`,
+    '',
+    `Batch: ${d.batch}`,
+    `Package: ${tierLabel}`,
+    `Participants: ${d.participants}`,
+    '',
+    `Name: ${d.fullName}`,
+    `Phone: ${d.phone}`,
+    `Email: ${d.email}`,
+    `City: ${d.city}`,
+    d.experience ? `Experience: ${d.experience}` : '',
+    d.rental ? 'Interested in equipment rental: Yes' : '',
+    d.notes ? `Notes: ${d.notes}` : '',
+  ].filter(Boolean).join('\n')
+}
+
+function whatsappUrl(text: string): string {
+  return `https://wa.me/${ASTRO_CONTACT.whatsapp}?text=${encodeURIComponent(text)}`
+}
+
 export default function AstroBooking() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  /** Kept so the success screen can offer the hand-off if the popup was blocked. */
+  const [waLink, setWaLink] = useState('')
+  const [waOpened, setWaOpened] = useState(false)
 
   const {
     register,
@@ -57,7 +92,14 @@ export default function AstroBooking() {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { participants: 1, boarding: '', batch: '', rental: false },
+    defaultValues: {
+      participants: 1,
+      boarding: '',
+      // With one departure open there is nothing to choose between, and an
+      // empty required field is just a validation error waiting to happen.
+      batch: ASTRO.batches.length === 1 ? ASTRO.batches[0].label : '',
+      rental: false,
+    },
   })
 
   const onSubmit = async (data: FormValues) => {
@@ -71,6 +113,28 @@ export default function AstroBooking() {
     }
 
     const tier = astroPricing.find((p) => p.id === data.boarding)
+    const tierLabel = tier ? `${tier.route} — ${tier.amountLabel}` : data.boarding
+
+    // Build and open WhatsApp BEFORE any await. After an await the browser no
+    // longer treats this as part of the click, and blocks the window.
+    const link = whatsappUrl(whatsappMessage(data, tierLabel))
+    setWaLink(link)
+    let opened = false
+    try {
+      const w = window.open(link, '_blank', 'noopener,noreferrer')
+      opened = Boolean(w)
+    } catch {
+      opened = false
+    }
+    setWaOpened(opened)
+
+    // The hand-off has happened, so say so now. Waiting on the backup email
+    // left the customer watching a spinner for six seconds after WhatsApp had
+    // already opened in front of them.
+    if (opened) {
+      setStatus('success')
+      reset()
+    }
 
     try {
       const res = await fetch(FORMSUBMIT_ENDPOINT, {
@@ -88,7 +152,7 @@ export default function AstroBooking() {
           Email: data.email,
           City: data.city,
           Participants: String(data.participants),
-          Package: tier ? `${tier.route} — ${tier.amountLabel}` : data.boarding,
+          Package: tierLabel,
           Batch: data.batch,
           Experience: data.experience || '—',
           'Equipment Rental': data.rental ? 'Yes — interested' : 'No',
@@ -97,12 +161,22 @@ export default function AstroBooking() {
       })
       const json = await res.json().catch(() => ({} as { success?: string | boolean }))
       const ok = res.ok && (json.success === 'true' || json.success === true)
-      if (!ok) throw new Error('Submission failed. Please try again or contact us directly.')
-      setStatus('success')
-      reset()
+      if (!ok) {
+        // The copy of the lead we keep for ourselves did not send. That is
+        // ours to chase, and it is not a reason to tell someone whose
+        // WhatsApp just opened that their enquiry failed.
+        console.error('[astro-booking] backup email failed; WhatsApp hand-off', opened ? 'opened' : 'was blocked')
+      }
+      if (!opened) { setStatus('success'); reset() }
     } catch (e) {
-      setStatus('error')
-      setErrorMsg(e instanceof Error ? e.message : 'Something went wrong. Please try again.')
+      console.error('[astro-booking] backup email threw', e)
+      // If WhatsApp opened we already showed success, and the enquiry is on
+      // its way regardless. Only a blocked popup AND a failed email is a
+      // genuine dead end worth reporting.
+      if (!opened) {
+        setStatus('error')
+        setErrorMsg('We could not send that automatically. Please message us on WhatsApp instead.')
+      }
     }
   }
 
@@ -169,15 +243,31 @@ export default function AstroBooking() {
                   <Check size={32} />
                 </span>
                 <h3 className="font-display mt-5 text-2xl font-semibold text-white">
-                  Booking request received!
+                  {waOpened ? 'Finish on WhatsApp' : 'Booking request received'}
                 </h3>
                 <p className="mt-2 max-w-md text-sm font-light text-white/65">
-                  Thank you for reserving your seat on the Astroventure Astrophotography Expedition.
-                  Our team will reach out within 24 hours to confirm availability and next steps.
+                  {waOpened
+                    ? 'We have opened WhatsApp with your details already filled in — press send there and we will reply within 24 hours.'
+                    : 'We have your enquiry. Send it on WhatsApp as well and we can confirm your seat straight away.'}
                 </p>
+
+                {/* An anchor, not a scripted popup — this one can never be
+                    blocked, so there is always a way through. */}
+                {waLink && (
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+                  >
+                    <Send size={16} />
+                    {waOpened ? 'Reopen WhatsApp' : 'Send on WhatsApp'}
+                  </a>
+                )}
+
                 <button
-                  onClick={() => setStatus('idle')}
-                  className="mt-6 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                  onClick={() => { setStatus('idle'); setWaLink(''); setWaOpened(false) }}
+                  className="mt-4 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
                 >
                   Submit another request
                 </button>
@@ -230,7 +320,11 @@ export default function AstroBooking() {
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="batch">Preferred batch</label>
-                    <select id="batch" className={cn(inputCls, 'appearance-none')} defaultValue="" {...register('batch')}>
+                    <select
+                      id="batch"
+                      className={cn(inputCls, 'appearance-none')}
+                      {...register('batch')}
+                    >
                       <option value="" disabled className="bg-[var(--av-deep)]">Select a batch</option>
                       {ASTRO.batches.map((b) => (
                         <option key={b.id} value={b.label} className="bg-[var(--av-deep)]">
@@ -239,6 +333,19 @@ export default function AstroBooking() {
                       ))}
                     </select>
                     {errors.batch && <p className={errCls}><AlertCircle size={12} />{errors.batch.message}</p>}
+                    {/* Why these dates, and why the window is longer than the
+                        programme. Both are questions a customer would
+                        otherwise have to ask. */}
+                    {ASTRO.batches.length === 1 && (
+                      <div className="mt-2 space-y-1">
+                        <p className="text-[11px] leading-relaxed text-[var(--av-gold)]/80">
+                          {ASTRO.batches[0].note}
+                        </p>
+                        <p className="text-[11px] leading-relaxed text-white/40">
+                          {ASTRO.batches[0].programmeNote}
+                        </p>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="experience">
@@ -273,9 +380,21 @@ export default function AstroBooking() {
                 {errors.consent && <p className={errCls}><AlertCircle size={12} />{errors.consent.message}</p>}
 
                 {status === 'error' && (
-                  <p className="flex items-center gap-2 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
-                    <AlertCircle size={16} /> {errorMsg}
-                  </p>
+                  <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+                    <p className="flex items-center gap-2"><AlertCircle size={16} /> {errorMsg}</p>
+                    {/* Never dead-end a lead. If the automatic route failed,
+                        hand them a link that works without any scripting. */}
+                    {waLink && (
+                      <a
+                        href={waLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-semibold text-black transition hover:brightness-110"
+                      >
+                        <Send size={14} /> Send on WhatsApp instead
+                      </a>
+                    )}
+                  </div>
                 )}
 
                 <button
