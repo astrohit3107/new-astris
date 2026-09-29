@@ -35,7 +35,7 @@ export default function AstroKit() {
         </div>
 
         <p className="mt-8 text-center text-xs text-white/40">
-          Kit contents are editable placeholders and may be refined before each batch.
+          A guide rather than a checklist — we confirm exactly what to bring, and what we lend you, once your place is booked.
         </p>
       </div>
     </section>

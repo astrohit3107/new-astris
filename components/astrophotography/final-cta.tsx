@@ -1,4 +1,4 @@
-import { ArrowRight, Download } from 'lucide-react'
+import { ArrowRight, MessageCircle } from 'lucide-react'
 import { ASTRO, ASTRO_IMAGES } from '@/lib/astrophotography-data'
 import Starfield from '@/components/astroventure/starfield'
 
@@ -39,10 +39,12 @@ export default function AstroFinalCta() {
           </a>
           <a
             href={ASTRO.brochurePath}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/50 hover:bg-white/10 sm:w-auto"
           >
-            <Download size={16} />
-            Download Brochure
+            <MessageCircle size={16} />
+            {ASTRO.brochureLabel}
           </a>
         </div>
       </div>

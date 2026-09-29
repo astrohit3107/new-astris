@@ -27,15 +27,17 @@ export default function AstroTrainer() {
                   <p className="mt-1 text-sm text-white/70">{t.title}</p>
                 </div>
               </div>
-              {/* Experience badge */}
-              <div className="glass absolute -right-3 -top-3 rounded-2xl border border-[var(--av-gold)]/30 px-4 py-3 text-center sm:-right-5 sm:-top-5">
-                <p className="font-display text-2xl font-semibold text-[var(--av-gold)]">
-                  {t.yearsExperience}
-                </p>
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/60">
-                  Years
-                </p>
-              </div>
+              {/* Experience badge — hidden entirely rather than shown empty. */}
+              {t.yearsExperience && (
+                <div className="glass absolute -right-3 -top-3 rounded-2xl border border-[var(--av-gold)]/30 px-4 py-3 text-center sm:-right-5 sm:-top-5">
+                  <p className="font-display text-2xl font-semibold text-[var(--av-gold)]">
+                    {t.yearsExperience}
+                  </p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/60">
+                    Years
+                  </p>
+                </div>
+              )}
             </div>
           </ScrollReveal>
 
@@ -66,45 +68,44 @@ export default function AstroTrainer() {
               {t.bio}
             </p>
 
-            {/* Achievements */}
-            <ul className="mt-6 space-y-2.5">
-              {t.achievements.map((a) => (
-                <li key={a} className="flex items-start gap-2.5 text-sm text-white/70">
-                  <Award size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />
-                  <span>{a}</span>
-                </li>
-              ))}
-            </ul>
+            {/* Achievements — only real ones. An empty list renders nothing. */}
+            {t.achievements.length > 0 && (
+              <ul className="mt-6 space-y-2.5">
+                {t.achievements.map((a) => (
+                  <li key={a} className="flex items-start gap-2.5 text-sm text-white/70">
+                    <Award size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />
+                    <span>{a}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
-            {/* Links */}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={t.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-[var(--av-gold)]/40 hover:text-white"
-              >
-                <Instagram size={15} className="text-[var(--av-gold)]" /> Instagram
-              </a>
-              <a
-                href={t.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-[var(--av-gold)]/40 hover:text-white"
-              >
-                <Globe size={15} className="text-[var(--av-gold)]" /> Website
-              </a>
-              <a
-                href={t.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-[var(--av-gold)]/40 hover:text-white"
-              >
-                <ImagesIcon size={15} className="text-[var(--av-gold)]" /> Portfolio
-              </a>
-            </div>
+            {/* Links — a link on href="#" looks clickable and does nothing,
+                so each is rendered only when there is a real URL behind it. */}
+            {(() => {
+              const links = [
+                { href: t.instagram, label: 'Instagram', Icon: Instagram },
+                { href: t.website, label: 'Website', Icon: Globe },
+                { href: t.portfolio, label: 'Portfolio', Icon: ImagesIcon },
+              ].filter((l) => l.href && l.href !== '#')
+              if (links.length === 0) return null
+              return (
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {links.map(({ href, label, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-[var(--av-gold)]/40 hover:text-white"
+                    >
+                      <Icon size={15} className="text-[var(--av-gold)]" /> {label}
+                    </a>
+                  ))}
+                </div>
+              )
+            })()}
 
-            <p className="mt-6 text-xs italic text-white/40">{t.bioNote}</p>
           </ScrollReveal>
         </div>
       </div>

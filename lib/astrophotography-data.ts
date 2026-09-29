@@ -81,7 +81,15 @@ export const ASTRO = {
   /** Routes used by CTAs across the page. */
   path: '/astroventure-astrophotography',
   bookingPath: '/astroventure-astrophotography#book',
-  brochurePath: '#', // TODO: replace with the brochure PDF URL when available
+  /**
+   * There is no brochure PDF yet, and a "Download Brochure" button on href="#"
+   * does nothing when clicked. Until a real file exists this asks for it on
+   * WhatsApp, which is where enquiries are going anyway.
+   */
+  brochurePath:
+    'https://wa.me/917581821834?text=' +
+    encodeURIComponent('Hi Astris — could you send me the brochure for the Ladakh Astrophotography Expedition (6–13 October 2026)?'),
+  brochureLabel: 'Ask for the brochure',
 
   /** Seats. */
   seatsLabel: 'Limited Seats',
@@ -180,9 +188,15 @@ export const ASTRO_TRAINER = {
   title: 'Professional Astrophotographer & Mentor',
   portrait: ASTRO_IMAGES.trainer,
 
-  /** Placeholder biography — to be updated later. */
+  /**
+   * Descriptive biography. Kept because it only restates the specialisations
+   * below, which came from the property. The hard claims that used to sit
+   * alongside it — an award record, a years-of-experience figure and a
+   * publications line — have been removed: they were filler marked
+   * "(placeholder)" and were being read by people about to pay ₹50,000+.
+   * Send the real ones and they go straight back.
+   */
   bio: 'Jhankrit Ahuja is a professional astrophotographer specialising in Milky Way landscapes, deep-sky imaging, timelapse cinematography and high-altitude astrophotography. With years spent chasing dark skies across the Himalayas, his work bridges the technical precision of astronomy with the artistry of landscape photography. As an educator, he is known for a patient, hands-on teaching style that takes complete beginners to confident night-sky photographers.',
-  bioNote: 'This biography is placeholder text and will be updated later.',
 
   /** Specialisations. */
   specialties: [
@@ -193,20 +207,20 @@ export const ASTRO_TRAINER = {
     'Photography Education',
   ],
 
-  /** Editable placeholder credentials. */
-  yearsExperience: '10+',
-  achievements: [
-    'Award-winning astrophotography (placeholder)',
-    'Published landscape & night-sky work (placeholder)',
-    'Featured astrophotography workshops (placeholder)',
-  ],
-  awards: 'Awards & recognition — to be added.',
-  publications: 'Publications & features — to be added.',
+  /**
+   * Verified credentials only. Empty until real ones are supplied — an empty
+   * list renders nothing, whereas an unverified claim renders as fact.
+   */
+  yearsExperience: '',
+  achievements: [] as string[],
 
-  /** Links — replace with real URLs. */
-  instagram: '#',
-  website: '#',
-  portfolio: '#',
+  /**
+   * Real profile URLs only. These were all href="#", which renders as a link
+   * and does nothing when clicked — worse than no link at all.
+   */
+  instagram: '',
+  website: '',
+  portfolio: '',
 } as const
 
 /* ---------------------------------------------------------------------------
