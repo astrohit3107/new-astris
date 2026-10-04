@@ -51,6 +51,7 @@ export function pageEntries(): SitemapEntry[] {
     { path: '/experiences', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/sky-calendar', priority: 0.8, changeFrequency: 'daily' },
     { path: '/stargazing-calendar', priority: 0.9, changeFrequency: 'daily' },
+    { path: '/world-space-week-2026', priority: 0.8, changeFrequency: 'daily' },
     { path: '/stargazing-calendar/methodology', priority: 0.4, changeFrequency: 'yearly' },
     { path: '/groups', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/schools', priority: 0.7, changeFrequency: 'monthly' },
