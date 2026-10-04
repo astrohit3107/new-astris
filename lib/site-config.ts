@@ -67,9 +67,14 @@ export function whatsappHref(message: string): string {
 }
 
 /** Pre-filled email link. */
-export function mailHref(subject: string, body?: string): string {
-  const q = new URLSearchParams({ subject, ...(body ? { body } : {}) })
-  return `mailto:${CONTACT.email}?${q.toString()}`
+/**
+ * mailto: links need percent-encoding (RFC 6068). URLSearchParams encodes a
+ * space as "+", which Outlook and several other clients display literally —
+ * the subject arrived as "AstroEd+enquiry". Line breaks must be CRLF.
+ */
+export function mailHref(subject: string, body?: string, to: string = CONTACT.email): string {
+  const enc = (v: string) => encodeURIComponent(v.replace(/\r?\n/g, '\r\n'))
+  return `mailto:${to}?subject=${enc(subject)}${body ? `&body=${enc(body)}` : ''}`
 }
 
 /* --- Ready-made enquiry intents -------------------------------------------

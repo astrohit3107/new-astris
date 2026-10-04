@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Award, Frame, MessageCircle, Moon, ScrollText, Palette, PenLine } from 'lucide-react'
+import { ArrowRight, Award, Frame, Mail, MessageCircle, Moon, ScrollText, Palette, PenLine } from 'lucide-react'
 
 import { SITE_URL, LEGAL_ENTITY, CONTACT } from '@/lib/site-config'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 import {
-  WSW, PARTNER, PAINTING, ESSAY, REGISTER, registrationsOpen,
+  WSW, PARTNER, PAINTING, ESSAY, REGISTER, REGISTRATION_EMAIL, registrationsOpen,
 } from '@/lib/world-space-week'
 
 const TITLE = 'Paint My Universe — World Space Week 2026 Competition'
@@ -29,8 +29,8 @@ export const revalidate = 3600
 
 const STEPS = [
   {
-    title: 'Reserve on WhatsApp',
-    body: 'Tap Reserve Your Spot. A message opens with the details we need — your child’s name, grade, school and city.',
+    title: 'Register by email',
+    body: `Tap Reserve Your Spot. An email to ${REGISTRATION_EMAIL} opens with the details we need — fill them in and send.`,
   },
   {
     title: 'Pay ₹100 by UPI',
@@ -114,7 +114,7 @@ export default function WorldSpaceWeekPage() {
             </span>
             <span className="text-white/35" aria-hidden="true">×</span>
             {PARTNER.logo ? (
-              <img src={PARTNER.logo} alt={PARTNER.name} className="h-8 w-auto" />
+              <img src={PARTNER.logo} alt={PARTNER.name} className="h-10 w-auto" />
             ) : (
               <span
                 className="rounded-md border border-dashed border-white/30 px-3 py-1.5 text-sm font-semibold tracking-wide text-white/80"
@@ -148,8 +148,6 @@ export default function WorldSpaceWeekPage() {
               <>
                 <a
                   href={REGISTER.painting}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-7 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
                 >
                   Reserve Your Spot
@@ -161,6 +159,14 @@ export default function WorldSpaceWeekPage() {
                 >
                   See both competitions
                 </a>
+                {/* A mailto: button does nothing on a computer with no mail app
+                    set up, so the address is always shown as well. */}
+                <p className="flex w-full items-center gap-2 text-sm text-white/55">
+                  <Mail size={14} className="shrink-0" />
+                  Or email us at{' '}
+                  <span className="select-all font-semibold text-white/85">{REGISTRATION_EMAIL}</span>
+                  with your child’s name, grade, school and city.
+                </p>
               </>
             ) : (
               <p className="rounded-full border border-white/20 px-6 py-3 text-sm text-white/70">
@@ -187,8 +193,6 @@ export default function WorldSpaceWeekPage() {
             {open && (
               <a
                 href={REGISTER.painting}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
               >
                 Reserve Your Spot <ArrowRight size={15} />
@@ -206,19 +210,65 @@ export default function WorldSpaceWeekPage() {
             <h2 className="font-display mt-5 text-3xl font-light">{ESSAY.title}</h2>
             <p className="mt-1 text-sm font-semibold text-[var(--av-gold)]">Theme: {ESSAY.theme}</p>
             <p className="mt-4 flex-1 text-sm leading-relaxed text-white/65">
-              {ESSAY.brief ?? 'The full brief and word limit are shared with you when you register.'}
+              {ESSAY.brief}
             </p>
+            <a href="#essay-brief" className="mt-4 text-sm font-semibold text-sky-200 hover:underline">
+              Read the full essay brief →
+            </a>
             {open && (
               <a
                 href={REGISTER.essay}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
               >
                 Reserve Your Spot <ArrowRight size={15} />
               </a>
             )}
           </article>
+        </div>
+      </section>
+
+      {/* ---- essay brief ------------------------------------------------ */}
+      <section id="essay-brief" className="scroll-mt-16 border-t border-white/10 px-5 py-20 sm:px-6">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+            {ESSAY.title} · {ESSAY.grades}
+          </p>
+          <h2 className="font-display mt-3 text-3xl font-light sm:text-4xl">The essay brief: {ESSAY.theme}</h2>
+          <p className="mt-5 text-pretty leading-relaxed text-white/70">{ESSAY.brief}</p>
+
+          <h3 className="mt-10 text-sm font-semibold uppercase tracking-wider text-white/50">Questions to get you started</h3>
+          <p className="mt-2 text-sm text-white/50">Choose one of these, or set your own question.</p>
+          <ul className="mt-4 space-y-2.5">
+            {ESSAY.questions.map((q) => (
+              <li key={q} className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm leading-relaxed text-white/80">
+                {q}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">The rules</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
+                {ESSAY.rules.map((r) => <li key={r} className="flex gap-2"><span className="text-sky-200/70">—</span>{r}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">What the judges look for</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
+                {ESSAY.judging.map((r) => <li key={r} className="flex gap-2"><span className="text-sky-200/70">—</span>{r}</li>)}
+              </ul>
+            </div>
+          </div>
+
+          {open && (
+            <a
+              href={REGISTER.essay}
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-7 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
+            >
+              Reserve Your Spot <ArrowRight size={15} />
+            </a>
+          )}
         </div>
       </section>
 
@@ -282,9 +332,10 @@ export default function WorldSpaceWeekPage() {
           <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
             {[
               ['Who can enter?', `The painting competition is for ${PAINTING.grades.toLowerCase()}. The essay competition is for ${ESSAY.grades.toLowerCase()}. Everything is done online.`],
-              ['How much does it cost?', `${WSW.feeLabel}, the same for every grade and both competitions. We send the UPI details on WhatsApp after you register.`],
+              ['How much does it cost?', `${WSW.feeLabel}, the same for every grade and both competitions. We reply to your registration email with the UPI details.`],
               ['How do we submit?', `After payment we send you a link to upload a clear photo or scan of the entry. Uploading needs a Google account — any Gmail address works. The last day is ${WSW.deadlineLabel}.`],
               ['What happens to the original painting?', 'Keep it. If your child’s painting is shortlisted for the wall, we will ask you to courier the original.'],
+              ['How do we register?', `Tap Reserve Your Spot to open a ready-made email, or write to ${REGISTRATION_EMAIL} with your child’s name, grade, school and city.`],
               ['Who is running this?', `Astris Space, together with ${PARTNER.name}, for World Space Week 2026.`],
             ].map(([q, a]) => (
               <details key={q} className="group py-5">
@@ -303,7 +354,7 @@ export default function WorldSpaceWeekPage() {
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[var(--av-gold)] hover:underline"
           >
-            <MessageCircle size={15} /> Ask us anything on WhatsApp
+            <MessageCircle size={15} /> Questions? Ask us on WhatsApp
           </a>
         </div>
       </section>
@@ -318,8 +369,6 @@ export default function WorldSpaceWeekPage() {
           </p>
           <a
             href={REGISTER.painting}
-            target="_blank"
-            rel="noopener noreferrer"
             className="group mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-8 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
           >
             Reserve Your Spot

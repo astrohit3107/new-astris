@@ -11,14 +11,13 @@
  *  and the social posting plan. Those are between the two organisers, not for
  *  parents.
  *
- *  STILL TO COME FROM THE ORGANISERS
- *    • Space Store logo           → set `PARTNER.logo` to a /public path
- *    • Essay brief and word limit → `ESSAY.brief` (it says "shared when you
- *                                   register" until then)
+ *  REGISTRATION is by email to astriseducation@gmail.com. Every registration
+ *  email carries the same subject line, so a single Gmail filter can label
+ *  them all — see the setup notes that came with this page.
  * ============================================================================
  */
 
-import { whatsappHref } from '@/lib/site-config'
+import { whatsappHref, mailHref, CONTACT } from '@/lib/site-config'
 
 export const WSW = {
   name: 'World Space Week 2026',
@@ -40,11 +39,12 @@ export const WSW = {
 export const PARTNER = {
   name: 'Space Store',
   /**
-   * Space Store's logo, e.g. '/partners/space-store.svg'. Until it is set the
-   * page shows the name in a logo-shaped slot. Drop the file in /public and
-   * put its path here — nothing else needs changing.
+   * White wordmark with a transparent background, for the dark page. Made from
+   * the supplied white-on-black artwork, with alpha taken from brightness so
+   * the edges stay soft. A black version sits beside it for light backgrounds.
    */
-  logo: null as string | null,
+  logo: '/partners/space-store-white.png' as string | null,
+  logoDark: '/partners/space-store-black.png',
 }
 
 export const PAINTING = {
@@ -61,30 +61,64 @@ export const ESSAY = {
   title: 'Essay Competition',
   theme: 'Space Policy',
   grades: 'Grades 9–12',
-  /**
-   * The organisers' brief only says "Space policy". Until the full brief and
-   * word limit are agreed, the page says they arrive with registration rather
-   * than inventing either.
-   */
-  brief: null as string | null,
+  brief:
+    'Space is no longer only for a few governments. India has opened its space sector to private companies, thousands of satellites now circle the Earth, and missions are heading back to the Moon. Someone has to decide the rules — who gets to go, what they can take, and who cleans up afterwards. Pick a question of space policy that matters to you, and argue for what you think should happen.',
+  /** Starting points, not a required list — students may set their own question. */
+  questions: [
+    'Who should own the Moon’s water ice and minerals — and who gets to decide?',
+    'Should countries and companies be made to clean up the satellites they leave in orbit?',
+    'What should India’s priorities in space be for the next 25 years?',
+    'Should space be kept free of weapons, and can that actually be enforced?',
+    'Space tourism: an adventure that should be open to everyone, or a luxury the planet cannot afford?',
+  ],
+  rules: [
+    '600–1,000 words, in English.',
+    'Give your essay a title that states the question you are answering.',
+    'Typed (PDF or Word) or a clear scan of a handwritten essay — both are welcome.',
+    'It must be your own work. Essays written by AI tools will not be considered.',
+  ],
+  /** What the judges look for, stated so students know what is being rewarded. */
+  judging: [
+    'A clear argument — taking a position and defending it.',
+    'Evidence and examples, not just opinion.',
+    'Original thinking: a fresh angle counts for more than a summary.',
+    'Clear, well-organised writing.',
+  ],
 }
 
-/** Prefilled WhatsApp messages — the fields the team needs, ready to fill. */
-function registrationMessage(competition: string): string {
-  return [
-    `Hi Astris Space — I'd like to register for the World Space Week 2026 ${competition}.`,
-    '',
-    "Child's name:",
-    'Grade:',
-    'School:',
-    'City:',
-    "Parent's email (for the certificate):",
-  ].join('\n')
+/**
+ * Registration emails. The subject is fixed and starts the same way for both
+ * competitions, so one Gmail filter catches every registration; the body
+ * already asks for every field the team needs.
+ */
+export const REGISTRATION_EMAIL = CONTACT.email
+export const REGISTRATION_SUBJECT_PREFIX = 'WSW 2026 Registration'
+
+function registrationEmail(competition: string): string {
+  return mailHref(
+    `${REGISTRATION_SUBJECT_PREFIX} — ${competition}`,
+    [
+      `Hello Astris Space,`,
+      '',
+      `I'd like to register my child for the World Space Week 2026 ${competition}.`,
+      '',
+      "Child's full name:",
+      'Grade:',
+      'School:',
+      'City:',
+      "Parent's name:",
+      "Parent's phone number:",
+      '',
+      'We will send the certificate to this email address.',
+    ].join('\n'),
+    REGISTRATION_EMAIL
+  )
 }
 
 export const REGISTER = {
-  painting: whatsappHref(registrationMessage('Painting Competition (Paint My Universe)')),
-  essay: whatsappHref(registrationMessage('Essay Competition (Space Policy)')),
+  painting: registrationEmail('Painting Competition'),
+  essay: registrationEmail('Essay Competition'),
+  /** Questions can still come on WhatsApp — only registration moved to email. */
   question: whatsappHref('Hi Astris Space — I have a question about the World Space Week 2026 competitions.'),
 }
 
