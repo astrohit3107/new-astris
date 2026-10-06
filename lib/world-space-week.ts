@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  WORLD SPACE WEEK 2026 — PAINT MY UNIVERSE
+ *  WORLD SPACE WEEK 2026 — COSMIC CANVAS
  * ============================================================================
  *
  *  Content source for /world-space-week-2026. Everything public on that page
@@ -20,6 +20,8 @@
 import { whatsappHref, mailHref, CONTACT } from '@/lib/site-config'
 
 export const WSW = {
+  /** The competition's name. It replaced "Paint My Universe" on 6 Oct 2026. */
+  title: 'Cosmic Canvas',
   name: 'World Space Week 2026',
   /** World Space Week runs 4–11 October every year. */
   weekStart: '2026-10-04',
@@ -30,6 +32,8 @@ export const WSW = {
    */
   deadline: '2026-10-11',
   deadlineLabel: '11 October 2026',
+  /** As the organisers worded it, for anywhere the exact cut-off matters. */
+  deadlineFull: '11 October 2026, 11:59 pm IST',
   /** Per child, whichever competition, any grade. */
   fee: 100,
   feeLabel: '₹100 per child',
@@ -49,8 +53,9 @@ export const PARTNER = {
 
 export const PAINTING = {
   id: 'painting',
-  title: 'Painting Competition',
-  theme: 'Paint My Universe',
+  title: 'Painting',
+  /** The painting brief is the theme; Cosmic Canvas names the whole competition. */
+  theme: null as string | null,
   grades: 'Grades 3–8',
   brief:
     'Everyone has their own idea of how the Universe could have taken shape — and it doesn’t have to look like the usual Solar System. Use your creativity and imagination to paint the Universe of your thoughts. Don’t worry about the physics!',
@@ -58,7 +63,7 @@ export const PAINTING = {
 
 export const ESSAY = {
   id: 'essay',
-  title: 'Essay Competition',
+  title: 'Essay',
   theme: 'Space Policy',
   grades: 'Grades 9–12',
   brief:
@@ -74,7 +79,7 @@ export const ESSAY = {
   rules: [
     '600–1,000 words, in English.',
     'Give your essay a title that states the question you are answering.',
-    'Typed (PDF or Word) or a clear scan of a handwritten essay — both are welcome.',
+    'Typed or handwritten — send it as a PDF, or a clear PNG or JPEG scan.',
     'It must be your own work. Essays written by AI tools will not be considered.',
   ],
   /** What the judges look for, stated so students know what is being rewarded. */
@@ -87,12 +92,22 @@ export const ESSAY = {
 }
 
 /**
- * Registration emails. The subject is fixed and starts the same way for both
- * competitions, so one Gmail filter catches every registration; the body
- * already asks for every field the team needs.
+ * Two kinds of email, each with a fixed subject prefix so a Gmail filter can
+ * sort them:
+ *
+ *   "WSW 2026 Registration — …"  asks to take part; we reply with UPI details
+ *   "WSW 2026 Entry — …"         the finished entry, with the payment
+ *                                screenshot and the child's details attached
+ *
+ * A mailto: link cannot attach files, so the entry email's body says plainly
+ * what to attach before sending.
  */
 export const REGISTRATION_EMAIL = CONTACT.email
 export const REGISTRATION_SUBJECT_PREFIX = 'WSW 2026 Registration'
+export const ENTRY_SUBJECT_PREFIX = 'WSW 2026 Entry'
+
+/** Accepted file types, exactly as the organisers stated them. */
+export const ENTRY_FORMATS = 'PDF, PNG or JPEG'
 
 function registrationEmail(competition: string): string {
   return mailHref(
@@ -100,7 +115,7 @@ function registrationEmail(competition: string): string {
     [
       `Hello Astris Space,`,
       '',
-      `I'd like to register my child for the World Space Week 2026 ${competition}.`,
+      `I'd like to register my child for Cosmic Canvas — the World Space Week 2026 ${competition}.`,
       '',
       "Child's full name:",
       'Grade:',
@@ -115,9 +130,34 @@ function registrationEmail(competition: string): string {
   )
 }
 
+function entryEmail(competition: string): string {
+  return mailHref(
+    `${ENTRY_SUBJECT_PREFIX} — ${competition}`,
+    [
+      `Hello Astris Space,`,
+      '',
+      `Here is our entry for Cosmic Canvas — ${competition}.`,
+      '',
+      "Child's full name:",
+      'Grade:',
+      'School:',
+      'City:',
+      "Parent's name:",
+      "Parent's phone number:",
+      '',
+      'ATTACHED (please attach both before sending):',
+      `1. The ${competition.toLowerCase()} — scanned, as a ${ENTRY_FORMATS} file`,
+      '2. A screenshot of the ₹100 UPI payment confirmation',
+    ].join('\n'),
+    REGISTRATION_EMAIL
+  )
+}
+
 export const REGISTER = {
   painting: registrationEmail('Painting Competition'),
   essay: registrationEmail('Essay Competition'),
+  paintingEntry: entryEmail('Painting'),
+  essayEntry: entryEmail('Essay'),
   /** Questions can still come on WhatsApp — only registration moved to email. */
   question: whatsappHref('Hi Astris Space — I have a question about the World Space Week 2026 competitions.'),
 }

@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Award, Frame, Mail, MessageCircle, Moon, ScrollText, Palette, PenLine } from 'lucide-react'
+import { ArrowRight, Award, CheckCircle2, Frame, Mail, MessageCircle, Moon, Paperclip, ScrollText, Palette, PenLine, Send } from 'lucide-react'
 
 import { SITE_URL, LEGAL_ENTITY, CONTACT } from '@/lib/site-config'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 import {
-  WSW, PARTNER, PAINTING, ESSAY, REGISTER, REGISTRATION_EMAIL, registrationsOpen,
+  WSW, PARTNER, PAINTING, ESSAY, REGISTER, REGISTRATION_EMAIL, ENTRY_FORMATS, ENTRY_SUBJECT_PREFIX,
+  registrationsOpen,
 } from '@/lib/world-space-week'
 
-const TITLE = 'Paint My Universe — World Space Week 2026 Competition'
+const TITLE = 'Cosmic Canvas — World Space Week 2026 Painting & Essay Competition'
 const DESCRIPTION =
-  'A painting competition for grades 3–8 and an essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 11 October 2026.'
+  'Cosmic Canvas: a painting competition for grades 3–8 and an essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 11 October 2026, 11:59 pm.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   alternates: { canonical: WSW.path },
   keywords: [
     'World Space Week 2026', 'World Space Week India', 'space painting competition for kids',
-    'space essay competition India', 'Paint My Universe',
+    'space essay competition India', 'Cosmic Canvas competition',
   ],
   openGraph: { type: 'website', title: TITLE, description: DESCRIPTION, url: WSW.path, siteName: 'Astris Space' },
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
@@ -30,19 +31,19 @@ export const revalidate = 3600
 const STEPS = [
   {
     title: 'Register by email',
-    body: `Tap Reserve Your Spot. An email to ${REGISTRATION_EMAIL} opens with the details we need — fill them in and send.`,
+    body: `Tap Reserve Your Spot to email ${REGISTRATION_EMAIL}. We reply with the UPI details for the ₹100 fee.`,
   },
   {
-    title: 'Pay ₹100 by UPI',
-    body: 'We reply with the UPI details. The fee is the same for every child, whichever competition and grade.',
+    title: 'Pay and screenshot',
+    body: 'Pay ₹100 by UPI and take a screenshot of the payment confirmation. The fee is the same for every child.',
   },
   {
-    title: 'Upload the entry',
-    body: `Once paid, we send your link to upload a clear photo or scan of the painting or essay. Upload by ${WSW.deadlineLabel}.`,
+    title: 'Email your entry',
+    body: `Scan the painting or essay and email it as a ${ENTRY_FORMATS} file, with the payment screenshot and your details. By ${WSW.deadlineFull}.`,
   },
   {
     title: 'Shortlist and results',
-    body: 'Astris Space and Space Store shortlist the entries together. Shortlisted families and winners hear from us by email.',
+    body: 'Astris Space and Space Store shortlist the entries together. If yours is selected, we email you with the next steps — including where to courier the original.',
   },
 ]
 
@@ -56,7 +57,7 @@ export default function WorldSpaceWeekPage() {
         // A real event with real dates, so Event is the honest type here.
         '@type': 'Event',
         '@id': `${SITE_URL}${WSW.path}#event`,
-        name: 'World Space Week 2026 — Paint My Universe Competition',
+        name: 'Cosmic Canvas — World Space Week 2026 Competition',
         description: DESCRIPTION,
         startDate: `${WSW.weekStart}T00:00:00+05:30`,
         endDate: `${WSW.weekEnd}T23:59:59+05:30`,
@@ -129,18 +130,18 @@ export default function WorldSpaceWeekPage() {
             {WSW.name} · 4–11 October
           </p>
           <h1 className="font-display mt-4 text-balance text-5xl font-light leading-[1.05] sm:text-7xl">
-            Paint My Universe
+            {WSW.title}
           </h1>
           <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-white/70">
             A painting competition for grades 3–8, and an essay competition for grades 9–12. The top
-            three painters win a night under the stars at Nakshatraalay.
+            three entries — across both categories — win a night under the stars at Nakshatraalay.
           </p>
 
           <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm">
             <div><dt className="text-[10px] uppercase tracking-wider text-white/40">Entry</dt><dd className="font-semibold">{WSW.feeLabel}</dd></div>
             <div><dt className="text-[10px] uppercase tracking-wider text-white/40">Painting</dt><dd className="font-semibold">{PAINTING.grades}</dd></div>
             <div><dt className="text-[10px] uppercase tracking-wider text-white/40">Essay</dt><dd className="font-semibold">{ESSAY.grades}</dd></div>
-            <div><dt className="text-[10px] uppercase tracking-wider text-white/40">Upload by</dt><dd className="font-semibold">{WSW.deadlineLabel}</dd></div>
+            <div><dt className="text-[10px] uppercase tracking-wider text-white/40">Entries by</dt><dd className="font-semibold">{WSW.deadlineLabel}, 11:59 pm</dd></div>
           </dl>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -188,7 +189,9 @@ export default function WorldSpaceWeekPage() {
               <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">{PAINTING.grades}</span>
             </div>
             <h2 className="font-display mt-5 text-3xl font-light">{PAINTING.title}</h2>
-            <p className="mt-1 text-sm font-semibold text-[var(--av-gold)]">Theme: {PAINTING.theme}</p>
+            {PAINTING.theme && (
+              <p className="mt-1 text-sm font-semibold text-[var(--av-gold)]">Theme: {PAINTING.theme}</p>
+            )}
             <p className="mt-4 flex-1 text-sm leading-relaxed text-white/65">{PAINTING.brief}</p>
             {open && (
               <a
@@ -285,19 +288,69 @@ export default function WorldSpaceWeekPage() {
               </li>
             ))}
           </ol>
+
+          {/* The one thing families most need to get right, in one place. */}
+          <div id="send-your-entry" className="mt-10 scroll-mt-16 rounded-3xl border border-[var(--av-gold)]/35 bg-[var(--av-gold)]/[0.06] p-7 sm:p-9">
+            <h3 className="font-display text-2xl font-light sm:text-3xl">Sending your entry</h3>
+            <p className="mt-2 text-sm text-white/65">
+              Email it to <span className="select-all font-semibold text-white">{REGISTRATION_EMAIL}</span> by{' '}
+              <span className="font-semibold text-white">{WSW.deadlineFull}</span>. Your email must have:
+            </p>
+
+            <div className="mt-6 grid gap-6 sm:grid-cols-2">
+              <div>
+                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-white/50">
+                  <Paperclip size={13} /> Attached
+                </p>
+                <ul className="mt-3 space-y-2.5 text-sm text-white/80">
+                  <li className="flex gap-2.5"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />The painting or essay, scanned, as a {ENTRY_FORMATS} file</li>
+                  <li className="flex gap-2.5"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />A screenshot of your ₹100 payment confirmation</li>
+                </ul>
+              </div>
+              <div>
+                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-white/50">
+                  <Mail size={13} /> Written in the email
+                </p>
+                <ul className="mt-3 space-y-2.5 text-sm text-white/80">
+                  <li className="flex gap-2.5"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />Child’s name, grade and school</li>
+                  <li className="flex gap-2.5"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />City, and a phone number we can reach you on if you are shortlisted</li>
+                </ul>
+              </div>
+            </div>
+
+            <p className="mt-6 text-sm leading-relaxed text-white/60">
+              <span className="font-semibold text-white/85">Keep the original.</span> If your entry is
+              shortlisted, we will email you with where to courier it.
+            </p>
+
+            {open && (
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href={REGISTER.paintingEntry} className="inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110">
+                  <Send size={15} /> Send a painting entry
+                </a>
+                <a href={REGISTER.essayEntry} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/10">
+                  <Send size={15} /> Send an essay entry
+                </a>
+              </div>
+            )}
+            <p className="mt-3 text-[11px] text-white/40">
+              These open an email with the subject “{ENTRY_SUBJECT_PREFIX}” and a checklist already written — remember to attach the files before sending.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ---- what you can win ------------------------------------------- */}
       <section className="border-t border-white/10 px-5 py-20 sm:px-6">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-display text-3xl font-light sm:text-4xl">What young artists can win</h2>
+          <h2 className="font-display text-3xl font-light sm:text-4xl">What you can win</h2>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             <div className="rounded-2xl border border-[var(--av-gold)]/30 bg-[var(--av-gold)]/[0.06] p-6">
               <Moon size={20} className="text-[var(--av-gold)]" />
-              <h3 className="mt-4 font-semibold">Top 3 paintings</h3>
+              <h3 className="mt-4 font-semibold">Top 3 entries</h3>
+              <p className="mt-1 text-[11px] uppercase tracking-wider text-[var(--av-gold)]/80">Painting and essay combined</p>
               <p className="mt-2 text-sm leading-relaxed text-white/65">
-                A free place for the child at a night sky-gazing workshop at{' '}
+                A free ticket to a night sky-gazing workshop at{' '}
                 <Link href="/nakshatraalay/gurgaon" className="underline decoration-white/30 underline-offset-2 hover:text-white">
                   Nakshatraalay
                 </Link>
@@ -309,8 +362,8 @@ export default function WorldSpaceWeekPage() {
               <Frame size={20} className="text-white/70" />
               <h3 className="mt-4 font-semibold">Top 20–25 paintings</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/65">
-                Framed and put up on the wall, with an invitation for the artist to come and see it.
-                Shortlisted families will be asked to courier the original painting, so keep it safe.
+                Framed and put up on the wall, with an invitation for the artist to come and see it. If
+                yours is shortlisted, we email you with where to courier the original.
               </p>
             </div>
             <div className="rounded-2xl border border-white/12 bg-white/[0.03] p-6">
@@ -333,8 +386,9 @@ export default function WorldSpaceWeekPage() {
             {[
               ['Who can enter?', `The painting competition is for ${PAINTING.grades.toLowerCase()}. The essay competition is for ${ESSAY.grades.toLowerCase()}. Everything is done online.`],
               ['How much does it cost?', `${WSW.feeLabel}, the same for every grade and both competitions. We reply to your registration email with the UPI details.`],
-              ['How do we submit?', `After payment we send you a link to upload a clear photo or scan of the entry. Uploading needs a Google account — any Gmail address works. The last day is ${WSW.deadlineLabel}.`],
-              ['What happens to the original painting?', 'Keep it. If your child’s painting is shortlisted for the wall, we will ask you to courier the original.'],
+              ['How do we submit?', `Scan the painting or essay and email it to ${REGISTRATION_EMAIL} as a ${ENTRY_FORMATS} file, with a screenshot of your payment confirmation and your child’s name, grade, school, city and a contact number. The deadline is ${WSW.deadlineFull}.`],
+              ['What happens to the original?', 'Keep it safe. If your child’s entry is shortlisted, we will email you with where to courier it.'],
+              ['Can essays win the top prize?', 'Yes. The top three are chosen from both categories combined, so a painting and an essay compete on equal terms for the three free tickets.'],
               ['How do we register?', `Tap Reserve Your Spot to open a ready-made email, or write to ${REGISTRATION_EMAIL} with your child’s name, grade, school and city.`],
               ['Who is running this?', `Astris Space, together with ${PARTNER.name}, for World Space Week 2026.`],
             ].map(([q, a]) => (
@@ -363,9 +417,9 @@ export default function WorldSpaceWeekPage() {
       {open && (
         <section className="border-t border-white/10 px-5 py-20 text-center sm:px-6">
           <Award size={28} className="mx-auto text-[var(--av-gold)]" />
-          <h2 className="font-display mt-5 text-3xl font-light sm:text-4xl">Paint the universe of your thoughts</h2>
+          <h2 className="font-display mt-5 text-3xl font-light sm:text-4xl">The cosmos is your canvas</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm text-white/60">
-            Entries close {WSW.deadlineLabel}.
+            Entries close {WSW.deadlineFull}.
           </p>
           <a
             href={REGISTER.painting}
