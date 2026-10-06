@@ -11,9 +11,12 @@
  *  and the social posting plan. Those are between the two organisers, not for
  *  parents.
  *
- *  REGISTRATION is by email to astriseducation@gmail.com. Every registration
- *  email carries the same subject line, so a single Gmail filter can label
- *  them all — see the setup notes that came with this page.
+ *  HOW A FAMILY TAKES PART
+ *    1. Pay ₹100 on the Razorpay payment page — that is the registration.
+ *    2. Email the scanned entry, the payment screenshot and their details to
+ *       astriseducation@gmail.com by 11 October, 11:59 pm IST.
+ *  Every entry email has the same subject prefix, so one Gmail filter sorts
+ *  them.
  * ============================================================================
  */
 
@@ -50,6 +53,16 @@ export const PARTNER = {
   logo: '/partners/space-store-white.png' as string | null,
   logoDark: '/partners/space-store-black.png',
 }
+
+/**
+ * Razorpay payment page for the ₹100 entry fee. Checked before it went on the
+ * site: active, titled "Cosmic Canvas", amount 10000 paise. Paying here IS
+ * registering — there is no separate registration step.
+ */
+export const PAYMENT_LINK = 'https://pages.razorpay.com/world-space-week-2026'
+
+/** Winners per competition — painting and essay are judged separately. */
+export const WINNERS_PER_COMPETITION = 3
 
 export const PAINTING = {
   id: 'painting',
@@ -92,43 +105,15 @@ export const ESSAY = {
 }
 
 /**
- * Two kinds of email, each with a fixed subject prefix so a Gmail filter can
- * sort them:
- *
- *   "WSW 2026 Registration — …"  asks to take part; we reply with UPI details
- *   "WSW 2026 Entry — …"         the finished entry, with the payment
- *                                screenshot and the child's details attached
- *
- * A mailto: link cannot attach files, so the entry email's body says plainly
- * what to attach before sending.
+ * Entries arrive by email. The subject prefix is fixed so one Gmail filter
+ * catches every entry. A mailto: link cannot attach files, so the body says
+ * plainly what to attach before sending.
  */
 export const REGISTRATION_EMAIL = CONTACT.email
-export const REGISTRATION_SUBJECT_PREFIX = 'WSW 2026 Registration'
 export const ENTRY_SUBJECT_PREFIX = 'WSW 2026 Entry'
 
 /** Accepted file types, exactly as the organisers stated them. */
 export const ENTRY_FORMATS = 'PDF, PNG or JPEG'
-
-function registrationEmail(competition: string): string {
-  return mailHref(
-    `${REGISTRATION_SUBJECT_PREFIX} — ${competition}`,
-    [
-      `Hello Astris Space,`,
-      '',
-      `I'd like to register my child for Cosmic Canvas — the World Space Week 2026 ${competition}.`,
-      '',
-      "Child's full name:",
-      'Grade:',
-      'School:',
-      'City:',
-      "Parent's name:",
-      "Parent's phone number:",
-      '',
-      'We will send the certificate to this email address.',
-    ].join('\n'),
-    REGISTRATION_EMAIL
-  )
-}
 
 function entryEmail(competition: string): string {
   return mailHref(
@@ -147,15 +132,16 @@ function entryEmail(competition: string): string {
       '',
       'ATTACHED (please attach both before sending):',
       `1. The ${competition.toLowerCase()} — scanned, as a ${ENTRY_FORMATS} file`,
-      '2. A screenshot of the ₹100 UPI payment confirmation',
+      '2. A screenshot of the ₹100 payment confirmation',
     ].join('\n'),
     REGISTRATION_EMAIL
   )
 }
 
 export const REGISTER = {
-  painting: registrationEmail('Painting Competition'),
-  essay: registrationEmail('Essay Competition'),
+  /** Both competitions pay through the same page; the entry email says which. */
+  painting: PAYMENT_LINK,
+  essay: PAYMENT_LINK,
   paintingEntry: entryEmail('Painting'),
   essayEntry: entryEmail('Essay'),
   /** Questions can still come on WhatsApp — only registration moved to email. */

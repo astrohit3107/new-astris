@@ -6,7 +6,7 @@ import { SITE_URL, LEGAL_ENTITY, CONTACT } from '@/lib/site-config'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 import {
   WSW, PARTNER, PAINTING, ESSAY, REGISTER, REGISTRATION_EMAIL, ENTRY_FORMATS, ENTRY_SUBJECT_PREFIX,
-  registrationsOpen,
+  PAYMENT_LINK, WINNERS_PER_COMPETITION, registrationsOpen,
 } from '@/lib/world-space-week'
 
 const TITLE = 'Cosmic Canvas — World Space Week 2026 Painting & Essay Competition'
@@ -30,16 +30,16 @@ export const revalidate = 3600
 
 const STEPS = [
   {
-    title: 'Register by email',
-    body: `Tap Reserve Your Spot to email ${REGISTRATION_EMAIL}. We reply with the UPI details for the ₹100 fee.`,
+    title: 'Pay ₹100 to reserve',
+    body: 'Tap Reserve Your Spot to pay on our secure Razorpay page. Paying is your registration — keep a screenshot of the confirmation.',
   },
   {
-    title: 'Pay and screenshot',
-    body: 'Pay ₹100 by UPI and take a screenshot of the payment confirmation. The fee is the same for every child.',
+    title: 'Scan the entry',
+    body: `Scan or photograph the painting or essay clearly, and save it as a ${ENTRY_FORMATS} file.`,
   },
   {
     title: 'Email your entry',
-    body: `Scan the painting or essay and email it as a ${ENTRY_FORMATS} file, with the payment screenshot and your details. By ${WSW.deadlineFull}.`,
+    body: `Email ${REGISTRATION_EMAIL} with the entry, the payment screenshot and your details, by ${WSW.deadlineFull}.`,
   },
   {
     title: 'Shortlist and results',
@@ -74,7 +74,7 @@ export default function WorldSpaceWeekPage() {
           priceCurrency: 'INR',
           availability: open ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
           validThrough: `${WSW.deadline}T23:59:59+05:30`,
-          url: `${SITE_URL}${WSW.path}`,
+          url: PAYMENT_LINK,
         },
         audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
       },
@@ -134,7 +134,7 @@ export default function WorldSpaceWeekPage() {
           </h1>
           <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-white/70">
             A painting competition for grades 3–8, and an essay competition for grades 9–12. The top
-            three entries — across both categories — win a night under the stars at Nakshatraalay.
+            three in each competition win a night under the stars at Nakshatraalay.
           </p>
 
           <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm">
@@ -149,24 +149,24 @@ export default function WorldSpaceWeekPage() {
               <>
                 <a
                   href={REGISTER.painting}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-7 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
                 >
                   Reserve Your Spot
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </a>
                 <a
-                  href="#competitions"
+                  href="#send-your-entry"
                   className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/10"
                 >
-                  See both competitions
+                  How to send your entry
                 </a>
-                {/* A mailto: button does nothing on a computer with no mail app
-                    set up, so the address is always shown as well. */}
-                <p className="flex w-full items-center gap-2 text-sm text-white/55">
+                <p className="flex w-full flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/55">
                   <Mail size={14} className="shrink-0" />
-                  Or email us at{' '}
+                  Pay ₹100, then email your entry to
                   <span className="select-all font-semibold text-white/85">{REGISTRATION_EMAIL}</span>
-                  with your child’s name, grade, school and city.
+                  by {WSW.deadlineFull}.
                 </p>
               </>
             ) : (
@@ -196,6 +196,8 @@ export default function WorldSpaceWeekPage() {
             {open && (
               <a
                 href={REGISTER.painting}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
               >
                 Reserve Your Spot <ArrowRight size={15} />
@@ -221,6 +223,8 @@ export default function WorldSpaceWeekPage() {
             {open && (
               <a
                 href={REGISTER.essay}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
               >
                 Reserve Your Spot <ArrowRight size={15} />
@@ -267,6 +271,8 @@ export default function WorldSpaceWeekPage() {
           {open && (
             <a
               href={REGISTER.essay}
+                  target="_blank"
+                  rel="noopener noreferrer"
               className="mt-10 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-7 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
             >
               Reserve Your Spot <ArrowRight size={15} />
@@ -347,8 +353,10 @@ export default function WorldSpaceWeekPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             <div className="rounded-2xl border border-[var(--av-gold)]/30 bg-[var(--av-gold)]/[0.06] p-6">
               <Moon size={20} className="text-[var(--av-gold)]" />
-              <h3 className="mt-4 font-semibold">Top 3 entries</h3>
-              <p className="mt-1 text-[11px] uppercase tracking-wider text-[var(--av-gold)]/80">Painting and essay combined</p>
+              <h3 className="mt-4 font-semibold">Top {WINNERS_PER_COMPETITION} in each competition</h3>
+              <p className="mt-1 text-[11px] uppercase tracking-wider text-[var(--av-gold)]/80">
+                {WINNERS_PER_COMPETITION} paintings and {WINNERS_PER_COMPETITION} essays
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-white/65">
                 A free ticket to a night sky-gazing workshop at{' '}
                 <Link href="/nakshatraalay/gurgaon" className="underline decoration-white/30 underline-offset-2 hover:text-white">
@@ -385,11 +393,11 @@ export default function WorldSpaceWeekPage() {
           <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
             {[
               ['Who can enter?', `The painting competition is for ${PAINTING.grades.toLowerCase()}. The essay competition is for ${ESSAY.grades.toLowerCase()}. Everything is done online.`],
-              ['How much does it cost?', `${WSW.feeLabel}, the same for every grade and both competitions. We reply to your registration email with the UPI details.`],
+              ['How much does it cost?', `${WSW.feeLabel}, the same for every grade and both competitions. Pay online on our secure Razorpay page — tap Reserve Your Spot.`],
               ['How do we submit?', `Scan the painting or essay and email it to ${REGISTRATION_EMAIL} as a ${ENTRY_FORMATS} file, with a screenshot of your payment confirmation and your child’s name, grade, school, city and a contact number. The deadline is ${WSW.deadlineFull}.`],
               ['What happens to the original?', 'Keep it safe. If your child’s entry is shortlisted, we will email you with where to courier it.'],
-              ['Can essays win the top prize?', 'Yes. The top three are chosen from both categories combined, so a painting and an essay compete on equal terms for the three free tickets.'],
-              ['How do we register?', `Tap Reserve Your Spot to open a ready-made email, or write to ${REGISTRATION_EMAIL} with your child’s name, grade, school and city.`],
+              ['How many winners are there?', `${WINNERS_PER_COMPETITION} in each competition — ${WINNERS_PER_COMPETITION} paintings and ${WINNERS_PER_COMPETITION} essays — and each wins a free ticket to a night sky-gazing workshop at Nakshatraalay.`],
+              ['How do we register?', `Paying the ₹100 fee reserves your spot. Then email your entry to ${REGISTRATION_EMAIL} with the payment screenshot by ${WSW.deadlineFull}.`],
               ['Who is running this?', `Astris Space, together with ${PARTNER.name}, for World Space Week 2026.`],
             ].map(([q, a]) => (
               <details key={q} className="group py-5">
@@ -423,6 +431,8 @@ export default function WorldSpaceWeekPage() {
           </p>
           <a
             href={REGISTER.painting}
+                  target="_blank"
+                  rel="noopener noreferrer"
             className="group mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-8 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
           >
             Reserve Your Spot
