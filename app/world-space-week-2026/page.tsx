@@ -126,10 +126,7 @@ export default function WorldSpaceWeekPage() {
             )}
           </div>
 
-          <p className="mt-10 text-[11px] font-semibold uppercase tracking-[0.4em] text-white/55">
-            {WSW.name} · 4–11 October
-          </p>
-          <h1 className="font-display mt-4 text-balance text-5xl font-light leading-[1.05] sm:text-7xl">
+          <h1 className="font-display mt-10 text-balance text-5xl font-light leading-[1.05] sm:text-7xl">
             {WSW.title}
           </h1>
           <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-white/70">
