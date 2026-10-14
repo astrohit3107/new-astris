@@ -14,7 +14,7 @@
  *  HOW A FAMILY TAKES PART
  *    1. Pay ₹100 on the Razorpay payment page — that is the registration.
  *    2. Email the scanned entry, the payment screenshot and their details to
- *       astriseducation@gmail.com by 11 October, 11:59 pm IST.
+ *       astriseducation@gmail.com by 31 October, 11:59 pm IST.
  *  Every entry email has the same subject prefix, so one Gmail filter sorts
  *  them.
  * ============================================================================
@@ -33,10 +33,14 @@ export const WSW = {
    * Last day to register and upload. End of the day in IST — after this the
    * page stops offering registration so nobody pays ₹100 for a closed contest.
    */
-  deadline: '2026-10-11',
-  deadlineLabel: '11 October 2026',
+  /**
+   * Extended on 14 Oct 2026 from 11 October to the end of the month. World
+   * Space Week itself still ran 4–11 October; only the entry window moved.
+   */
+  deadline: '2026-10-31',
+  deadlineLabel: '31 October 2026',
   /** As the organisers worded it, for anywhere the exact cut-off matters. */
-  deadlineFull: '11 October 2026, 11:59 pm IST',
+  deadlineFull: '31 October 2026, 11:59 pm IST',
   /** Per child, whichever competition, any grade. */
   fee: 100,
   feeLabel: '₹100 per child',

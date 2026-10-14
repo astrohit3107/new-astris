@@ -11,7 +11,7 @@ import {
 
 const TITLE = 'Cosmic Canvas — World Space Week 2026 Painting & Essay Competition'
 const DESCRIPTION =
-  'Cosmic Canvas: a painting competition for grades 3–8 and an essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 11 October 2026, 11:59 pm.'
+  'Cosmic Canvas: a painting competition for grades 3–8 and an essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 31 October 2026, 11:59 pm.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -60,7 +60,7 @@ export default function WorldSpaceWeekPage() {
         name: 'Cosmic Canvas — World Space Week 2026 Competition',
         description: DESCRIPTION,
         startDate: `${WSW.weekStart}T00:00:00+05:30`,
-        endDate: `${WSW.weekEnd}T23:59:59+05:30`,
+        endDate: `${WSW.deadline}T23:59:59+05:30`,
         eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
         location: { '@type': 'VirtualLocation', url: `${SITE_URL}${WSW.path}` },
