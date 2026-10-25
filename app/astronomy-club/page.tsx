@@ -21,6 +21,7 @@ import {
   CHANGES,
   CLOSE,
   CLUB_PATH,
+  CLUB_KIT_PDF,
   CLUB_PDF,
   CLUB_PHONE_LABEL,
   CLUB_SEO,
@@ -179,7 +180,7 @@ function PdfButton({ from, className = '' }: { from: string; className?: string 
       href={CLUB_PDF}
       download
       event="club_pdf_download"
-      eventProps={{ from }}
+      eventProps={{ doc: 'proposal', from }}
       className={`club-btn-ghost justify-center ${className}`}
     >
       Download the proposal (PDF)
@@ -898,6 +899,15 @@ export default function AstronomyClubPage() {
 
                   <aside className="space-y-4 lg:col-span-4" aria-label="Other ways to reach us">
                     <PdfButton from="close" className="w-full" />
+                    <TrackedLink
+                      href={CLUB_KIT_PDF}
+                      download
+                      event="club_pdf_download"
+                      eventProps={{ doc: 'kit_guide', from: 'close' }}
+                      className="club-btn-ghost w-full justify-center"
+                    >
+                      Download the kit guide (PDF)
+                    </TrackedLink>
                     <TrackedLink
                       href={CLUB_WHATSAPP}
                       target="_blank"

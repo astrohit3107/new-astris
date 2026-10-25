@@ -1,8 +1,8 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { BUILDS, TAKE_HOME, YEAR_COLORS, type YearId } from '@/lib/astronomy-club-data'
-import { useScrollProgress } from './motion'
+import { BUILDS, CLUB_KIT_PDF, TAKE_HOME, YEAR_COLORS, type YearId } from '@/lib/astronomy-club-data'
+import { TrackedLink, useScrollProgress } from './motion'
 
 /**
  * Scene 11 — What students take home.
@@ -238,6 +238,16 @@ export default function TakeHome() {
         <div>
           <h3 className="club-display text-3xl font-bold text-white">18 builds across the cycle</h3>
           <p className="mt-2 max-w-2xl text-pretty text-white/70">{TAKE_HOME.buildsNote}</p>
+          <TrackedLink
+            href={CLUB_KIT_PDF}
+            download
+            event="club_pdf_download"
+            eventProps={{ doc: 'kit_guide', from: 'builds' }}
+            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#E8A33D] underline-offset-4 hover:underline"
+          >
+            Download the kit guide (PDF)
+            <span aria-hidden="true">↓</span>
+          </TrackedLink>
         </div>
         <div role="group" aria-label="Filter builds by year" className="inline-flex self-start rounded-full border border-white/15 p-1">
           {FILTERS.map((f) => (
