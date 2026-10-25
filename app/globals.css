@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Pinned, scroll-scrubbed scenes (/astronomy-club): desktop width with motion
+   allowed. Everywhere else those scenes fall back to a static, stacked layout. */
+@custom-variant pin (@media (min-width: 1024px) and (prefers-reduced-motion: no-preference));
+
 /* ============================================================================
    THEME TOKENS
    ----------------------------------------------------------------------------
