@@ -113,7 +113,10 @@ export const ESSAY = {
  * catches every entry. A mailto: link cannot attach files, so the body says
  * plainly what to attach before sending.
  */
-export const REGISTRATION_EMAIL = CONTACT.email
+// Pinned to the inbox families were told to use, and that the entry filter
+// sorts, rather than following CONTACT.email (now contact@astriseducation.in). Entries close
+// 31 October; this can follow CONTACT.email after judging.
+export const REGISTRATION_EMAIL = 'astriseducation@gmail.com'
 export const ENTRY_SUBJECT_PREFIX = 'WSW 2026 Entry'
 
 /** Accepted file types, exactly as the organisers stated them. */

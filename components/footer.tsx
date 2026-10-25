@@ -97,7 +97,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-foreground/70">
                 <Mail size={16} />
-                <span>astriseducation@gmail.com</span>
+                <span>contact@astriseducation.in</span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-foreground/70">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />
@@ -114,7 +114,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-foreground/60">
             © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
-            <span className="block text-xs text-foreground/45">
+            <span className="block text-xs text-foreground/65">
               Astris Space is a trading name of {LEGAL_ENTITY}.
             </span>
           </p>

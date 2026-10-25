@@ -739,6 +739,16 @@ export default function AstronomyClubPage() {
                   {WHY.stats.map((s, i) => (
                     <Reveal as="li" key={s.value} delay={i * 100}>
                       <div className="h-full rounded-3xl bg-[#EAF5F8] p-6">
+                        {i === 0 && (
+                          <img
+                            src="/partners/isro-logo.webp"
+                            alt="ISRO — Indian Space Research Organisation"
+                            width={500}
+                            height={473}
+                            loading="lazy"
+                            className="mb-4 h-14 w-auto object-contain"
+                          />
+                        )}
                         <p className="club-display text-2xl font-extrabold leading-tight sm:text-4xl">{s.value}</p>
                         <p className="mt-2 text-sm text-[#3B4663]">{s.label}</p>
                       </div>
@@ -748,13 +758,7 @@ export default function AstronomyClubPage() {
                 <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
                   {WHY.founders.map((f, i) => (
                     <Reveal key={f.name} delay={i * 150}>
-                      <article className="flex h-full gap-5 rounded-3xl p-6 ring-1 ring-[#D5DCE6] sm:p-8">
-                        <span
-                          aria-hidden="true"
-                          className="club-display flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#0E1A3A] text-xl font-bold text-[#E8A33D]"
-                        >
-                          {f.initials}
-                        </span>
+                      <article className="h-full rounded-3xl p-6 ring-1 ring-[#D5DCE6] sm:p-8">
                         <div>
                           <h3 className="text-xl font-bold">{f.name}</h3>
                           <p className="text-sm font-semibold text-[#0B7285]">{f.role}</p>

@@ -56,7 +56,7 @@ export const CONTACT = {
   phone: '+91 75818 21834',
   /** digits only, for tel: and wa.me links */
   phoneDigits: '917581821834',
-  email: 'astriseducation@gmail.com',
+  email: 'contact@astriseducation.in',
 } as const
 
 export const telHref = `tel:+${CONTACT.phoneDigits}`

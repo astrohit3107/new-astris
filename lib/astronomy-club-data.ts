@@ -15,12 +15,8 @@ import { CONTACT } from '@/lib/site-config'
 export const CLUB_PATH = '/astronomy-club'
 export const CLUB_PDF = '/downloads/astris-astronomy-club-proposal.pdf'
 
-/**
- * The club's own inbox. The rest of the site uses astriseducation@gmail.com;
- * school outreach goes from this address, so club leads go here too.
- * TODO(Rohit): confirm which address should be the public one site-wide.
- */
-export const CLUB_EMAIL = 'contact@astriseducation.in'
+/** Where club demo requests are emailed. Same as the site's public CONTACT.email. */
+export const CLUB_EMAIL = CONTACT.email
 
 export const CLUB_WHATSAPP_MESSAGE =
   "Hi Astris, I'd like to know more about the Astronomy Club for our school."
@@ -735,17 +731,14 @@ export const WHY = {
     { value: '500+', label: 'astronomy camps conducted' },
     { value: 'Nakshatra Scopes', label: 'our own telescopes' },
   ],
-  // No founder photos exist in the repo, so the page shows initials.
-  // TODO(Rohit): send founder photos if you want them on the page.
+  // TODO(Rohit): founder photos to come; the cards are text-only until then.
   founders: [
     {
-      initials: 'RA',
       name: 'Rohit Agrawal',
       role: 'Founder',
       bio: 'Founded Astris Space to make astronomy something students do, not just read about. He has taught astronomy to more than 50,000 students and has led astronomy tours and camps for years, from dark-sky nights near Delhi to astrophotography expeditions in Ladakh.',
     },
     {
-      initials: 'HP',
       name: 'Harshavardhan Patil',
       role: 'Co-founder (IIT Roorkee alumnus)',
       bio: 'Leads marketing and growth at Astris Space, and brought IIT Roorkee into the programme’s development, including its quality checks.',

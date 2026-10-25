@@ -102,7 +102,7 @@ export const ASTRO_CONTACT = {
   brand: 'Astris Space',
   phone: '+91 75818 21834',
   whatsapp: '917581821834',
-  email: 'astriseducation@gmail.com',
+  email: 'contact@astriseducation.in',
   bookingPhone: '+91 75818 21834',
 } as const
 

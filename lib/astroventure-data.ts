@@ -25,7 +25,7 @@ export const SITE = {
   tagline: 'Himalayan Dark-Sky Astronomy Expeditions',
   phone: '+91 75818 21834',
   whatsapp: '917581821834', // digits only, used for wa.me links
-  email: 'astriseducation@gmail.com',
+  email: 'contact@astriseducation.in',
   instagram: 'https://instagram.com/',
   twitter: 'https://twitter.com/',
   youtube: 'https://youtube.com/',
