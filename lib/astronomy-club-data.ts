@@ -14,6 +14,8 @@ import { CONTACT } from '@/lib/site-config'
 
 export const CLUB_PATH = '/astronomy-club'
 export const CLUB_PDF = '/downloads/astris-astronomy-club-proposal.pdf'
+/** The DIY kit guide: every build, what comes from home and what Astris supplies. */
+export const CLUB_KIT_PDF = '/downloads/astris-club-kit-guide.pdf'
 
 /** Where club demo requests are emailed. Same as the site's public CONTACT.email. */
 export const CLUB_EMAIL = CONTACT.email
