@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import ClubBanner from '@/components/astronomy-club/club-banner'
 import { Reveal, Eyebrow, SectionHead, Rule, CtaPair } from '@/components/program/ui'
 import {
   ASTROED,
@@ -163,6 +164,16 @@ export default function AstroEdPage() {
                   className="h-full max-h-[560px] w-full object-cover"
                 />
               </figure>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ───────────────────── ASTRONOMY CLUB ───────────────────── */}
+        {/* The zero-cost first step before a full Space Lab. */}
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <Reveal>
+              <ClubBanner />
             </Reveal>
           </div>
         </section>

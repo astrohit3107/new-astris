@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { ASTROED } from '@/lib/astroed-data'
 import { ASTROTRAIN } from '@/lib/astrotrain-data'
+import ClubBanner from '@/components/astronomy-club/club-banner'
 
 /**
  * Homepage teasers for AstroEd and AstroTrain.
@@ -93,6 +94,8 @@ export default function ProgramTeasers() {
             </a>
           ))}
         </div>
+
+        <ClubBanner className="mt-12" />
       </div>
     </section>
   )
