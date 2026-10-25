@@ -65,6 +65,17 @@ describe('POST /api/club-demo', () => {
     expect(sent.reply_to).toBe('principal@example.com')
   })
 
+  it('labels a quote request in the subject and rows', async () => {
+    fetchMock.mockImplementation(async () => new Response(JSON.stringify({ success: 'true' }), { status: 200 }))
+    const res = await POST(request({ ...valid, kind: 'quote', students: '35' }))
+    expect(res.status).toBe(200)
+    const sent = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(sent._subject).toBe('Astronomy Club quote request — Test School, Gurugram')
+    expect(sent['Request']).toBe('Quote')
+    expect(sent['Approximate number of students']).toBe('35')
+    expect(sent['Preferred demo week']).toBeUndefined()
+  })
+
   it('rejects missing required fields', async () => {
     const res = await POST(request({ ...valid, school: '' }))
     expect(res.status).toBe(400)

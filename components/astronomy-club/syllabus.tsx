@@ -104,17 +104,54 @@ export default function Syllabus() {
             aria-live="polite"
           >
             {board === 'cbse' ? (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0B7285]">
-                  {band.name} ({band.grades}) · in their NCERT books
+              <div className="flex h-full flex-col">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className="rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em]"
+                    style={{ background: YEAR_COLORS[row.year], color: row.year === 'B' ? '#FFFFFF' : '#0E1A3A' }}
+                  >
+                    Year {row.year}
+                  </span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#075E6C]">Club theme</span>
+                </div>
+                <h3 className="club-display mt-2 text-2xl font-bold text-[#0E1A3A] sm:text-3xl">{row.theme}</h3>
+
+                {/* The chosen band: the chapter it meets in its own books. */}
+                <div className="mt-6 rounded-2xl p-5" style={{ background: `${band.color}1F`, boxShadow: `inset 0 0 0 1.5px ${band.color}` }}>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0E1A3A]">
+                    {band.name} · {band.grades} · in their NCERT books
+                  </p>
+                  <p className="club-display mt-2 text-xl font-bold leading-snug text-[#0E1A3A] sm:text-2xl">{row[bandId]}</p>
+                </div>
+
+                {/* The same week, through the other two lenses. */}
+                <p className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B4663]">
+                  Same theme, the other bands
                 </p>
-                <p className="club-display mt-3 text-2xl font-bold leading-snug text-[#0E1A3A] sm:text-3xl">
-                  {row[bandId]}
+                <ul className="mt-2 divide-y divide-[#D5DCE6]">
+                  {BANDS.filter((b) => b.id !== bandId).map((b) => (
+                    <li key={b.id}>
+                      <button
+                        type="button"
+                        onClick={() => setBandId(b.id)}
+                        className="flex w-full items-start gap-3 py-3 text-left transition-colors hover:bg-[#EAF5F8]/60"
+                      >
+                        <span aria-hidden="true" className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: b.color }} />
+                        <span>
+                          <span className="block text-sm font-semibold text-[#0E1A3A]">
+                            {b.name} <span className="font-normal text-[#3B4663]">· {b.grades}</span>
+                          </span>
+                          <span className="mt-0.5 block text-sm text-[#3B4663]">{row[b.id]}</span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="mt-auto border-t border-[#D5DCE6] pt-4 text-sm text-[#3B4663]">
+                  One theme a week for the whole club, taught through each band’s own chapters.
                 </p>
-                <p className="mt-5 text-sm text-[#3B4663]">
-                  Club theme: <strong className="text-[#0E1A3A]">{row.theme}</strong> · taught in Year {row.year}
-                </p>
-              </>
+              </div>
             ) : (
               <>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0B7285]">

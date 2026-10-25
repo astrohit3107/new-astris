@@ -206,6 +206,7 @@ export function CountUp({
 
 export type ClubEvent =
   | 'club_cta_demo_click'
+  | 'club_cta_quote_click'
   | 'club_form_submit'
   | 'club_pdf_download'
   | 'club_whatsapp_click'
