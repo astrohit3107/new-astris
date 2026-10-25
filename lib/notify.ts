@@ -23,7 +23,14 @@ export async function sendNotification(input: {
   rows: [string, string][]
   replyTo?: string
   origin?: string
+  /** Overrides NOTIFY_RECIPIENTS (Resend and FormSubmit; Web3Forms always
+   *  delivers to the inbox that owns its access key). */
+  to?: string[]
+  /** Sender name shown by Web3Forms and Resend. */
+  fromName?: string
 }): Promise<{ sent: boolean; reason?: string }> {
+  const recipients = input.to?.length ? input.to : NOTIFY_RECIPIENTS
+  const fromName = input.fromName || 'Nakshatraalay reservations'
   const text = input.rows.map(([k, v]) => `${k}: ${v}`).join('\n')
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;color:#0b0b14">
@@ -50,7 +57,7 @@ export async function sendNotification(input: {
         body: JSON.stringify({
           access_key: web3,
           subject: input.subject,
-          from_name: 'Nakshatraalay reservations',
+          from_name: fromName,
           replyto: input.replyTo,
           message: text,
           ...Object.fromEntries(input.rows),
@@ -65,14 +72,14 @@ export async function sendNotification(input: {
 
   // Resend — needs a verified sending domain.
   const resend = process.env.RESEND_API_KEY
-  if (resend && NOTIFY_RECIPIENTS.length) {
+  if (resend && recipients.length) {
     try {
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${resend}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: process.env.NOTIFY_FROM || 'Nakshatraalay <onboarding@resend.dev>',
-          to: NOTIFY_RECIPIENTS,
+          from: process.env.NOTIFY_FROM || `${fromName.split(' ')[0]} <onboarding@resend.dev>`,
+          to: recipients,
           reply_to: input.replyTo,
           subject: input.subject,
           html,
@@ -88,9 +95,9 @@ export async function sendNotification(input: {
 
   // FormSubmit — zero config, but blocks datacenter IPs, so it is the last
   // resort here rather than the default it is on the browser-side forms.
-  if (NOTIFY_RECIPIENTS.length && input.origin) {
+  if (recipients.length && input.origin) {
     try {
-      const [primary, ...cc] = NOTIFY_RECIPIENTS
+      const [primary, ...cc] = recipients
       const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(primary)}`, {
         method: 'POST',
         headers: {
