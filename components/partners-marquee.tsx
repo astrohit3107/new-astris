@@ -18,6 +18,7 @@ export interface PartnerLogo {
 }
 
 export const partnerLogos: PartnerLogo[] = [
+  { name: 'Taj Hotels', src: '/partners/taj.jpg' },
   { name: 'Bennett University', src: '/partners/bennett-university.jpeg' },
   { name: 'Edterra Edventures', src: '/partners/edterra.png' },
   { name: 'Indiahikes', src: '/partners/indiahikes.jpg' },
@@ -31,7 +32,7 @@ function LogoItem({ logo, ariaHidden }: { logo: PartnerLogo; ariaHidden?: boolea
       {/* Most of these marks ship on a solid white background (JPEG/PNG without
           alpha), so we seat every logo on a matching white tile. That reads as a
           deliberate lockup on the dark theme instead of stray white rectangles,
-          and keeps all five visually consistent. */}
+          and keeps them all visually consistent. */}
       <div className="flex h-24 w-40 items-center justify-center rounded-xl bg-white px-4 py-3 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] transition-transform duration-500 hover:scale-[1.04] sm:h-28 sm:w-48 sm:px-5">
         <img
           src={logo.src}
@@ -66,8 +67,8 @@ export default function PartnersMarquee() {
             Organisations we&rsquo;ve conducted sessions for
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-foreground/60">
-            From universities and tourism boards to India&rsquo;s best-known travel and hostel
-            networks — we bring telescopes, astronomers and the night sky to their people.
+            From luxury hotels, universities and tourism boards to India&rsquo;s best-known travel
+            and hostel networks — we bring telescopes, astronomers and the night sky to their people.
           </p>
         </div>
       </div>
