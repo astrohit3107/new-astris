@@ -110,7 +110,7 @@ function SiteIdentitySchema() {
         alternateName: [SITE.shortName],
         url: `${SITE_URL}/`,
         description: SITE.description,
-        email: 'astriseducation@gmail.com',
+        email: 'contact@astriseducation.in',
         telephone: '+91 75818 21834',
         address: { '@type': 'PostalAddress', addressCountry: 'IN' },
         // A raster logo with explicit dimensions. Google accepts SVG, but the

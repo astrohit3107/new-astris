@@ -36,6 +36,15 @@ const ASTROED_EXPERIENCE = {
   href: '/astroed',
 }
 
+/** The weekly club: the zero-cost way for a school to start. */
+const CLUB_EXPERIENCE = {
+  label: 'Astronomy Club',
+  title: 'Astris Astronomy Club — a weekly club at zero cost to the school',
+  detail:
+    'A weekly, NCERT-linked astronomy club for Grades 4–12, run by Astris educators with real telescopes and family sky-watches. The school gives a room and a slot; parents enrol directly with Astris.',
+  href: '/astronomy-club',
+}
+
 export const educationGuides: Guide[] = [
   /* ------------------------------------------------------------------ HUB */
   {
@@ -201,7 +210,7 @@ export const educationGuides: Guide[] = [
           'That is a scheduling decision, not a fixed quantity. Most schools run it as a regular period or club slot with occasional evening observation sessions timed around the Moon. The sequence is designed with the school so it fits the existing timetable.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education/schools',
       'astronomy-education/space-lab',
@@ -333,7 +342,7 @@ export const educationGuides: Guide[] = [
           'Tie it to the syllabus explicitly and end the year with student projects. Observation logs, student-captured images of the Moon and planets, and presented projects are concrete outputs a board can see, and they attach directly to physics and geography topics already being assessed.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education',
       'astronomy-education/space-lab',
@@ -476,7 +485,7 @@ export const educationGuides: Guide[] = [
           'Trained school faculty handle routine care — collimation checks, cleaning discipline, dew management and storage. Anything beyond that is part of the ongoing support the programme provides, which is worth confirming explicitly before you commit.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education',
       'astronomy-education/schools',
@@ -591,7 +600,7 @@ export const educationGuides: Guide[] = [
           'A well-planned workshop has an indoor session of equal value ready — telescope handling and optics, sky-motion work, rocketry or immersive material. Ask about this explicitly before booking; the answer tells you a lot about how many of these a provider has actually run.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education',
       'astronomy-education/schools',
@@ -744,7 +753,7 @@ export const educationGuides: Guide[] = [
           'Unfiltered or improperly filtered solar observation can cause permanent eye damage in seconds, which is why it is only ever done with full-aperture filtration rated for the purpose, or a dedicated solar instrument, under trained supervision. With correct equipment and procedure it is entirely safe and is one of the most rewarding things a school can run.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education',
       'astronomy-education/space-lab',
@@ -871,7 +880,7 @@ export const educationGuides: Guide[] = [
           'Rocketry flight data and iterations, observation logs, sunspot and lunar-phase datasets, student-captured images of the Moon and planets, and project presentations. These are the outputs that make the programme legible to parents and to a board.',
       },
     ],
-    experiences: [ASTROED_EXPERIENCE],
+    experiences: [CLUB_EXPERIENCE, ASTROED_EXPERIENCE],
     related: [
       'astronomy-education',
       'astronomy-education/space-lab',

@@ -28,6 +28,12 @@ export default function Header() {
     { label: 'About', href: '/#about' },
   ]
   const isActive = (href: string) => href.startsWith('/') && !href.includes('#') && pathname === href
+  // AstroEd's programmes. The nav has no room for another top-level item at
+  // tablet width, so the club sits first in an AstroEd dropdown instead.
+  const astroedLinks = [
+    { label: 'Astronomy Club', blurb: 'A weekly club, at zero cost to the school', href: '/astronomy-club' },
+    { label: 'AstroEd Space Lab', blurb: 'A permanent lab and curriculum', href: '/astroed' },
+  ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -89,18 +95,48 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                aria-current={isActive(l.href) ? 'page' : undefined}
-                className={`text-xs font-medium transition-colors duration-300 hover:text-foreground ${
-                  isActive(l.href) ? 'text-foreground' : 'text-foreground/60'
-                }`}
-              >
-                {l.label}
-              </a>
-            ))}
+            {navLinks.map((l) =>
+              l.href === '/astroed' ? (
+                <div key={l.href} className="group relative">
+                  <a
+                    href={l.href}
+                    aria-current={isActive(l.href) ? 'page' : undefined}
+                    className={`inline-flex items-center gap-1 text-xs font-medium transition-colors duration-300 hover:text-foreground ${
+                      isActive(l.href) || isActive('/astronomy-club') ? 'text-foreground' : 'text-foreground/60'
+                    }`}
+                  >
+                    {l.label}
+                    <ChevronDown size={12} className="text-foreground/50 transition-transform duration-300 group-hover:rotate-180" />
+                  </a>
+                  <div className="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="overflow-hidden rounded-xl border border-foreground/10 bg-background/95 p-1.5 shadow-2xl backdrop-blur-xl">
+                      {astroedLinks.map((a) => (
+                        <a
+                          key={a.href}
+                          href={a.href}
+                          aria-current={isActive(a.href) ? 'page' : undefined}
+                          className="flex flex-col rounded-lg px-3 py-2.5 transition-colors hover:bg-foreground/5"
+                        >
+                          <span className="text-xs font-bold text-foreground">{a.label}</span>
+                          <span className="mt-0.5 text-[11px] text-foreground/55">{a.blurb}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  aria-current={isActive(l.href) ? 'page' : undefined}
+                  className={`text-xs font-medium transition-colors duration-300 hover:text-foreground ${
+                    isActive(l.href) ? 'text-foreground' : 'text-foreground/60'
+                  }`}
+                >
+                  {l.label}
+                </a>
+              ),
+            )}
           </nav>
 
           <div className="hidden md:flex items-center space-x-2">
@@ -157,7 +193,7 @@ export default function Header() {
                   <ArrowUpRight size={13} className="text-foreground/40" />
                 </a>
               </div>
-              {navLinks.map((l) => (
+              {[...navLinks.slice(0, 2), { label: 'Astronomy Club', href: '/astronomy-club' }, ...navLinks.slice(2)].map((l) => (
                 <a
                   key={l.href}
                   href={l.href}

@@ -1,0 +1,320 @@
+/* ============================================================================
+   /astronomy-club — page-scoped styles
+   ----------------------------------------------------------------------------
+   Everything here is namespaced `.club-*` so nothing leaks into the rest of
+   the site. Layout lives in Tailwind classes; this file holds the type
+   families, the buttons, and the keyframes the scenes share.
+   ========================================================================== */
+
+.club {
+  font-family: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  color: #ffffff;
+  background: #050b1f;
+  -webkit-font-smoothing: antialiased;
+  /* Slide-ins start off-canvas; clip (not hidden) keeps sticky pinning working. */
+  overflow-x: clip;
+}
+.club-display,
+.club h2,
+.club h3,
+.club h1 {
+  font-family: var(--font-bricolage), var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+.club-h2 {
+  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.club-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #5cc6d6;
+}
+.club-light .club-kicker {
+  color: #075e6c;
+}
+
+/* Visible keyboard focus everywhere on the page. */
+.club :focus-visible {
+  outline: 3px solid #5cc6d6;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.club-light :focus-visible {
+  outline-color: #0b7285;
+}
+
+/* ------------------------------------------------------------------ buttons */
+.club-btn-primary,
+.club-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.club-btn-primary {
+  background: #e8a33d;
+  color: #0e1a3a;
+}
+.club-btn-primary:hover {
+  background: #f2b65a;
+  transform: translateY(-2px);
+}
+.club-btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+.club-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+}
+.club-light .club-btn-ghost {
+  border-color: #0e1a3a40;
+  color: #0e1a3a;
+}
+.club-light .club-btn-primary {
+  background: #0e1a3a;
+  color: #ffffff;
+}
+.club-light .club-btn-primary:hover {
+  background: #0b7285;
+}
+
+/* --------------------------------------------------------------- hero star */
+.club-star {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 12px 3px rgba(255, 255, 255, 0.85),
+    0 0 40px 10px rgba(191, 231, 238, 0.35);
+  animation:
+    club-star-in 1.2s ease-out both,
+    club-twinkle 3.2s ease-in-out 1.2s infinite;
+}
+@keyframes club-star-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes club-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.8);
+  }
+}
+
+/* Typed line: revealed left to right in character-sized steps. */
+.club-type {
+  display: inline-block;
+  animation: club-type 1.5s steps(26, end) 0.5s both;
+}
+.club-type::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.12em;
+  background: #5cc6d6;
+  animation: club-caret 0.9s step-end 0.5s 3 both;
+}
+@keyframes club-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes club-caret {
+  50% {
+    opacity: 0;
+  }
+}
+.club-question {
+  animation: club-rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both;
+}
+/* Starts faint, never invisible: the question is the page's largest paint,
+   and an opacity-0 start would hold LCP back until the animation ends. */
+@keyframes club-rise {
+  from {
+    opacity: 0.14;
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Scroll cue: a dot orbiting a ring. */
+.club-cue {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.club-cue::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 999px;
+  background: #e8a33d;
+  transform-origin: 3.5px 21px;
+  animation: club-orbit 2.8s linear infinite;
+}
+@keyframes club-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------- shared bits */
+
+/* Strokes that draw themselves once their Reveal parent is in view. */
+.club-draw {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 0;
+}
+[data-in] .club-draw-on,
+.club-draw-on[data-in] {
+  animation: club-draw 1.6s ease-out both;
+}
+@keyframes club-draw {
+  from {
+    stroke-dashoffset: 600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Content swaps in when a toggle changes it. */
+.club-slide-in {
+  animation: club-slide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes club-slide {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The four constraints collapse into one point of light (Scene 4). */
+.club-converge span {
+  transition:
+    transform 1.4s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 1.4s ease;
+}
+[data-in] .club-converge span {
+  transform: translate(0, 0) !important;
+  opacity: 0;
+}
+.club-converge-core {
+  transform: scale(0.3);
+  opacity: 0;
+  transition:
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.1s,
+    opacity 1s ease 1.1s;
+}
+[data-in] .club-converge-core {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Constellation lines between level badges (Scene 8) and the closing sky. */
+.club-const-line {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  transition: stroke-dashoffset 1.4s ease-out;
+}
+[data-in] .club-const-line {
+  stroke-dashoffset: 0;
+}
+
+/* Pillars rising (Scene 13). */
+.club-pillar {
+  transform-origin: bottom;
+  transform: scaleY(0.15);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-in] .club-pillar {
+  transform: scaleY(1);
+}
+
+/* Four-week track filling (Scene 15). */
+.club-track-fill {
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
+}
+[data-in] .club-track-fill {
+  transform: scaleX(1);
+}
+
+.club-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+/* FAQ disclosure marker. */
+.club-faq summary {
+  list-style: none;
+}
+.club-faq summary::-webkit-details-marker {
+  display: none;
+}
+.club-faq[open] .club-faq-icon {
+  transform: rotate(45deg);
+}
+
+/* --------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .club *,
+  .club *::before,
+  .club *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .club-cue::after {
+    animation: none;
+  }
+}

@@ -45,6 +45,7 @@ export function pageEntries(): SitemapEntry[] {
   return [
     { path: '/', priority: 1.0, changeFrequency: 'weekly' },
     { path: '/astroed', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/astronomy-club', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/astrotrain', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/nakshatraalay/gurgaon', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/first-light', priority: 0.8, changeFrequency: 'weekly' },

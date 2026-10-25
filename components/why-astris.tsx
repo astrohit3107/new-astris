@@ -21,7 +21,7 @@ export default function WhyAstris() {
     {
       icon: Award,
       title: 'Large-Scale Impact',
-      description: '500+ schools, 50+ resorts, 50,000+ students annually',
+      description: '100+ schools, 10+ resorts, 50,000+ students annually',
     },
   ]
 
@@ -85,7 +85,7 @@ export default function WhyAstris() {
               <p className="text-xs md:text-sm text-foreground/70 leading-tight">Students</p>
             </div>
             <div className="space-y-1 text-center">
-              <p className="text-2xl md:text-3xl font-black text-foreground">50+</p>
+              <p className="text-2xl md:text-3xl font-black text-foreground">10+</p>
               <p className="text-xs md:text-sm text-foreground/70 leading-tight">Resorts</p>
             </div>
           </div>
