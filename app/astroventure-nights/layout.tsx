@@ -23,11 +23,11 @@ const SITE_URL = CANONICAL_SITE_URL
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Astroventure Nights — Himalayan Dark-Sky Astronomy Expeditions',
+    default: 'Astroventure Nights: Himalayan Stargazing Expeditions',
     template: '%s · Astroventure Nights',
   },
   description:
-    'Experience the Himalayas through the lens of astronomy. Explore pristine dark skies, observe celestial wonders through powerful telescopes, and create unforgettable memories under the stars with Astris SpaceEd.',
+    'Himalayan stargazing expeditions with Astris SpaceEd: pristine dark skies, powerful telescopes and guided nights under the stars. See the destinations.',
   applicationName: 'Astroventure Nights',
   keywords: [
     'astronomy expedition India',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/astroventure-nights' },
   openGraph: {
     type: 'website',
-    title: 'Astroventure Nights — Himalayan Dark-Sky Astronomy Expeditions',
+    title: 'Astroventure Nights: Himalayan Stargazing Expeditions',
     description:
       'Pristine dark skies, research-grade telescopes and expert astronomers across the Indian Himalayas. Reserve your night under the stars.',
     siteName: 'Astroventure Nights',
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Astroventure Nights — Himalayan Dark-Sky Astronomy Expeditions',
+    title: 'Astroventure Nights: Himalayan Stargazing Expeditions',
     description:
       'Pristine dark skies, research-grade telescopes and expert astronomers across the Indian Himalayas.',
   },

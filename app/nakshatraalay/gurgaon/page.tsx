@@ -32,7 +32,7 @@ import FindUs from '@/components/nakshatraalay/find-us'
  */
 
 const PATH = '/nakshatraalay/gurgaon'
-const TITLE = 'Nakshatraalay Gurgaon — Stargazing & Astronomy Stays near Delhi'
+const TITLE = 'Nakshatraalay Gurgaon: Stargazing & Astronomy Stays'
 const DESCRIPTION =
   'Delhi NCR’s gateway to the universe. Telescope nights, astrophotography workshops and stays under the stars, an easy drive from Gurgaon and Delhi.'
 

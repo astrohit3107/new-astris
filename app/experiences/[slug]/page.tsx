@@ -31,7 +31,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!exp) return { title: 'Not found' }
 
   const title = `${exp.title} — ${NAKSHATRAALAY.name}`
-  const description = exp.description ?? exp.summary
+  // The one-line summary fits a results snippet; the long description is
+  // for the page itself and would be cut off mid-sentence.
+  const description = exp.summary
   return {
     title,
     description,

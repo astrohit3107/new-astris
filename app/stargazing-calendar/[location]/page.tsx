@@ -19,8 +19,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { location } = await params
   const l = getLocation(location)
   if (!l) return {}
-  const title = `Stargazing Calendar for ${l.name} — Moon, Meteor Showers & Planets`
-  const description = `What is visible in the night sky from ${l.name}, ${l.region}: moon phases, meteor showers, eclipses and planet visibility, calculated for ${l.latitude.toFixed(2)}°N ${l.longitude.toFixed(2)}°E.`
+  // Kept under ~60 / ~155 characters so results show them whole.
+  const title = `${l.name} Stargazing Calendar: ${l.name.length > 14 ? 'Moon & Meteors' : 'Moon, Meteors, Planets'}`
+  const description = `The night sky over ${l.name}, ${l.region}: moon phases, meteor showers, eclipses and planets, calculated for ${l.latitude.toFixed(2)}°N ${l.longitude.toFixed(2)}°E.`
   return {
     title, description,
     alternates: { canonical: `/stargazing-calendar/${l.slug}` },

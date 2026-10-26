@@ -20,9 +20,9 @@ import { SITE, absoluteUrl } from '@/lib/site-config'
  */
 
 const PATH = '/guides'
-const TITLE = 'Astris Guides — Astronomy, Astrophotography and Stargazing in India'
+const TITLE = 'Astronomy, Astrophotography & Stargazing Guides | Astris'
 const DESCRIPTION =
-  'Practical guides from Astris Space: astronomy programmes for schools, astrophotography from Indian skies, stargazing and dark-sky travel, and astronomy experiences for properties.'
+  'Practical guides from Astris Space: school astronomy programmes, astrophotography from Indian skies, stargazing and dark-sky travel, and resort astronomy.'
 
 export const metadata: Metadata = {
   title: TITLE,

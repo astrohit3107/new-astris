@@ -21,9 +21,9 @@ const SITE_URL = CANONICAL_SITE_URL
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title:
-    'Astroventure Astrophotography Expedition — Master the Night Sky in the Himalayas',
+    'Ladakh Astrophotography Expedition | Astroventure',
   description:
-    'A 6-day immersive astrophotography expedition through Ladakh (Leh · Pangong · Hanle · Tso Moriri). Learn Milky Way photography, deep-space imaging, star trails, timelapse and a professional editing workflow under India’s darkest skies. Small-group mentoring for beginners & intermediate photographers. September & October new-moon batches.',
+    '6-day astrophotography expedition through Ladakh (Leh, Pangong, Hanle, Tso Moriri): Milky Way, deep-sky, star trails and editing, in small mentored groups.',
   applicationName: 'Astroventure Astrophotography Expedition',
   keywords: [
     'astrophotography expedition India',

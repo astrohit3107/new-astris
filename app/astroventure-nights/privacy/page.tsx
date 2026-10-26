@@ -3,7 +3,7 @@ import { SITE } from '@/lib/astroventure-data'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'How Astris SpaceEd collects, uses and protects your information.',
+  description: 'How Astris SpaceEd collects, uses and protects your information when you book or enquire about Astroventure Nights.',
   robots: { index: false, follow: true },
 }
 

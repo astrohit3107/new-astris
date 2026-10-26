@@ -718,7 +718,9 @@ function cityGuide(c: City): Guide {
   return {
     slug: `${HUB}/${c.slug}`,
     cluster: 'astronomy-club',
-    title: `Astronomy Club for Schools in ${c.display}`,
+    // Long display names (e.g. the Chandigarh tricity) would be cut off in
+    // results, so the <title> falls back to the short city name.
+    title: `Astronomy Club for Schools in ${c.display.length > 30 ? c.name : c.display}`,
     description: `Weekly NCERT-linked astronomy club for ${c.name} schools, Grades 4–12: real telescopes, solar observing and family sky-watches. No cost to the school.`,
     h1: `Astronomy club for schools in ${c.display}`,
     eyebrow: c.ncr ? `${c.name} · Delhi NCR` : `${c.name} · ${c.region}`,
@@ -749,9 +751,9 @@ export const clubGuides: Guide[] = [
     slug: HUB,
     cluster: 'astronomy-club',
     isHub: true,
-    title: 'Astronomy Club for Schools in India — How a Weekly Club Works',
+    title: 'Astronomy Club for Schools in India: How It Works',
     description:
-      'What a school astronomy club looks like when it is done properly: weekly NCERT-linked sessions for Grades 4–12, real telescopes, safe solar observing, family sky-watches, and no cost to the school.',
+      'A school astronomy club done properly: weekly NCERT-linked sessions for Grades 4–12, real telescopes, safe solar observing and family sky-watches.',
     h1: 'Astronomy club for schools',
     eyebrow: 'Astronomy club',
     lede:
@@ -834,9 +836,9 @@ export const clubGuides: Guide[] = [
   {
     slug: `${HUB}/how-to-start`,
     cluster: 'astronomy-club',
-    title: 'How to Start an Astronomy Club in School — A Principal’s Checklist',
+    title: 'How to Start an Astronomy Club in School: Checklist',
     description:
-      'A practical, four-week path from yes to a first astronomy club session: the room, the slot, the parent note, enrolment, safety and what to measure. Written for Indian school principals and coordinators.',
+      'A four-week path from yes to a first school astronomy club session: the room, the slot, the parent note, enrolment and safety. For principals and coordinators.',
     h1: 'How to start an astronomy club in your school',
     eyebrow: 'Astronomy club · How to start',
     lede:
@@ -896,9 +898,9 @@ export const clubGuides: Guide[] = [
   {
     slug: `${HUB}/activities`,
     cluster: 'astronomy-club',
-    title: 'Astronomy Club Activities for School Students — Ideas by Grade',
+    title: 'Astronomy Club Activities for Students, by Grade',
     description:
-      'Astronomy club activities that work in Indian schools, by grade band: Moon diaries, sunspot logs, planispheres, water rockets, CD spectroscopes and more, with what each one teaches.',
+      'Astronomy club activities that work in Indian schools, by grade: Moon diaries, sunspot logs, planispheres, water rockets and CD spectroscopes.',
     h1: 'Astronomy club activities for school students',
     eyebrow: 'Astronomy club · Activities',
     lede:

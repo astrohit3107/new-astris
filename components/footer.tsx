@@ -20,7 +20,7 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold text-foreground text-sm mb-3">Products</h4>
+            <h3 className="font-semibold text-foreground text-sm mb-3">Products</h3>
             <ul className="space-y-1.5">
               <li>
                 <a href="/astroventure-astrophotography" className="text-xs font-semibold text-foreground hover:text-accent transition">
@@ -62,7 +62,7 @@ export default function Footer() {
               meant to be found through search, breadcrumbs and contextual
               links, not by cluttering the header. */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+            <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
                 <a href="/#about" className="text-sm text-foreground/70 hover:text-foreground transition">
@@ -89,7 +89,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Get in Touch</h4>
+            <h3 className="font-semibold text-foreground mb-4">Get in Touch</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-2 text-sm text-foreground/70">
                 <Phone size={16} />

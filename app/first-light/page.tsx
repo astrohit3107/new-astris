@@ -22,7 +22,7 @@ import NakshatraalayNav from '@/components/nakshatraalay/nav'
 const PATH = '/first-light'
 const TITLE = 'Nakshatraalay First Light — Delhi NCR, Look Up'
 const DESCRIPTION =
-  'The universe has a new home in Delhi NCR. Nakshatraalay Gurgaon is opening — telescopes, dark-sky nights, astrophotography and a place to stay under the stars. Join the First Light list.'
+  'Nakshatraalay Gurgaon is opening in Delhi NCR: telescopes, dark-sky nights, astrophotography and a place to stay under the stars. Join the First Light list.'
 
 export const metadata: Metadata = {
   title: TITLE,

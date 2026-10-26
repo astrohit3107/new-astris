@@ -148,8 +148,8 @@ export const ASTROTRAIN_CONDITIONS_NOTE =
 
 /* --- SEO ------------------------------------------------------------------ */
 export const ASTROTRAIN_SEO = {
-  title: 'AstroTrain — Build an Astronomy Experience at Your Property | Astris Space',
+  title: 'AstroTrain: Stargazing Programme for Resorts & Hotels',
   description:
-    'AstroTrain equips resorts and hotels with professional telescopes, trains your team to lead stargazing sessions, and supports the programme long-term — turning dark skies into a guest experience your staff can run.',
+    'Professional telescopes for resorts and hotels, training for your team to lead stargazing sessions, and long-term support: a guest experience staff can run.',
   path: '/astrotrain',
 } as const

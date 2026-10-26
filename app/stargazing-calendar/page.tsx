@@ -9,7 +9,7 @@ import NakshatraalayNav from '@/components/nakshatraalay/nav'
 const PATH = '/stargazing-calendar'
 const TITLE = 'Astris Stargazing Calendar — The Night Sky Over India'
 const DESCRIPTION =
-  'Moon phases, meteor showers, eclipses, conjunctions and planetary visibility, calculated for your location in India. See which nights are actually worth going out.'
+  'Moon phases, meteor showers, eclipses and planets, calculated for your location in India. See which nights are actually worth going out to stargaze.'
 
 export const metadata: Metadata = {
   title: TITLE,

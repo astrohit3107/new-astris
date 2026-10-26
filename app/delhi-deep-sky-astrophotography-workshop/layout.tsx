@@ -17,9 +17,9 @@ const SITE_URL = CANONICAL_SITE_URL
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title:
-    'Deep-Sky Astrophotography Workshop in Delhi — Narrowband & DSO Imaging | Astris Space',
+    'Deep-Sky Astrophotography Workshop in Delhi | Narrowband',
   description:
-    'A hands-on weekend workshop on photographing nebulae and deep-sky objects from heavily light-polluted Delhi using narrowband imaging (Hα · OIII · SII). Learn the full workflow — acquisition, calibration, stacking and processing — with a live imaging session. September & October 2026.',
+    'Weekend workshop imaging nebulae from light-polluted Delhi with narrowband (Hα, OIII, SII): acquisition, calibration, stacking, processing and live imaging.',
   applicationName: WORKSHOP.name,
   keywords: [
     'astrophotography workshop Delhi',

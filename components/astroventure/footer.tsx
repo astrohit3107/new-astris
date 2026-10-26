@@ -35,7 +35,7 @@ export default function AstroFooter() {
 
           {/* Destinations */}
           <div>
-            <h4 className="text-sm font-semibold text-white">Destinations</h4>
+            <h3 className="text-sm font-semibold text-white">Destinations</h3>
             <ul className="mt-4 space-y-2.5">
               {destinations.map((d) => (
                 <li key={d.slug}>
@@ -52,7 +52,7 @@ export default function AstroFooter() {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-sm font-semibold text-white">Quick Links</h4>
+            <h3 className="text-sm font-semibold text-white">Quick Links</h3>
             <ul className="mt-4 space-y-2.5">
               {quickLinks.map((l) => (
                 <li key={l.href}>
@@ -66,7 +66,7 @@ export default function AstroFooter() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-semibold text-white">Get in Touch</h4>
+            <h3 className="text-sm font-semibold text-white">Get in Touch</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/55">
               <li>
                 <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} className="flex items-center gap-2 transition-colors hover:text-white">
