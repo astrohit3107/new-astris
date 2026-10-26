@@ -77,6 +77,11 @@ export function isSheetsConfigured(): boolean {
   )
 }
 
+/** Credentials alone, without a booking ledger — enough for other sheets. */
+export function hasServiceAccount(): boolean {
+  return Boolean(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY)
+}
+
 /** The PEM survives a round trip through env vars with literal \n. */
 function privateKey(): string {
   return (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n').trim()
@@ -98,7 +103,7 @@ function b64url(input: Buffer | string): string {
 let cachedToken: { token: string; expiresAt: number } | null = null
 
 async function accessToken(): Promise<string | null> {
-  if (!isSheetsConfigured()) return null
+  if (!hasServiceAccount()) return null
   if (cachedToken && Date.now() < cachedToken.expiresAt) return cachedToken.token
 
   const now = Math.floor(Date.now() / 1000)
@@ -151,13 +156,41 @@ async function accessToken(): Promise<string | null> {
  *  Writing
  * -------------------------------------------------------------------------- */
 
-/** Append one booking. Returns false rather than throwing — the caller has
- *  already taken money and must not fail because a spreadsheet was busy. */
-export async function appendBooking(row: BookingRow): Promise<{ ok: boolean; reason?: string }> {
+/**
+ * Append rows to any spreadsheet the service account can edit. Returns a
+ * reason rather than throwing, like everything else in here.
+ */
+export async function appendValues(
+  spreadsheetId: string,
+  rangeA1: string,
+  values: string[][]
+): Promise<{ ok: boolean; reason?: string }> {
   const token = await accessToken()
   if (!token) return { ok: false, reason: 'sheets-not-configured' }
 
-  const values = [
+  try {
+    const url =
+      `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}` +
+      `/values/${encodeURIComponent(rangeA1)}:append` +
+      `?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values }),
+    })
+    if (res.ok) return { ok: true }
+    return { ok: false, reason: `sheets:${res.status} ${(await res.text()).slice(0, 200)}` }
+  } catch (e) {
+    return { ok: false, reason: `sheets-exception:${String(e).slice(0, 160)}` }
+  }
+}
+
+/** Append one booking. Returns false rather than throwing — the caller has
+ *  already taken money and must not fail because a spreadsheet was busy. */
+export async function appendBooking(row: BookingRow): Promise<{ ok: boolean; reason?: string }> {
+  if (!isSheetsConfigured()) return { ok: false, reason: 'sheets-not-configured' }
+
+  const result = await appendValues(process.env.GOOGLE_SHEET_ID!, `${SHEET_TAB}!A:P`, [
     [
       row.bookingId,
       row.bookedAt,
@@ -176,26 +209,9 @@ export async function appendBooking(row: BookingRow): Promise<{ ok: boolean; rea
       row.notes,
       row.source,
     ],
-  ]
-
-  try {
-    const url =
-      `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(process.env.GOOGLE_SHEET_ID!)}` +
-      `/values/${encodeURIComponent(`${SHEET_TAB}!A:P`)}:append` +
-      `?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values }),
-    })
-    if (res.ok) {
-      invalidateBookingCache()
-      return { ok: true }
-    }
-    return { ok: false, reason: `sheets:${res.status} ${(await res.text()).slice(0, 200)}` }
-  } catch (e) {
-    return { ok: false, reason: `sheets-exception:${String(e).slice(0, 160)}` }
-  }
+  ])
+  if (result.ok) invalidateBookingCache()
+  return result
 }
 
 /* -------------------------------------------------------------------------- *
@@ -242,6 +258,7 @@ function toRow(r: string[]): BookingRow {
  */
 export async function readBookings(): Promise<BookingRow[] | null> {
   if (cachedRows && Date.now() - cachedRows.at < READ_TTL_MS) return cachedRows.rows
+  if (!isSheetsConfigured()) return null
 
   const token = await accessToken()
   if (!token) return null
