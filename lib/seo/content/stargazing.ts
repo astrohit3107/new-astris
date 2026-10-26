@@ -82,7 +82,7 @@ export const stargazingGuides: Guide[] = [
     isHub: true,
     title: 'Stargazing in India — How to Actually See Something',
     description:
-      'A practical stargazing guide for India: what you can see without equipment, how to plan around the Moon and the monsoon, and how to choose a night that is worth travelling for.',
+      'A practical stargazing guide for India: what you can see without equipment, how to plan around the Moon and monsoon, and how to pick a night worth it.',
     h1: 'Stargazing in India',
     eyebrow: 'Stargazing',
     lede:
@@ -225,9 +225,9 @@ export const stargazingGuides: Guide[] = [
   {
     slug: 'stargazing/near-delhi',
     cluster: 'stargazing',
-    title: 'Stargazing Near Delhi — Where to Actually Go, and How Dark It Really Is',
+    title: 'Stargazing Near Delhi: Best Places & How Dark They Are',
     description:
-      'Honest options for stargazing near Delhi NCR: how far you have to drive to escape the light dome, what the sky is genuinely like when you get there, and when to go.',
+      'The best places for stargazing near Delhi NCR: how far to drive to escape the light dome, how dark each sky really is, and the best months and nights to go.',
     h1: 'Stargazing near Delhi',
     eyebrow: 'Near Delhi',
     lede:
@@ -352,9 +352,9 @@ export const stargazingGuides: Guide[] = [
   {
     slug: 'stargazing/delhi',
     cluster: 'stargazing',
-    title: 'Stargazing in Delhi — What You Can Actually See From the City',
+    title: 'Stargazing in Delhi: What You Can See From the City',
     description:
-      'What is genuinely visible from a Delhi rooftop or balcony: the Moon, the planets, bright double stars and clusters — plus when the city sky is at its clearest.',
+      'Stargazing in Delhi from a rooftop or balcony: the Moon, planets, bright double stars and clusters you can see, and when the city sky is clearest.',
     h1: 'Stargazing in Delhi',
     eyebrow: 'In the city',
     lede:
@@ -472,9 +472,9 @@ export const stargazingGuides: Guide[] = [
   {
     slug: 'stargazing/india',
     cluster: 'stargazing',
-    title: 'Stargazing in India — Regions, Seasons and What Each Sky Offers',
+    title: 'Stargazing in India: Regions, Seasons and Skies',
     description:
-      'A region-by-region look at stargazing in India: the trans-Himalayan rain shadow, the north-western deserts, the foothills and the south, and when each is at its best.',
+      'Stargazing in India region by region: the trans-Himalayan rain shadow, north-western deserts, the foothills and the south, and when each is at its best.',
     h1: 'Stargazing in India',
     eyebrow: 'The country',
     lede:
@@ -599,7 +599,7 @@ export const stargazingGuides: Guide[] = [
     cluster: 'stargazing',
     title: 'Weekend Stargazing Trips — How to Plan One That Works',
     description:
-      'Planning a weekend stargazing getaway from an Indian city: choosing the weekend around the Moon, how far to go, what to pack, and how to avoid the common disappointments.',
+      'Planning a weekend stargazing trip from an Indian city: picking the weekend around the Moon, how far to go, what to pack, and avoiding common letdowns.',
     h1: 'Weekend stargazing trips',
     eyebrow: 'Weekends',
     lede:
@@ -724,7 +724,7 @@ export const stargazingGuides: Guide[] = [
     cluster: 'stargazing',
     title: 'Dark Sky Places in India — Where the Sky Is Genuinely Dark',
     description:
-      'An honest guide to India’s dark-sky regions: the trans-Himalayan high desert, the Himalayan valleys and the accessible rural sites near the northern cities — with realistic sky ratings.',
+      'An honest guide to India’s dark-sky places: the trans-Himalayan desert, Himalayan valleys and rural sites near northern cities, with realistic sky ratings.',
     h1: 'Dark sky places in India',
     eyebrow: 'Dark skies',
     lede:
@@ -850,7 +850,7 @@ export const stargazingGuides: Guide[] = [
     cluster: 'stargazing',
     title: 'When and Where to See the Milky Way in India',
     description:
-      'How to see the Milky Way with your own eyes in India: the months the galactic core is up, how the monsoon reshapes the season, and how dark a sky you actually need.',
+      'How to see the Milky Way in India: the months the galactic core is up, how the monsoon shapes the season, and how dark a sky you actually need.',
     h1: 'Seeing the Milky Way in India',
     eyebrow: 'Milky Way',
     lede:
@@ -950,7 +950,7 @@ export const stargazingGuides: Guide[] = [
   {
     slug: 'stargazing/bortle-scale',
     cluster: 'stargazing',
-    title: 'The Bortle Scale Explained — What Each Class Actually Looks Like',
+    title: 'The Bortle Scale Explained: What Each Class Looks Like',
     description:
       'What the Bortle scale measures, what you can see at each class, where Indian cities and rural sites sit on it, and why advertised ratings are so often inflated.',
     h1: 'The Bortle scale, explained',

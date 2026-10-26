@@ -59,7 +59,7 @@ export const astrophotographyGuides: Guide[] = [
     isHub: true,
     title: 'Astrophotography in India — A Complete Practical Guide',
     description:
-      'How astrophotography actually works: the four kinds of imaging, what each needs, what an Indian sky and an Indian calendar allow, and where to begin without wasting money.',
+      'How astrophotography works: the four kinds of imaging, what each needs, what Indian skies and seasons allow, and where to begin without wasting money.',
     h1: 'Astrophotography in India',
     eyebrow: 'Astrophotography',
     lede:
@@ -350,9 +350,9 @@ export const astrophotographyGuides: Guide[] = [
   {
     slug: 'astrophotography/deep-sky',
     cluster: 'astrophotography',
-    title: 'Deep-Sky Astrophotography — How Nebulae and Galaxies Are Actually Imaged',
+    title: 'Deep-Sky Astrophotography: How Nebulae Are Imaged',
     description:
-      'The real deep-sky workflow: tracking, guiding, sub-exposures, calibration frames, stacking and stretching — and why total integration time matters more than equipment.',
+      'The real deep-sky workflow: tracking, guiding, sub-exposures, calibration, stacking and stretching, and why integration time matters more than gear.',
     h1: 'Deep-sky astrophotography',
     eyebrow: 'Deep sky',
     lede:
@@ -606,9 +606,9 @@ export const astrophotographyGuides: Guide[] = [
   {
     slug: 'astrophotography/light-pollution',
     cluster: 'astrophotography',
-    title: 'Astrophotography From a Light-Polluted City — What Works and What Does Not',
+    title: 'Astrophotography in the City: Beating Light Pollution',
     description:
-      'How light pollution actually damages an astrophoto, which targets survive it, which filters help and which do not, and the techniques that genuinely recover an image from a city sky.',
+      'How to do astrophotography in a light-polluted city: which targets survive, which filters help, and the techniques that recover an image from a city sky.',
     h1: 'Astrophotography from a light-polluted city',
     eyebrow: 'Light pollution',
     lede:
@@ -772,9 +772,9 @@ export const astrophotographyGuides: Guide[] = [
   {
     slug: 'astrophotography/milky-way',
     cluster: 'astrophotography',
-    title: 'How to Photograph the Milky Way in India — Season, Settings and Planning',
+    title: 'How to Photograph the Milky Way in India',
     description:
-      'When the galactic core is visible from India, how to plan a Milky Way shoot around the Moon and the monsoon, and the settings and technique that produce a clean result.',
+      'When the galactic core is visible from India, how to plan a Milky Way shoot around the Moon and monsoon, and the camera settings for a clean result.',
     h1: 'How to photograph the Milky Way in India',
     eyebrow: 'Milky Way',
     lede:
@@ -1060,7 +1060,7 @@ export const astrophotographyGuides: Guide[] = [
     cluster: 'astrophotography',
     title: 'Astrophotography From Delhi — What Is Genuinely Possible',
     description:
-      'Imaging from one of India’s brightest skies: which targets work from a Delhi rooftop, how narrowband changes the maths, the best months, and where to go when the city is not enough.',
+      'Imaging from one of India’s brightest skies: targets that work from a Delhi rooftop, how narrowband helps, the best months, and where to go beyond the city.',
     h1: 'Astrophotography from Delhi',
     eyebrow: 'Delhi',
     lede:
@@ -1209,7 +1209,7 @@ export const astrophotographyGuides: Guide[] = [
   {
     slug: 'astrophotography/india',
     cluster: 'astrophotography',
-    title: 'Astrophotography in India — Where, When and How the Country Actually Shoots',
+    title: 'Astrophotography in India: Where and When to Shoot',
     description:
       'The Indian astrophotographer’s planning guide: how the monsoon shapes the year, which regions stay clear when, and how latitude changes what you can reach.',
     h1: 'Astrophotography in India — where and when',

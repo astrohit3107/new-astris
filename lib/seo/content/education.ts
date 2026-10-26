@@ -53,7 +53,7 @@ export const educationGuides: Guide[] = [
     isHub: true,
     title: 'Astronomy Education for Schools in India — A Practical Guide',
     description:
-      'What a real school astronomy programme involves: space labs, telescope sessions, safe solar observation, rocketry and ISRO-aligned space science. Written for Indian schools deciding how to start.',
+      'What a real school astronomy programme involves: space labs, telescope sessions, solar observing, rocketry and ISRO-aligned space science in Indian schools.',
     h1: 'Astronomy education for schools in India',
     eyebrow: 'Astronomy education',
     lede:
@@ -225,9 +225,9 @@ export const educationGuides: Guide[] = [
   {
     slug: 'astronomy-education/schools',
     cluster: 'astronomy-education',
-    title: 'Astronomy Programs for Schools — What to Look For Before You Commit',
+    title: 'Astronomy Programs for Schools: What to Check First',
     description:
-      'A buyer’s guide for schools considering an astronomy programme: what to ask a provider, what infrastructure you need, how to budget the decision and the warning signs of a one-evening package.',
+      'A buyer’s guide for schools choosing an astronomy programme: what to ask a provider, the infrastructure you need, budgeting, and warning signs to watch for.',
     h1: 'Astronomy programs for schools',
     eyebrow: 'For schools',
     lede:
@@ -361,9 +361,9 @@ export const educationGuides: Guide[] = [
   {
     slug: 'astronomy-education/space-lab',
     cluster: 'astronomy-education',
-    title: 'Space Lab for Schools — What Goes Into an Astronomy Lab, and What It Needs',
+    title: 'Space Lab for Schools: What an Astronomy Lab Needs',
     description:
-      'What a school space lab or astronomy lab actually contains, the room and sky access it needs, how it is used week to week, and the mistakes that leave one sitting unused.',
+      'What a school space lab or astronomy lab contains, the room and sky access it needs, how it is used week to week, and the mistakes that leave one unused.',
     h1: 'Setting up a space lab in a school',
     eyebrow: 'Infrastructure',
     lede:
@@ -502,7 +502,7 @@ export const educationGuides: Guide[] = [
     cluster: 'astronomy-education',
     title: 'Astronomy Workshops for Schools — Formats That Actually Work',
     description:
-      'Day workshops, evening observation sessions, solar sessions and multi-day intensives: which astronomy workshop format suits which school, and how to run one that leads somewhere.',
+      'Day workshops, evening observing, solar sessions and multi-day intensives: which astronomy workshop format suits your school, and how to run one well.',
     h1: 'Astronomy workshops for schools',
     eyebrow: 'Formats',
     lede:
@@ -615,9 +615,9 @@ export const educationGuides: Guide[] = [
   {
     slug: 'astronomy-education/telescope-programs',
     cluster: 'astronomy-education',
-    title: 'Telescope Programs for Schools — Choosing and Actually Using One',
+    title: 'Telescope Programs for Schools: Choosing and Using One',
     description:
-      'How to choose a school telescope, what students can realistically see from an Indian campus, and how to build a telescope programme that keeps the instrument in use rather than in a cupboard.',
+      'How to choose a school telescope, what students can see from an Indian campus, and how to build a programme that keeps it in use, not in a cupboard.',
     h1: 'Telescope programs for schools',
     eyebrow: 'Equipment',
     lede:
@@ -770,7 +770,7 @@ export const educationGuides: Guide[] = [
     cluster: 'astronomy-education',
     title: 'STEM & Space Science Programs for Schools in India',
     description:
-      'How space science earns its place in a school STEM programme — rocketry, orbital mechanics, ISRO-aligned modules and student projects, tied to what is already on the syllabus.',
+      'How space science fits a school STEM programme: rocketry, orbital mechanics, ISRO-aligned modules and student projects, tied to the existing syllabus.',
     h1: 'STEM and space science programs for schools',
     eyebrow: 'STEM',
     lede:
@@ -895,9 +895,9 @@ export const educationGuides: Guide[] = [
   {
     slug: 'astronomy-education/delhi',
     cluster: 'astronomy-education',
-    title: 'Astronomy Programs for Schools in Delhi — What Works Under a City Sky',
+    title: 'Astronomy Programs for Delhi Schools: What Works',
     description:
-      'Running a school astronomy programme in Delhi: what is genuinely observable from a campus under a Bortle 8–9 sky, which months are usable, and how Delhi schools structure the year.',
+      'Running a school astronomy programme in Delhi: what is observable from a Bortle 8–9 campus, which months are usable, and how Delhi schools plan the year.',
     h1: 'Astronomy programs for schools in Delhi',
     eyebrow: 'Delhi',
     lede:
@@ -1028,9 +1028,9 @@ export const educationGuides: Guide[] = [
   {
     slug: 'astronomy-education/gurgaon',
     cluster: 'astronomy-education',
-    title: 'Astronomy Programs for Schools in Gurgaon — On Campus and Beyond It',
+    title: 'Astronomy Programs for Gurgaon Schools',
     description:
-      'Astronomy for Gurgaon schools: what works on a campus in the NCR light dome, and how proximity to darker Aravalli skies makes an off-campus night genuinely practical here.',
+      'Astronomy for Gurgaon schools: what works on a campus in the NCR light dome, and how nearby darker Aravalli skies make an off-campus night practical.',
     h1: 'Astronomy programs for schools in Gurgaon',
     eyebrow: 'Gurgaon',
     lede:

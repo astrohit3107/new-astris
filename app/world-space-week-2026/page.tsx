@@ -9,9 +9,9 @@ import {
   PAYMENT_LINK, WINNERS_PER_COMPETITION, registrationsOpen,
 } from '@/lib/world-space-week'
 
-const TITLE = 'Cosmic Canvas — World Space Week 2026 Painting & Essay Competition'
+const TITLE = 'World Space Week 2026: Cosmic Canvas Painting & Essay'
 const DESCRIPTION =
-  'Cosmic Canvas: a painting competition for grades 3–8 and an essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 31 October 2026, 11:59 pm.'
+  'Painting competition for grades 3–8 and essay competition for grades 9–12, from Astris Space and Space Store. ₹100 per child. Entries close 31 Oct 2026.'
 
 export const metadata: Metadata = {
   title: TITLE,

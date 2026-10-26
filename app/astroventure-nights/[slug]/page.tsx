@@ -33,6 +33,13 @@ export function generateStaticParams(): Params[] {
 
 export const dynamicParams = false
 
+/** Cut text at a word boundary so it fits `max` characters, ending in an ellipsis. */
+function clip(text: string, max: number): string {
+  if (text.length <= max) return text
+  const cut = text.slice(0, max - 1)
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:—–-]\s*$/, '')}…`
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -42,15 +49,13 @@ export async function generateMetadata({
   const d = getDestination(slug)
   if (!d) return { title: 'Destination not found' }
 
-  const title = d.pricing
-    ? `${d.name} Stargazing Weekend — ${d.categoryLabel ?? 'Astroventure'}`
-    : `${d.name}, ${d.valley} — Stargazing Expedition`
+  // The layout template appends " · Astroventure Nights", so these stay short
+  // enough for the whole title to show in results.
+  const title = d.pricing ? `${d.name} Stargazing Weekend` : `${d.name} Stargazing Expedition`
   const priceLine = d.pricing
-    ? ` Weekend astronomy from ${d.pricing
-        .map((p) => `${p.fromCity} ${p.amountLabel}`)
-        .join(' · ')}.`
+    ? ` From ${d.pricing.map((p) => `${p.fromCity} ${p.amountLabel}`).join(' · ')}.`
     : ''
-  const description = `${d.tagline} ${d.overview.slice(0, 120)}…${priceLine}`
+  const description = `${d.tagline} ${clip(d.overview, 155 - d.tagline.length - priceLine.length)}${priceLine}`
 
   return {
     title,

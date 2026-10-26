@@ -42,9 +42,9 @@ export const resortGuides: Guide[] = [
     slug: 'resort-astronomy',
     cluster: 'resort-astronomy',
     isHub: true,
-    title: 'Astronomy Experiences for Resorts and Hotels — A Practical Guide',
+    title: 'Astronomy Experiences for Resorts and Hotels: A Guide',
     description:
-      'What it takes to run a real stargazing programme at a resort or hotel: the equipment, the staffing, the session format, the failure modes, and what it changes about the guest evening.',
+      'What it takes to run a real stargazing programme at a resort or hotel: equipment, staffing, session format, common failures and the guest evening.',
     h1: 'Astronomy experiences for resorts and hotels',
     eyebrow: 'For properties',
     lede:
@@ -167,7 +167,7 @@ export const resortGuides: Guide[] = [
   {
     slug: 'resort-astronomy/stargazing-experience',
     cluster: 'resort-astronomy',
-    title: 'Designing a Stargazing Experience for Guests — What Actually Works',
+    title: 'Designing a Stargazing Experience for Resort Guests',
     description:
       'How to structure a guest stargazing session: the ninety-minute shape, group sizes, what to show when, and the mistakes that turn a good sky into a queue.',
     h1: 'Designing a guest stargazing experience',
@@ -299,9 +299,9 @@ export const resortGuides: Guide[] = [
   {
     slug: 'resort-astronomy/telescope-installation',
     cluster: 'resort-astronomy',
-    title: 'Telescope Installation for Hotels and Resorts — What to Specify',
+    title: 'Telescope Installation for Hotels and Resorts',
     description:
-      'Choosing and installing a telescope at a property: how to pick the observing spot, what to specify for guest use, and what maintenance the site will actually need.',
+      'Choosing and installing a telescope at a hotel or resort: picking the observing spot, what to specify for guest use, and the maintenance it will need.',
     h1: 'Telescope installation for properties',
     eyebrow: 'Equipment',
     lede:
@@ -434,7 +434,7 @@ export const resortGuides: Guide[] = [
     cluster: 'resort-astronomy',
     title: 'Training Hotel Staff to Run Astronomy Sessions',
     description:
-      'What property staff actually need to learn to lead a stargazing session: equipment handling, finding objects, reading the season, and running ninety minutes for a mixed group.',
+      'What hotel staff need to learn to lead a stargazing session: equipment handling, finding objects, reading the season, and running ninety minutes for guests.',
     h1: 'Training staff to run astronomy sessions',
     eyebrow: 'Capability',
     lede:

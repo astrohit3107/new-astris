@@ -48,7 +48,7 @@ export default function AstroFooter() {
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Expedition</h4>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Expedition</h3>
             <ul className="mt-4 space-y-2.5 text-sm text-white/65">
               <li><a href="#overview" className="transition-colors hover:text-white">Overview</a></li>
               <li><a href="#trainer" className="transition-colors hover:text-white">Trainer</a></li>
@@ -60,7 +60,7 @@ export default function AstroFooter() {
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Contact</h4>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">Contact</h3>
             <ul className="mt-4 space-y-2.5 text-sm text-white/65">
               <li>
                 <a href={`tel:${ASTRO_CONTACT.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 transition-colors hover:text-white">

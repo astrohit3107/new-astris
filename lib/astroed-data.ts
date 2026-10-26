@@ -174,8 +174,8 @@ export const ASTROED_OUTCOMES: string[] = [
 
 /* --- SEO ------------------------------------------------------------------ */
 export const ASTROED_SEO = {
-  title: 'AstroEd — Space Lab & Astronomy Curriculum for Schools | Astris Space',
+  title: 'AstroEd: School Space Lab & Astronomy Curriculum | Astris',
   description:
-    'AstroEd builds a Space Lab inside your school and runs a year-long astronomy curriculum for Grades 4–12 — telescope and solar observation, model rocketry, ISRO-aligned space science and student projects, led by trained astronomy educators.',
+    'A Space Lab inside your school and a year-long astronomy curriculum for Grades 4–12: telescopes, solar observing, rocketry and ISRO-aligned space science.',
   path: '/astroed',
 } as const

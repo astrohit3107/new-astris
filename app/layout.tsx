@@ -40,9 +40,9 @@ const mono = JetBrains_Mono({
   variable: '--font-mono-face',
 })
 
-const TITLE = "Astris Space - India's Leading Astronomy & Space Education Ecosystem"
+const TITLE = "Astris Space | Astronomy Education, Stargazing & Telescopes"
 const DESCRIPTION =
-  'Bring the universe closer through experiential astronomy. Astris Space offers AstroTrain for resorts, AstroEd for schools, and Nakshatra Scopes telescopes across India.'
+  'Experiential astronomy across India: AstroEd for schools, AstroTrain for resorts, stargazing nights and Nakshatra Scopes telescopes. Bring the universe closer.'
 
 export const metadata: Metadata = {
   // Resolves relative OG/Twitter image paths and canonicals to absolute URLs

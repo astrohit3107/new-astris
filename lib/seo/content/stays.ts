@@ -71,9 +71,9 @@ export const staysGuides: Guide[] = [
     slug: 'astronomy-stays',
     cluster: 'astronomy-stays',
     isHub: true,
-    title: 'Astronomy Stays in India — What Makes a Stargazing Stay Worth It',
+    title: 'Astronomy Stays in India: What Makes One Worth It',
     description:
-      'How an astronomy stay differs from a hotel with a nice view: what to check before booking, what the sky should be, and the questions that separate a real one from a marketing claim.',
+      'How an astronomy stay differs from a hotel with a view: what to check before booking, how dark the sky should be, and questions that expose marketing claims.',
     h1: 'Astronomy stays in India',
     eyebrow: 'Astronomy stays',
     lede:
@@ -328,7 +328,7 @@ export const staysGuides: Guide[] = [
     isHub: true,
     title: 'Astro Tourism in India — What It Is and Where It Is Going',
     description:
-      'Astronomy tourism in India: what the country has that others do not, how the monsoon shapes the season, what a good astro-tourism experience contains, and where the risks are.',
+      'Astronomy tourism in India: what the country offers, how the monsoon shapes the season, what a good astro-tourism experience contains, and the risks.',
     h1: 'Astro tourism in India',
     eyebrow: 'Astro tourism',
     lede:
