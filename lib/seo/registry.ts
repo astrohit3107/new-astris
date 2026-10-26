@@ -16,11 +16,20 @@ import { astrophotographyGuides } from '@/lib/seo/content/astrophotography'
 import { stargazingGuides } from '@/lib/seo/content/stargazing'
 import { resortGuides } from '@/lib/seo/content/resorts'
 import { staysGuides } from '@/lib/seo/content/stays'
+import { clubGuides } from '@/lib/seo/content/club'
 
 /* ---------------------------------------------------------------------------
  * Clusters
  * ------------------------------------------------------------------------- */
 export const clusters: Cluster[] = [
+  {
+    id: 'astronomy-club',
+    hub: '/astronomy-club-for-schools',
+    name: 'Astronomy club for schools',
+    blurb:
+      'How a weekly, syllabus-linked astronomy club works in an Indian school, how to start one, and city guides from Delhi NCR to Bengaluru, Hyderabad, Mumbai and beyond.',
+    funnel: 'Astris Astronomy Club',
+  },
   {
     id: 'astronomy-education',
     hub: '/astronomy-education',
@@ -82,6 +91,7 @@ export const guides: Guide[] = [
   ...stargazingGuides,
   ...resortGuides,
   ...staysGuides,
+  ...clubGuides,
 ]
 
 const guideBySlug = new Map<string, Guide>(guides.map((g) => [g.slug, g]))

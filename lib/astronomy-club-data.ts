@@ -28,9 +28,37 @@ export const CLUB_WHATSAPP = `https://wa.me/${CONTACT.phoneDigits}?text=${encode
 export const CLUB_PHONE_LABEL = '+91 7581821834'
 
 export const CLUB_SEO = {
-  title: 'Astronomy Club for Schools in Delhi NCR | Astris Space',
+  title: 'Astronomy Club for Schools in India | Astris Space',
   description:
-    'A weekly, NCERT-linked astronomy club for Grades 4–12 with real telescopes and family sky-watches. Run by an ISRO-registered Space Tutor. Zero cost to schools.',
+    'Weekly NCERT-linked astronomy club for Grades 4–12: real telescopes, family sky-watches, zero cost to schools. Delhi NCR, Bengaluru, Hyderabad, Mumbai and more.',
+  keywords: [
+    'astronomy club for schools',
+    'astronomy club for schools in Delhi',
+    'astronomy club for schools in Bangalore',
+    'astronomy club for schools in Hyderabad',
+    'astronomy club for schools in Mumbai',
+    'school astronomy club India',
+    'space club for schools',
+    'astronomy program for schools',
+    'NEP experiential learning STEM club',
+  ],
+  /** Cities with a guide under /astronomy-club-for-schools. */
+  areaServed: [
+    'Delhi',
+    'Gurugram',
+    'Noida',
+    'Ghaziabad',
+    'Bengaluru',
+    'Hyderabad',
+    'Mumbai',
+    'Pune',
+    'Chennai',
+    'Kolkata',
+    'Ahmedabad',
+    'Jaipur',
+    'Lucknow',
+    'Chandigarh',
+  ],
 }
 
 /* ------------------------------------------------------------------ bands */

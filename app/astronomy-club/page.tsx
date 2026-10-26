@@ -79,6 +79,7 @@ const instrument = Instrument_Sans({
 export const metadata: Metadata = {
   title: { absolute: CLUB_SEO.title },
   description: CLUB_SEO.description,
+  keywords: CLUB_SEO.keywords,
   alternates: { canonical: CLUB_PATH },
   openGraph: {
     type: 'website',
@@ -108,7 +109,10 @@ function JsonLd() {
         url: PAGE_URL,
         // The Organization is declared once, in app/layout.tsx.
         provider: { '@id': `${SITE_URL}/#organization` },
-        areaServed: { '@type': 'Place', name: 'Delhi NCR' },
+        areaServed: [
+          { '@type': 'Country', name: 'India' },
+          ...CLUB_SEO.areaServed.map((name) => ({ '@type': 'City', name })),
+        ],
         audience: { '@type': 'EducationalAudience', educationalRole: 'school' },
       },
       {
@@ -127,7 +131,7 @@ function JsonLd() {
           location: {
             '@type': 'Place',
             name: 'The school’s own campus',
-            address: { '@type': 'PostalAddress', addressRegion: 'Delhi NCR', addressCountry: 'IN' },
+            address: { '@type': 'PostalAddress', addressCountry: 'IN' },
           },
         },
       },
