@@ -38,6 +38,7 @@ export type ClusterId =
   | 'resort-astronomy'
   | 'astronomy-stays'
   | 'astro-tourism'
+  | 'astronomy-club'
 
 export interface Cluster {
   id: ClusterId
