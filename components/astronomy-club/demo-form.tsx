@@ -1,15 +1,36 @@
 'use client'
 
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { CLOSE, FORM_GRADES, FORM_ROLES } from '@/lib/astronomy-club-data'
 import { CONTACT } from '@/lib/site-config'
 import { clubTrack } from './motion'
 
 /**
- * The demo request. Posts to /api/club-demo; whatever happens there, the
- * WhatsApp button below sends the same details as a pre-filled message, so a
+ * The demo request, and the quote request. One form with a two-way switch:
+ * "Book a free demo" or "Request a quote" (links to #request-quote open it on
+ * the quote side). Both post to /api/club-demo; whatever happens there, the
+ * WhatsApp button sends the same details as a pre-filled message, so a
  * principal is never stuck on a failed submit.
  */
+
+type Kind = 'demo' | 'quote'
+
+const COPY: Record<Kind, { title: string; lede: string; submit: string; done: string; opener: string }> = {
+  demo: {
+    title: CLOSE.formTitle,
+    lede: 'A live telescope view or a safe solar projection, in your school assembly. Free.',
+    submit: 'Book my free demo',
+    done: CLOSE.success,
+    opener: "Hi Astris, I'd like to book a free assembly demo of the Astronomy Club for our school.",
+  },
+  quote: {
+    title: 'Request a quote',
+    lede: 'Tell us about your school and we will send a quote with the full proposal.',
+    submit: 'Request my quote',
+    done: 'Thank you. We’ll be in touch with your quote and the proposal.',
+    opener: "Hi Astris, I'd like a quote for the Astronomy Club for our school.",
+  },
+}
 
 type Fields = {
   name: string
@@ -20,6 +41,7 @@ type Fields = {
   email: string
   grades: string[]
   week: string
+  students: string
   message: string
 }
 
@@ -32,16 +54,18 @@ const EMPTY: Fields = {
   email: '',
   grades: [],
   week: '',
+  students: '',
   message: '',
 }
 
-function whatsappText(f: Fields) {
+function whatsappText(f: Fields, kind: Kind) {
   const lines = [
-    "Hi Astris, I'd like to book a free assembly demo of the Astronomy Club for our school.",
+    COPY[kind].opener,
     f.name && `Name: ${f.name}${f.role ? ` (${f.role})` : ''}`,
     f.school && `School: ${f.school}${f.city ? `, ${f.city}` : ''}`,
     f.grades.length && `Grades: ${f.grades.join(', ')}`,
-    f.week && `Preferred demo week: ${f.week}`,
+    kind === 'demo' && f.week && `Preferred demo week: ${f.week}`,
+    kind === 'quote' && f.students && `Approximate number of students: ${f.students}`,
     f.email && `Email: ${f.email}`,
     f.message && `Message: ${f.message}`,
   ]
@@ -53,7 +77,19 @@ const input =
 const label = 'block text-sm font-medium text-white/85'
 
 export default function DemoForm() {
+  const [kind, setKind] = useState<Kind>('demo')
   const [f, setF] = useState<Fields>(EMPTY)
+
+  // "Request a quote" links elsewhere on the page land here on the quote side.
+  useEffect(() => {
+    const sync = () => {
+      if (window.location.hash === '#request-quote') setKind('quote')
+      if (window.location.hash === '#book-demo') setKind('demo')
+    }
+    sync()
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
   const renderedAt = useRef(Date.now())
@@ -74,13 +110,16 @@ export default function DemoForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...f,
+          kind,
+          week: kind === 'demo' ? f.week : '',
+          students: kind === 'quote' ? f.students : '',
           company: honeypot.current?.value ?? '',
           renderedAt: renderedAt.current,
         }),
       })
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
       if (!res.ok || !json.ok) throw new Error(json.error || 'Something went wrong.')
-      clubTrack('club_form_submit', { role: f.role || 'unknown' })
+      clubTrack('club_form_submit', { role: f.role || 'unknown', kind })
       setStatus('done')
     } catch (err) {
       setStatus('error')
@@ -88,18 +127,47 @@ export default function DemoForm() {
     }
   }
 
-  const wa = `https://wa.me/${CONTACT.phoneDigits}?text=${encodeURIComponent(whatsappText(f))}`
+  const wa = `https://wa.me/${CONTACT.phoneDigits}?text=${encodeURIComponent(whatsappText(f, kind))}`
+  const copy = COPY[kind]
+
+  const switcher = (
+    <div role="group" aria-label="What would you like?" className="inline-flex rounded-full border border-white/15 p-1">
+      {(['demo', 'quote'] as Kind[]).map((k) => (
+        <button
+          key={k}
+          type="button"
+          aria-pressed={kind === k}
+          onClick={() => {
+            setKind(k)
+            if (status === 'done') setStatus('idle')
+          }}
+          className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+            kind === k ? 'bg-[#E8A33D] text-[#0E1A3A]' : 'text-white/75 hover:text-white'
+          }`}
+        >
+          {k === 'demo' ? 'Book a free demo' : 'Request a quote'}
+        </button>
+      ))}
+    </div>
+  )
 
   if (status === 'done') {
     return (
-      <div role="status" className="rounded-3xl border border-[#5CC6D6]/40 bg-[#0B7285]/20 p-8 text-center">
-        <p className="club-display text-2xl font-bold text-white">{CLOSE.success}</p>
+      <div className="space-y-6">
+        {switcher}
+        <div role="status" className="rounded-3xl border border-[#5CC6D6]/40 bg-[#0B7285]/20 p-8 text-center">
+          <p className="club-display text-2xl font-bold text-white">{copy.done}</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <form onSubmit={submit} noValidate={false} className="space-y-5" aria-describedby="form-note">
+    <div>
+      {switcher}
+      <h3 className="club-display mt-6 text-2xl font-bold sm:text-3xl">{copy.title}</h3>
+      <p className="mt-2 text-white/70">{copy.lede}</p>
+    <form onSubmit={submit} noValidate={false} className="mt-8 space-y-5" aria-describedby="form-note">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="cd-name" className={label}>
@@ -185,12 +253,29 @@ export default function DemoForm() {
       </fieldset>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {kind === 'demo' ? (
         <div>
           <label htmlFor="cd-week" className={label}>
             Preferred demo week <span className="text-white/50">(optional)</span>
           </label>
           <input id="cd-week" placeholder="e.g. second week of December" className={input} maxLength={80} value={f.week} onChange={(e) => set('week', e.target.value)} />
         </div>
+        ) : (
+          <div>
+            <label htmlFor="cd-students" className={label}>
+              Approximate number of students <span className="text-white/50">(optional)</span>
+            </label>
+            <input
+              id="cd-students"
+              inputMode="numeric"
+              placeholder="e.g. 30"
+              className={input}
+              maxLength={40}
+              value={f.students}
+              onChange={(e) => set('students', e.target.value)}
+            />
+          </div>
+        )}
         <div className="sm:row-span-2">
           <label htmlFor="cd-message" className={label}>
             Message <span className="text-white/50">(optional)</span>
@@ -217,7 +302,7 @@ export default function DemoForm() {
           disabled={status === 'sending'}
           className="club-btn-primary justify-center disabled:opacity-60"
         >
-          {status === 'sending' ? 'Sending…' : 'Book my free demo'}
+          {status === 'sending' ? 'Sending…' : copy.submit}
         </button>
         <a
           href={wa}
@@ -233,5 +318,6 @@ export default function DemoForm() {
         Fields marked * are required. We use your details only to arrange the demo.
       </p>
     </form>
+    </div>
   )
 }

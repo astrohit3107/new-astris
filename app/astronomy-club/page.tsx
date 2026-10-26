@@ -14,7 +14,8 @@ import Sunrise from '@/components/astronomy-club/sunrise'
 import DemoForm from '@/components/astronomy-club/demo-form'
 import Share from '@/components/astronomy-club/share'
 import { Reveal, CountUp, TrackedLink } from '@/components/astronomy-club/motion'
-import { Crescent, Emblem, Satellite, StarGlyph } from '@/components/astronomy-club/art'
+import { Crescent, StarGlyph } from '@/components/astronomy-club/art'
+import { AnswerMark, ConstraintIcon } from '@/components/astronomy-club/constraints'
 import {
   ANSWER,
   BANDS,
@@ -28,7 +29,6 @@ import {
   CLUB_WHATSAPP,
   CYCLE,
   FAQS,
-  FEES,
   GAP,
   HERO,
   HOUR,
@@ -37,6 +37,7 @@ import {
   PATH,
   SAFETY,
   SPARK,
+  START,
   SYLLABUS,
   TAKE_HOME,
   WHY,
@@ -129,14 +130,6 @@ function JsonLd() {
             address: { '@type': 'PostalAddress', addressRegion: 'Delhi NCR', addressCountry: 'IN' },
           },
         },
-        offers: {
-          '@type': 'Offer',
-          category: 'Paid',
-          price: 11000,
-          priceCurrency: 'INR',
-          description: 'Per student, for the full year, all inclusive. Rs 0 to the school.',
-          url: PAGE_URL,
-        },
       },
       {
         '@type': 'FAQPage',
@@ -195,14 +188,6 @@ function Chapter({ id, children }: { id: string; children: React.ReactNode }) {
     </div>
   )
 }
-
-/* Four points that fly in from the corners and become one light (Scene 4). */
-const CONVERGE = [
-  { x: -150, y: -90, c: '#E8A33D' },
-  { x: 150, y: -90, c: '#5CC6D6' },
-  { x: -150, y: 90, c: '#0B7285' },
-  { x: 150, y: 90, c: '#FFFFFF' },
-]
 
 /* Level badges as a rising constellation (Scene 8). */
 const LEVEL_POINTS = [
@@ -320,7 +305,7 @@ export default function AstronomyClubPage() {
                   {GAP.constraints.map((c, i) => (
                     <Reveal as="li" key={c.title} from={i % 2 ? 'right' : 'left'} delay={i * 140}>
                       <div className="flex h-full gap-5 rounded-3xl border border-white/10 bg-[#0E1A3A]/70 p-6 backdrop-blur-sm sm:p-7">
-                        <Satellite className="mt-1 h-7 w-14 shrink-0" color={i % 2 ? '#5CC6D6' : '#E8A33D'} />
+                        <ConstraintIcon index={i} />
                         <div>
                           <h3 className="text-xl font-bold text-white">
                             <span className="mr-2 text-white/40">{i + 1}</span>
@@ -347,24 +332,7 @@ export default function AstronomyClubPage() {
             <section data-sky aria-labelledby="answer-h" className="relative z-10 py-24 sm:py-32">
               <div className={`${wrap} text-center`}>
                 <Reveal from="none">
-                  <div className="relative mx-auto h-44 w-44" aria-hidden="true">
-                    <div className="club-converge absolute inset-0">
-                      {CONVERGE.map((d, i) => (
-                        <span
-                          key={i}
-                          className="absolute left-1/2 top-1/2 -ml-1.5 -mt-1.5 h-3 w-3 rounded-full"
-                          style={{
-                            background: d.c,
-                            boxShadow: `0 0 18px ${d.c}`,
-                            transform: `translate(${d.x}px, ${d.y}px)`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <div className="club-converge-core absolute inset-0">
-                      <Emblem className="h-full w-full" />
-                    </div>
-                  </div>
+                  <AnswerMark />
                 </Reveal>
                 <Reveal delay={200}>
                   <p className="club-kicker mt-8">The answer</p>
@@ -673,46 +641,23 @@ export default function AstronomyClubPage() {
 
           {/* =========================================== CHAPTER 6 · START */}
           <Chapter id="start">
-            {/* ---------------------------------------------- Scene 15 · fees */}
-            <section aria-labelledby="fees-h" className="club-light relative z-10 bg-[#EAF5F8] py-24 text-[#0E1A3A] sm:py-32">
+            {/* ---------------------------------------------- Scene 15 · how to start */}
+            <section aria-labelledby="start-h" className="club-light relative z-10 bg-[#EAF5F8] py-24 text-[#0E1A3A] sm:py-32">
               <div className={wrap}>
                 <Reveal>
-                  <p className="club-kicker">Fees and enrolment</p>
-                  <h2 id="fees-h" className="club-h2 mt-4">
-                    {FEES.headline}
+                  <p className="club-kicker">How to start</p>
+                  <h2 id="start-h" className="club-h2 mt-4">
+                    {START.headline}
                   </h2>
                 </Reveal>
-                <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
-                  {FEES.numbers.map((n, i) => (
-                    <Reveal key={n.value} delay={i * 150}>
-                      <div className={`h-full rounded-3xl p-8 sm:p-10 ${i === 0 ? 'bg-[#0E1A3A] text-white' : 'bg-white ring-1 ring-[#D5DCE6]'}`}>
-                        <p className={`club-display text-6xl font-extrabold sm:text-7xl ${i === 0 ? 'text-[#E8A33D]' : 'text-[#0E1A3A]'}`}>
-                          {n.value}
-                        </p>
-                        <p className={`mt-3 text-lg ${i === 0 ? 'text-white/85' : 'text-[#3B4663]'}`}>{n.label}</p>
-                      </div>
-                    </Reveal>
-                  ))}
-                </div>
-                <Reveal>
-                  <ul className="mt-10 grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-2">
-                    {FEES.details.map((d) => (
-                      <li key={d} className="flex gap-3 text-pretty text-[#3B4663]">
-                        <span aria-hidden="true" className="mt-1 font-bold text-[#0B7285]">✓</span>
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
-                </Reveal>
 
-                <Reveal className="mt-16">
-                  <h3 className="club-display text-2xl font-bold sm:text-3xl">{FEES.trackTitle}</h3>
-                  <div className="relative mt-8">
+                <Reveal className="mt-14">
+                  <div className="relative">
                     <div aria-hidden="true" className="absolute left-0 right-0 top-[0.6rem] hidden h-1 rounded-full bg-[#CFE9EF] md:block">
                       <div className="club-track-fill h-full rounded-full bg-[#0B7285]" />
                     </div>
                     <ol className="relative grid grid-cols-1 gap-6 md:grid-cols-4">
-                      {FEES.track.map((t) => (
+                      {START.track.map((t) => (
                         <li key={t.week} className="flex gap-4 md:block">
                           <span aria-hidden="true" className="mt-0.5 block h-5 w-5 shrink-0 rounded-full border-4 border-[#EAF5F8] bg-[#0B7285] md:mt-0" />
                           <div className="md:mt-4">
@@ -722,6 +667,27 @@ export default function AstronomyClubPage() {
                         </li>
                       ))}
                     </ol>
+                  </div>
+                </Reveal>
+
+                <Reveal className="mt-16">
+                  <div className="club-dark-card flex flex-col gap-6 rounded-3xl bg-[#0E1A3A] p-7 text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="max-w-2xl">
+                      <h3 className="club-display text-2xl font-bold sm:text-3xl">{START.quoteTitle}</h3>
+                      <p className="mt-2 text-pretty text-white/80">{START.quoteBody}</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+                      <TrackedLink
+                        href="#request-quote"
+                        event="club_cta_quote_click"
+                        eventProps={{ from: 'start' }}
+                        className="club-btn-primary justify-center"
+                      >
+                        Request a quote
+                        <span aria-hidden="true">→</span>
+                      </TrackedLink>
+                      <PdfButton from="start" />
+                    </div>
                   </div>
                 </Reveal>
               </div>
@@ -887,14 +853,9 @@ export default function AstronomyClubPage() {
                 </Reveal>
 
                 <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-12">
-                  <div id="book-demo" className="scroll-mt-20 rounded-[2rem] border border-white/10 bg-[#0E1A3A]/80 p-6 backdrop-blur-md sm:p-8 lg:col-span-8">
-                    <h3 className="club-display text-2xl font-bold sm:text-3xl">{CLOSE.formTitle}</h3>
-                    <p className="mt-2 text-white/70">
-                      A live telescope view or a safe solar projection, in your school assembly. Free.
-                    </p>
-                    <div className="mt-8">
-                      <DemoForm />
-                    </div>
+                  <div id="book-demo" className="relative scroll-mt-20 rounded-[2rem] border border-white/10 bg-[#0E1A3A]/80 p-6 backdrop-blur-md sm:p-8 lg:col-span-8">
+                    <span id="request-quote" className="absolute -top-20" aria-hidden="true" />
+                    <DemoForm />
                   </div>
 
                   <aside className="space-y-4 lg:col-span-4" aria-label="Other ways to reach us">

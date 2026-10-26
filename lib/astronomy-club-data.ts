@@ -696,20 +696,10 @@ export const CHANGES = [
 ]
 
 /* --------------------------------------------------------------- scene 15 */
-export const FEES = {
-  headline: 'Simple for families, free for the school',
-  numbers: [
-    { value: 'Rs 0', label: 'to the school' },
-    { value: 'Rs 11,000', label: 'per student, for the full year, all inclusive' },
-  ],
-  details: [
-    'The fee covers all 32 sessions, every observation, build kits, the textbook and logbook, LMS access and the certificate.',
-    'Paid once at enrolment, directly to Astris Space.',
-    'A club starts at 25 students and caps at 40 per batch; a second batch opens beyond that.',
-    '100% refund to every family if the club does not reach 25.',
-    'Returning members re-enrol each year and keep their level.',
-  ],
-  trackTitle: 'From yes to first session in 4 weeks',
+// Fees and enrolment terms are not published on the page; they are in the
+// proposal PDF, and schools can ask for a quote.
+export const START = {
+  headline: 'From yes to first session in 4 weeks',
   track: [
     { week: 'Week 1', body: 'The school says yes; slot, room and coordinator fixed.' },
     {
@@ -722,6 +712,9 @@ export const FEES = {
       body: 'The club is confirmed at 25+ students; first session and April-style baseline.',
     },
   ],
+  quoteTitle: 'Get a quote for your school',
+  quoteBody:
+    'Tell us your school, city and the grades you would like to start with, and we will send a quote and the full proposal.',
 }
 
 /* --------------------------------------------------------------- scene 16 */

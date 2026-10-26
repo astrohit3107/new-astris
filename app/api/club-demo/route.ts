@@ -38,7 +38,10 @@ const schema = z.object({
     .regex(/^[0-9+\-\s()]+$/),
   email: z.string().trim().email().max(160),
   grades: z.array(z.enum(FORM_GRADES)).max(3).default([]),
+  /** A demo booking (the default) or a request for a quote. */
+  kind: z.enum(['demo', 'quote']).default('demo'),
   week: z.string().trim().max(80).optional().or(z.literal('')),
+  students: z.string().trim().max(40).optional().or(z.literal('')),
   message: z.string().trim().max(1000).optional().or(z.literal('')),
   // Honeypot. Accepted by the schema so a filled-in value gets the same
   // success response as a real lead, rather than a tell-tale 400.
@@ -80,12 +83,13 @@ export async function POST(req: Request) {
   const origin = req.headers.get('origin') || new URL(req.url).origin
   const to = [process.env.CLUB_LEADS_EMAIL || CLUB_EMAIL]
   const result = await sendNotification({
-    subject: `Astronomy Club demo request — ${d.school}, ${d.city}`,
+    subject: `Astronomy Club ${d.kind === 'quote' ? 'quote request' : 'demo request'} — ${d.school}, ${d.city}`,
     fromName: 'Astris Astronomy Club',
     replyTo: d.email,
     origin,
     to,
     rows: [
+      ['Request', d.kind === 'quote' ? 'Quote' : 'Free assembly demo'],
       ['Name', d.name],
       ['Role', d.role],
       ['School', d.school],
@@ -93,7 +97,9 @@ export async function POST(req: Request) {
       ['Phone / WhatsApp', d.phone],
       ['Email', d.email],
       ['Grades to start with', d.grades.length ? d.grades.join(', ') : '—'],
-      ['Preferred demo week', d.week || '—'],
+      ...(d.kind === 'quote'
+        ? ([['Approximate number of students', d.students || '—']] as [string, string][])
+        : ([['Preferred demo week', d.week || '—']] as [string, string][])),
       ['Message', d.message || '—'],
       ['Submitted', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST'],
     ],

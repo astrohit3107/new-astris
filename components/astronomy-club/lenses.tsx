@@ -22,91 +22,133 @@ const band = (id: BandId) => BANDS.find((b) => b.id === id)!
 
 /* -------------------------------------------------------------- overlays */
 
+/** Lit part of a Moon of radius r at (cx, cy); k = 0 new … 4 full … 8 new, waxing lit on the right. */
+function phasePath(cx: number, cy: number, r: number, k: number) {
+  const waxing = k <= 4
+  const c = Math.cos((k / 8) * 2 * Math.PI)
+  const rx = Math.abs(c) * r
+  const outer = waxing ? 1 : 0
+  const inner = c > 0 ? (waxing ? 0 : 1) : waxing ? 1 : 0
+  return `M${cx} ${cy - r}A${r} ${r} 0 0 ${outer} ${cx} ${cy + r}A${rx} ${r} 0 0 ${inner} ${cx} ${cy - r}Z`
+}
+
+/**
+ * Explorers: the Moon becomes a page of a child's Moon diary. A pencil
+ * outline, a hatched lit side, and five nights of sketches along the bottom,
+ * each a little fuller. When the lens is active the strokes draw themselves.
+ */
 function ExplorersOverlay() {
-  const clip = `ex-clip-${useId().replace(/:/g, '')}`
+  const id = useId().replace(/:/g, '')
+  const nights = [1, 1.5, 2, 2.5, 3]
   return (
     <svg viewBox="0 0 200 200" aria-hidden="true" className="h-full w-full">
       <defs>
-        <clipPath id={clip}>
-          <circle cx="100" cy="100" r="71" />
+        <clipPath id={`${id}-page`}>
+          <circle cx="100" cy="100" r="96" />
         </clipPath>
+        <filter id={`${id}-pencil`} x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" />
+          <feDisplacementMap in="SourceGraphic" scale="1.6" />
+        </filter>
+        <pattern id={`${id}-hatch`} width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+          <line x1="0" y1="0" x2="0" y2="3.2" stroke="#C98A2E" strokeWidth="1.1" />
+        </pattern>
       </defs>
-      <circle cx="100" cy="100" r="71" fill="#FBF3E2" />
-      <g clipPath={`url(#${clip})`} stroke="#CBB892" strokeWidth="0.6">
-        {Array.from({ length: 13 }, (_, i) => (
-          <line key={i} x1="20" x2="180" y1={40 + i * 10} y2={40 + i * 10} />
+      <circle cx="100" cy="100" r="96" fill="#FBF4E4" />
+      <g clipPath={`url(#${id}-page)`}>
+        {Array.from({ length: 17 }, (_, i) => (
+          <line key={i} x1="0" x2="200" y1={20 + i * 10} y2={20 + i * 10} stroke="#9FC3CC" strokeOpacity="0.45" strokeWidth="0.5" />
         ))}
+        <line x1="34" x2="34" y1="0" y2="200" stroke="#E57373" strokeOpacity="0.5" strokeWidth="0.6" />
       </g>
-      {/* Hand-drawn Moon: wobbly outline, hatched shadow side. */}
-      <path
-       
-        d="M100 46c30 1 54 25 53 55-1 30-24 53-54 53-29-1-52-25-52-54 0-30 24-55 53-54z"
-        fill="none"
-        stroke="#B8741A"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <g stroke="#B8741A" strokeWidth="1.3" strokeLinecap="round" opacity="0.75">
-        {Array.from({ length: 9 }, (_, i) => (
-          <line key={i} x1={54 + i * 5} y1={70 + (i % 2) * 4} x2={48 + i * 5} y2={130 - (i % 3) * 4} />
-        ))}
-      </g>
-      <g fill="none" stroke="#B8741A" strokeWidth="1.2">
-        <circle cx="118" cy="82" r="5" />
-        <circle cx="128" cy="118" r="3.5" />
-      </g>
-      <text x="100" y="174" textAnchor="middle" fontSize="9" fill="#8A5A12" fontStyle="italic">
-        Moon diary · Night 1
+      <text x="100" y="34" textAnchor="middle" fontSize="8.5" fontWeight="700" letterSpacing="1.4" fill="#8A5A12">
+        MY MOON DIARY
       </text>
+      <g filter={`url(#${id}-pencil)`}>
+        {/* Tonight's Moon, waxing gibbous: hatched lit part, pencil outline. */}
+        <path d={phasePath(100, 88, 36, 2.5)} fill={`url(#${id}-hatch)`} />
+        <path
+          className="club-sketch"
+          pathLength={1}
+          d={`M100 52A${(Math.abs(Math.cos((2.5 / 8) * 2 * Math.PI)) * 36).toFixed(2)} 36 0 0 1 100 124`}
+          fill="none"
+          stroke="#7A4D0E"
+          strokeWidth="1"
+        />
+        <circle className="club-sketch" pathLength={1} cx="100" cy="88" r="36" fill="none" stroke="#7A4D0E" strokeWidth="1.6" />
+        <circle cx="114" cy="78" r="3.5" fill="none" stroke="#7A4D0E" strokeWidth="0.9" />
+        <circle cx="120" cy="100" r="2.4" fill="none" stroke="#7A4D0E" strokeWidth="0.9" />
+        {/* Five nights, five sketches. */}
+        {nights.map((k, i) => {
+          const cx = 52 + i * 24
+          return (
+            <g key={i} className="club-pop" style={{ ['--i' as string]: i }}>
+              <path d={phasePath(cx, 150, 8, k)} fill="#E7B566" />
+              <circle cx={cx} cy="150" r="8" fill="none" stroke="#7A4D0E" strokeWidth="0.9" />
+              <text x={cx} y="168" textAnchor="middle" fontSize="6" fill="#7A4D0E">
+                N{i + 1}
+              </text>
+            </g>
+          )
+        })}
+      </g>
     </svg>
   )
 }
 
+/**
+ * Navigators: the textbook's own Session 7 diagram. Sunlight from the left,
+ * the Moon at eight points of its orbit, always half lit towards the Sun,
+ * and the Sun–Earth–Moon line-up that makes an eclipse possible.
+ */
 function NavigatorsOverlay() {
+  const id = useId().replace(/:/g, '')
+  const E = { x: 114, y: 100 }
+  const R = 50
   const pts = Array.from({ length: 8 }, (_, i) => {
+    // Numbered as in the textbook: 1 between Earth and the Sun, 3 below, 5 opposite, 7 above.
     const a = Math.PI - (i * Math.PI) / 4
-    return { n: i + 1, x: 100 + 62 * Math.cos(a), y: 100 + 62 * Math.sin(a) }
+    return { n: i + 1, x: E.x + R * Math.cos(a), y: E.y + R * Math.sin(a), lx: E.x + 64 * Math.cos(a), ly: E.y + 64 * Math.sin(a) }
   })
   return (
     <svg viewBox="0 0 200 200" aria-hidden="true" className="h-full w-full">
-      <circle cx="100" cy="100" r="96" fill="#0E1A3A" opacity="0.92" />
-      <g stroke="#E8A33D" strokeWidth="1.6" strokeLinecap="round">
-        {[60, 80, 100, 120, 140].map((y) => (
-          <g key={y}>
-            <line x1="10" x2="30" y1={y} y2={y} />
-            <path d={`M27 ${y - 3}l4 3-4 3`} fill="none" />
+      <defs>
+        <clipPath id={`${id}-disc`}>
+          <circle cx="100" cy="100" r="96" />
+        </clipPath>
+      </defs>
+      <circle cx="100" cy="100" r="96" fill="#0E1A3A" opacity="0.95" />
+      <g clipPath={`url(#${id}-disc)`}>
+        {[72, 86, 100, 114, 128].map((y, i) => (
+          <g key={y} className="club-pop" style={{ ['--i' as string]: i }} stroke="#E8A33D" strokeWidth="1.2" strokeLinecap="round" fill="none">
+            <line x1="14" x2="40" y1={y} y2={y} />
+            <path d={`M36 ${y - 3}l4 3-4 3`} />
           </g>
         ))}
+        <text x="16" y="62" fontSize="6" fontWeight="700" letterSpacing="0.8" fill="#E8A33D">
+          SUNLIGHT
+        </text>
+        {/* The line-up: Sun, Earth and Moon in a row is when an eclipse can happen. */}
+        <line x1="40" y1={E.y} x2="190" y2={E.y} stroke="#E8A33D" strokeOpacity="0.35" strokeWidth="0.8" strokeDasharray="2 3" />
+        <circle cx={E.x} cy={E.y} r={R} fill="none" stroke="#5CC6D6" strokeOpacity="0.8" strokeWidth="0.9" strokeDasharray="2.5 3.5" />
+        <circle cx={E.x} cy={E.y} r="11" fill="#1BB0C7" />
+        <path d={`M${E.x} ${E.y - 11}A11 11 0 0 1 ${E.x} ${E.y + 11}Z`} fill="#0B4F5C" />
+        <text x={E.x} y={E.y + 2.5} textAnchor="middle" fontSize="6" fontWeight="700" fill="#FFFFFF">
+          Earth
+        </text>
+        {pts.map((p, i) => (
+          <g key={p.n} className="club-pop" style={{ ['--i' as string]: i + 3 }}>
+            <circle cx={p.x} cy={p.y} r="6.5" fill="#22325E" />
+            <path d={`M${p.x} ${p.y - 6.5}A6.5 6.5 0 0 0 ${p.x} ${p.y + 6.5}Z`} fill="#F4E7C3" />
+            <text x={p.lx} y={p.ly + 2.5} textAnchor="middle" fontSize="7" fontWeight="700" fill="#5CC6D6">
+              {p.n}
+            </text>
+          </g>
+        ))}
+        <text x="100" y="178" textAnchor="middle" fontSize="6.5" fill="#BFE7EE">
+          In line at 1 or 5: an eclipse is possible
+        </text>
       </g>
-      <circle
-       
-        cx="100"
-        cy="100"
-        r="62"
-        fill="none"
-        stroke="#5CC6D6"
-        strokeWidth="1.2"
-        strokeDasharray="3 4"
-      />
-      <circle cx="100" cy="100" r="13" fill="#0B7285" />
-      <path d="M100 87a13 13 0 0 1 0 26z" fill="#063F4A" />
-      {pts.map((p) => (
-        <g key={p.n}>
-          <circle cx={p.x} cy={p.y} r="7" fill="#1C2A52" />
-          {/* Lit half always faces the Sun (to the left). */}
-          <path d={`M${p.x} ${p.y - 7}a7 7 0 0 0 0 14z`} fill="#F6EBCB" />
-          <text
-            x={100 + 80 * ((p.x - 100) / 62)}
-            y={100 + 80 * ((p.y - 100) / 62) + 3}
-            textAnchor="middle"
-            fontSize="9"
-            fontWeight="700"
-            fill="#5CC6D6"
-          >
-            {p.n}
-          </text>
-        </g>
-      ))}
     </svg>
   )
 }
