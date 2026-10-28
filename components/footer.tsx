@@ -101,7 +101,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start space-x-2 text-sm text-foreground/70">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />
-                <span>Delhi, India</span>
+                <span>{REGISTERED_OFFICE_LINE}</span>
               </div>
             </div>
           </div>
@@ -116,7 +116,6 @@ export default function Footer() {
             © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
             <span className="block text-xs text-foreground/65">
               Astris Space is a trading name of {LEGAL_ENTITY}.
-              <span className="block">Registered office: {REGISTERED_OFFICE_LINE}</span>
             </span>
           </p>
 

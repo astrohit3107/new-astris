@@ -31,7 +31,7 @@ export const SITE = {
   twitter: 'https://twitter.com/',
   youtube: 'https://youtube.com/',
   facebook: 'https://facebook.com/',
-  address: 'Delhi, India',
+  address: REGISTERED_OFFICE_LINE,
 } as const
 
 /* ---------------------------------------------------------------------------
