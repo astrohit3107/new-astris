@@ -78,8 +78,10 @@ export default function AstroFooter() {
                   <Mail size={14} className="text-[var(--av-gold)]" /> {SITE.email}
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin size={14} className="text-[var(--av-gold)]" /> {SITE.address}
+              {/* A full street address wraps, so the pin aligns to the top line. */}
+              <li className="flex items-start gap-2">
+                <MapPin size={14} className="mt-0.5 shrink-0 text-[var(--av-gold)]" />
+                <span>{SITE.address}</span>
               </li>
             </ul>
           </div>

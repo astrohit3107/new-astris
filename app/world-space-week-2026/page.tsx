@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Award, CheckCircle2, Frame, Mail, MessageCircle, Moon, Paperclip, ScrollText, Palette, PenLine, Send } from 'lucide-react'
 
-import { SITE_URL, LEGAL_ENTITY, CONTACT } from '@/lib/site-config'
+import { SITE_URL, LEGAL_ENTITY, CONTACT, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 import {
   WSW, PARTNER, PAINTING, ESSAY, REGISTER, REGISTRATION_EMAIL, ENTRY_FORMATS, ENTRY_SUBJECT_PREFIX,
@@ -440,6 +440,7 @@ export default function WorldSpaceWeekPage() {
 
       <footer className="border-t border-white/10 px-5 py-8 text-center text-[11px] text-white/35 sm:px-6">
         Organised by Astris Space ({LEGAL_ENTITY}) in collaboration with {PARTNER.name}. Questions: {CONTACT.phone}.
+        <span className="mt-1 block">Registered office: {REGISTERED_OFFICE_LINE}</span>
       </footer>
     </main>
   )

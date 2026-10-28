@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
 import { REFUND_BANDS, POLICY } from '@/lib/policies'
 import { experiences, NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
-import { CONTACT, LEGAL_ENTITY } from '@/lib/site-config'
+import { CONTACT, LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 
 const TITLE = 'Cancellation & Refund Policy — Nakshatraalay Gurgaon'
 const DESCRIPTION =
@@ -25,7 +25,8 @@ export default function CancellationPolicyPage() {
       <Clause heading="Who you are booking with">
         <p>
           Bookings at Nakshatraalay Gurgaon are made with {LEGAL_ENTITY}, the company trading as
-          Astris Space. Payments are collected by, and refunds are issued by, that company.
+          Astris Space, registered office {REGISTERED_OFFICE_LINE}. Payments are collected by, and
+          refunds are issued by, that company.
         </p>
       </Clause>
 

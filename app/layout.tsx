@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
-import { SITE, SITE_URL, absoluteUrl, LEGAL_ENTITY } from '@/lib/site-config'
+import { SITE, SITE_URL, absoluteUrl, LEGAL_ENTITY, REGISTERED_OFFICE } from '@/lib/site-config'
 import './globals.css'
 
 /**
@@ -112,7 +112,8 @@ function SiteIdentitySchema() {
         description: SITE.description,
         email: 'contact@astriseducation.in',
         telephone: '+91 75818 21834',
-        address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+        // Registered office of the LLP. Venues carry their own addresses.
+        address: { '@type': 'PostalAddress', ...REGISTERED_OFFICE },
         // A raster logo with explicit dimensions. Google accepts SVG, but the
         // PNG is what it processes most reliably for the entity's icon.
         logo: {

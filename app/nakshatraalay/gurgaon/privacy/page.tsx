@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
-import { CONTACT, LEGAL_ENTITY } from '@/lib/site-config'
+import { CONTACT, LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 
 const TITLE = 'Privacy Policy — Nakshatraalay Gurgaon'
@@ -24,8 +24,9 @@ export default function PrivacyPage() {
     >
       <Clause heading="Who holds your details">
         <p>
-          {LEGAL_ENTITY}, the company trading as Astris Space and operating Nakshatraalay Gurgaon.
-          &ldquo;We&rdquo; throughout this policy means that company.
+          {LEGAL_ENTITY}, the company trading as Astris Space and operating Nakshatraalay Gurgaon,
+          with its registered office at {REGISTERED_OFFICE_LINE}. &ldquo;We&rdquo; throughout this
+          policy means that company.
         </p>
       </Clause>
 

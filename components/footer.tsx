@@ -1,4 +1,4 @@
-import { LEGAL_ENTITY } from '@/lib/site-config'
+import { LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 import { Mail, Phone, MapPin } from 'lucide-react'
 
 export default function Footer() {
@@ -116,6 +116,7 @@ export default function Footer() {
             © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
             <span className="block text-xs text-foreground/65">
               Astris Space is a trading name of {LEGAL_ENTITY}.
+              <span className="block">Registered office: {REGISTERED_OFFICE_LINE}</span>
             </span>
           </p>
 

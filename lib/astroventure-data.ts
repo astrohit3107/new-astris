@@ -1,3 +1,4 @@
+import { REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 /**
  * ============================================================================
  *  ASTROVENTURE NIGHTS — SINGLE SOURCE OF CONTENT

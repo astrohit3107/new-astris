@@ -51,6 +51,26 @@ export function absoluteUrl(path = '/'): string {
  */
 export const LEGAL_ENTITY = 'ASTRIS SPACEED LLP'
 
+/**
+ * Registered office of ASTRIS SPACEED LLP, from 28 Oct 2026.
+ *
+ * This is the COMPANY's address — shown wherever the legal entity is named
+ * and in the Organization structured data. It is not where anything happens:
+ * Nakshatraalay, the Astroventure destinations and school programmes keep
+ * their own locations, and must not be pointed here.
+ */
+export const REGISTERED_OFFICE = {
+  streetAddress: '808B, DLF Prime Tower, Pocket F, Okhla Phase I, Okhla Industrial Estate',
+  addressLocality: 'New Delhi',
+  addressRegion: 'Delhi',
+  postalCode: '110020',
+  addressCountry: 'IN',
+} as const
+
+/** As supplied, for display. */
+export const REGISTERED_OFFICE_LINE =
+  '808B, DLF Prime Tower, Pocket F, Okhla Phase I, Okhla Industrial Estate, New Delhi, Delhi, 110020'
+
 export const CONTACT = {
   brand: 'Astris Space',
   phone: '+91 75818 21834',

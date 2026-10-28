@@ -1,4 +1,4 @@
-import { LEGAL_ENTITY } from '@/lib/site-config'
+import { LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 import { Mail, Phone, ArrowUpRight } from 'lucide-react'
 import {
   ASTRO,
@@ -79,7 +79,10 @@ export default function AstroFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row">
-          <p>© {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
+            <span className="block">Registered office: {REGISTERED_OFFICE_LINE}</span>
+          </p>
           <p>{ASTRO.name}</p>
         </div>
 

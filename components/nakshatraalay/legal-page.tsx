@@ -4,7 +4,7 @@ import Link from 'next/link'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 import { POLICY_UPDATED } from '@/lib/policies'
-import { LEGAL_ENTITY, CONTACT } from '@/lib/site-config'
+import { LEGAL_ENTITY, CONTACT, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 
 /** Shared chrome for the three policy pages, so they read as one document. */
 export default function LegalPage({
@@ -59,7 +59,8 @@ export default function LegalPage({
         </div>
         <p className="mx-auto mt-6 max-w-3xl text-xs leading-relaxed text-white/35">
           These terms are between you and {LEGAL_ENTITY}, the company trading as Astris Space and
-          operating Nakshatraalay Gurgaon. Contact {CONTACT.email} or {CONTACT.phone}.
+          operating Nakshatraalay Gurgaon, with its registered office at {REGISTERED_OFFICE_LINE}.
+          Contact {CONTACT.email} or {CONTACT.phone}.
         </p>
       </section>
     </main>

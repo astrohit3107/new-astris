@@ -1,4 +1,4 @@
-import { LEGAL_ENTITY } from '@/lib/site-config'
+import { LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 import { Mail, Phone, MessageCircle } from 'lucide-react'
 import { WORKSHOP, WORKSHOP_CONTACT } from '@/lib/workshop-delhi-data'
 
@@ -43,6 +43,7 @@ export default function WorkshopFooter() {
         <p className="mt-12 border-t border-white/10 pt-6 text-xs text-white/40">
           © {new Date().getFullYear()} {LEGAL_ENTITY}. Observation and imaging are subject to weather
           and sky conditions.
+          <span className="mt-1 block">Registered office: {REGISTERED_OFFICE_LINE}</span>
         </p>
       </div>
     </footer>
