@@ -15,6 +15,10 @@ import RegistrationForm from '@/components/astroventure/registration-form'
 import Faq from '@/components/astroventure/faq'
 import RelatedDestinations from '@/components/astroventure/related-destinations'
 import FinalCta from '@/components/astroventure/final-cta'
+import SaturdaySky from '@/components/astroventure/saturday-sky'
+import PropertyGallery, { SAMBHAR_PROPERTY_PHOTOS } from '@/components/astroventure/property-gallery'
+import ReservationForm from '@/components/nakshatraalay/reservation-form'
+import { paymentsUnderMaintenance } from '@/lib/cashfree'
 import {
   destinations,
   getDestination,
@@ -32,6 +36,12 @@ export function generateStaticParams(): Params[] {
 }
 
 export const dynamicParams = false
+
+/**
+ * Rebuilt every six hours, so the weekend sky calendar always starts from the
+ * coming Saturday rather than whichever Saturday the site was last deployed.
+ */
+export const revalidate = 21600
 
 /** Cut text at a word boundary so it fits `max` characters, ending in an ellipsis. */
 function clip(text: string, max: number): string {
@@ -148,22 +158,45 @@ export default async function DestinationPage({ params }: { params: Promise<Para
       <DestinationOverview destination={destination} />
       <Experiences />
       <Itinerary itinerary={destination.itinerary} destinationName={destination.name} />
-      <Pricing destination={destination} />
+      {destination.weekendStay ? (
+        <>
+          {/* Saturday stays: what is up each Saturday, where you sleep, and
+              online booking — in place of departures and the enquiry form. */}
+          <SaturdaySky locationSlug={destination.slug} />
+          <PropertyGallery photos={SAMBHAR_PROPERTY_PHOTOS} />
+          <section id="book" className="scroll-mt-20 px-5 py-20 sm:px-6">
+            <div className="mx-auto max-w-2xl">
+              <h2 className="font-display text-balance text-3xl font-light text-white sm:text-4xl">Book your Saturday</h2>
+              <p className="mt-3 text-sm leading-relaxed text-white/60">
+                Dinner, four to five hours of stargazing, the night and breakfast. Return travel is not
+                included. Check-out is by 11 am on Sunday.
+              </p>
+              <div className="mt-8">
+                <ReservationForm experienceSlug="sambhar-lake" maintenance={paymentsUnderMaintenance()} />
+              </div>
+            </div>
+          </section>
+        </>
+      ) : (
+        <Pricing destination={destination} />
+      )}
       <TelescopeGallery />
       <PhotoGallery />
       {/* Weekend escapes (with published pricing) get a compact calendar/date
           selector; expeditions keep the batch list. */}
-      {destination.pricing ? (
+      {destination.weekendStay ? null : destination.pricing ? (
         <EventCalendar slug={destination.slug} />
       ) : (
         <BookSlots slug={destination.slug} />
       )}
       {destination.collegeGroups && <CollegeCta destination={destination} />}
-      <RegistrationForm
-        defaultDestination={destination.slug}
-        experienceName={destination.pricing ? `Astroventure ${destination.name}` : undefined}
-        departureCities={destination.pricing?.map((p) => p.fromCity)}
-      />
+      {!destination.weekendStay && (
+        <RegistrationForm
+          defaultDestination={destination.slug}
+          experienceName={destination.pricing ? `Astroventure ${destination.name}` : undefined}
+          departureCities={destination.pricing?.map((p) => p.fromCity)}
+        />
+      )}
       <Faq items={destination.faqs} />
       <RelatedDestinations currentSlug={destination.slug} />
       <FinalCta />

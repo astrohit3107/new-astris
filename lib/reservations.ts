@@ -1,8 +1,12 @@
 import { z } from 'zod'
 
+import { getBookable } from '@/lib/bookables'
+
 import {
   experiences,
   getExperience,
+  priceFor,
+  roomsNeeded,
   formatINR,
   earliestBookableDate,
   isClosed,
@@ -119,8 +123,20 @@ export interface Quote {
  *
  * Returns a message to show the guest, or null when the date is fine.
  */
-export function dateProblem(date: string, now: Date = new Date()): string | null {
+export function dateProblem(date: string, now: Date = new Date(), slug?: string): string | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return 'Please choose a date.'
+
+  // Saturday-only products (Sambhar). Checked on the server because the date
+  // list in the form is a convenience, not a control.
+  if (slug && getBookable(slug)?.saturdaysOnly) {
+    const day = new Date(`${date}T12:00:00Z`).getUTCDay()
+    if (day !== 6) return 'This experience runs on Saturdays only. Please choose a Saturday.'
+    const today = new Date(now.getTime() + 5.5 * 3600_000).toISOString().slice(0, 10)
+    if (date < today) return 'That Saturday has passed. Please choose an upcoming one.'
+    const limit = new Date(now.getTime() + 400 * 86_400_000).toISOString().slice(0, 10)
+    if (date > limit) return 'That date is too far ahead. Please message us to arrange it.'
+    return null
+  }
 
   const earliest = earliestBookableDate(now)
   if (date < earliest) {
@@ -149,18 +165,21 @@ export function quoteFor(input: {
   tierLabel: string
   guests: number
 }): Quote | null {
-  const experience = getExperience(input.experienceSlug)
+  const experience = getBookable(input.experienceSlug)
   if (!experience) return null
 
   const tier = experience.priceTiers.find((t) => t.label === input.tierLabel)
   if (!tier) return null
 
-  // A per-person tier scales with the party; a whole-party tier does not, and
-  // must not be multiplied by the guest count.
-  const amount = tier.perPerson ? tier.amount * input.guests : tier.amount
+  // Per person scales with the party; per room scales with the rooms the party
+  // needs; a whole-party tier does neither. One formula, shared with the page.
+  const amount = priceFor(tier, input.guests)
+  const rooms = roomsNeeded(tier, input.guests)
   const breakdown = tier.perPerson
     ? `${formatINR(tier.amount)} × ${input.guests} guest${input.guests === 1 ? '' : 's'}`
-    : `${formatINR(tier.amount)} for the party`
+    : rooms
+      ? `${formatINR(tier.amount)} × ${rooms} room${rooms === 1 ? '' : 's'}`
+      : `${formatINR(tier.amount)} for the party`
 
   return {
     experienceTitle: experience.title,

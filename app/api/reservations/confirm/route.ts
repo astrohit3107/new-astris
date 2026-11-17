@@ -10,7 +10,7 @@ import {
 } from '@/lib/cashfree'
 import { sendNotification, sendCustomerConfirmation } from '@/lib/notify'
 import { appendBooking } from '@/lib/sheets'
-import { getExperience, MAPS } from '@/lib/nakshatraalay-data'
+import { getBookable } from '@/lib/bookables'
 import { availabilityFor } from '@/lib/availability'
 import { SITE_URL } from '@/lib/site-config'
 
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
 
   const host = request.headers.get('host')
   const origin = request.headers.get('origin') || (host ? `https://${host}` : undefined)
-  const experience = getExperience(d.experienceSlug)
+  const experience = getBookable(d.experienceSlug)
   const bookedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
 
   /* ---- the ledger ------------------------------------------------------ *
@@ -146,7 +146,8 @@ export async function POST(request: Request) {
     paymentId,
     bring: experience?.bring,
     souvenir: experience?.includes?.some((i) => /souvenir|print/i.test(i)) ?? false,
-    directionsUrl: MAPS.directionsUrl,
+    directionsUrl: experience?.directionsUrl,
+    venue: experience?.venue ?? 'Astris Space',
     siteUrl: SITE_URL,
   })
   if (!customer.sent) {

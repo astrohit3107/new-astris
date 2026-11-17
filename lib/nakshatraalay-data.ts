@@ -182,6 +182,26 @@ export interface PriceTier {
   amount: number
   perPerson: boolean
   note?: string
+  /**
+   * Guests per room, for tiers priced PER ROOM. Set it and the price becomes
+   * amount × rooms needed — four guests in a twin room pay for two rooms.
+   * Leave it unset for a flat whole-party price.
+   */
+  occupancy?: number
+  /** Rooms of this type available each night — the capacity for this tier. */
+  rooms?: number
+}
+
+/** Rooms a party of `guests` needs in this tier, or null if not room-priced. */
+export function roomsNeeded(tier: PriceTier, guests: number): number | null {
+  return !tier.perPerson && tier.occupancy ? Math.ceil(guests / tier.occupancy) : null
+}
+
+/** What a party pays for a tier — the one formula, used by page and server alike. */
+export function priceFor(tier: PriceTier, guests: number): number {
+  if (tier.perPerson) return tier.amount * guests
+  const rooms = roomsNeeded(tier, guests)
+  return rooms ? tier.amount * rooms : tier.amount
 }
 
 /** ₹8,000 — Indian digit grouping, no decimals. */

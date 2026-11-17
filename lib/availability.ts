@@ -19,12 +19,15 @@
  * ============================================================================
  */
 
-import { getExperience, isClosed } from '@/lib/nakshatraalay-data'
+import { isClosed, roomsNeeded } from '@/lib/nakshatraalay-data'
+import { getBookable } from '@/lib/bookables'
 import { readBookings, type BookingRow } from '@/lib/sheets'
 
 export type AvailabilityState = 'open' | 'full' | 'unknown' | 'closed' | 'untracked'
 
 export interface Availability {
+  /** What is being counted: seats (guests) or rooms of one type. */
+  unit: 'guests' | 'rooms'
   state: AvailabilityState
   /** Total seats for the night. Null when the experience is not sold by seat. */
   capacity: number | null
@@ -60,38 +63,49 @@ function bookedFor(rows: BookingRow[], slug: string, date: string): number {
 export function availabilityFrom(
   rows: BookingRow[] | null,
   slug: string,
-  date: string
+  date: string,
+  tierLabel?: string
 ): Availability {
-  const experience = getExperience(slug)
-  const capacity = experience?.slotsPerNight ?? null
+  const bookable = getBookable(slug)
+  const tier = tierLabel ? bookable?.priceTiers.find((t) => t.label === tierLabel) : undefined
+
+  // Room-priced stays (Sambhar) are limited by rooms of each type, not seats.
+  // Every booking of this type on this date uses the rooms its party needs.
+  if (tier?.rooms) {
+    const capacity = tier.rooms
+    if (rows === null) return { unit: 'rooms', state: 'unknown', capacity, booked: null, remaining: null }
+    const booked = rows
+      .filter((r) => counts(r) && r.date === date && r.packageLabel.trim() === tier.label)
+      .filter((r) => r.experienceSlug.toLowerCase().trim().replace(/\s+/g, '-') === slug)
+      .reduce((sum, r) => sum + (roomsNeeded(tier, r.guests > 0 ? r.guests : 1) ?? 1), 0)
+    const remaining = Math.max(0, capacity - booked)
+    return { unit: 'rooms', state: remaining > 0 ? 'open' : 'full', capacity, booked, remaining }
+  }
+
+  const capacity = bookable?.slotsPerNight ?? null
 
   // Sold as a whole night to one group — a seat counter says nothing useful.
   if (capacity === null) {
-    return { state: 'untracked', capacity: null, booked: null, remaining: null }
+    return { unit: 'guests', state: 'untracked', capacity: null, booked: null, remaining: null }
   }
 
   // A night we have manually closed is closed regardless of the ledger.
   if (isClosed(date)) {
-    return { state: 'closed', capacity, booked: null, remaining: 0 }
+    return { unit: 'guests', state: 'closed', capacity, booked: null, remaining: 0 }
   }
 
   if (rows === null) {
-    return { state: 'unknown', capacity, booked: null, remaining: null }
+    return { unit: 'guests', state: 'unknown', capacity, booked: null, remaining: null }
   }
 
   const booked = bookedFor(rows, slug, date)
   const remaining = Math.max(0, capacity - booked)
-  return {
-    state: remaining > 0 ? 'open' : 'full',
-    capacity,
-    booked,
-    remaining,
-  }
+  return { unit: 'guests', state: remaining > 0 ? 'open' : 'full', capacity, booked, remaining }
 }
 
-/** Availability for one experience on one date, read from the ledger. */
-export async function availabilityFor(slug: string, date: string): Promise<Availability> {
-  return availabilityFrom(await readBookings(), slug, date)
+/** Availability for one experience (and, for room-priced stays, one room type). */
+export async function availabilityFor(slug: string, date: string, tierLabel?: string): Promise<Availability> {
+  return availabilityFrom(await readBookings(), slug, date, tierLabel)
 }
 
 /** Availability for one experience across a run of dates, on a single read. */
@@ -127,14 +141,18 @@ export function availabilityLabel(a: Availability, guests = 1): string {
       return 'Fully booked'
     case 'open':
       if (a.remaining === null) return 'Available'
+      if (a.unit === 'rooms') return `${a.remaining} of ${a.capacity} room${a.capacity === 1 ? '' : 's'} left`
       if (a.remaining <= 3) return `Only ${a.remaining} of ${a.capacity} left`
       return `${a.remaining} of ${a.capacity} places left`
   }
 }
 
-/** Can this many guests still be taken? `unknown` is permissive by design. */
-export function canAccept(a: Availability, guests: number): boolean {
+/**
+ * Can this booking still be taken? `need` is guests, or rooms when the
+ * availability counts rooms. `unknown` is permissive by design.
+ */
+export function canAccept(a: Availability, need: number): boolean {
   if (a.state === 'closed' || a.state === 'full') return false
   if (a.state === 'untracked' || a.state === 'unknown') return true
-  return (a.remaining ?? 0) >= guests
+  return (a.remaining ?? 0) >= need
 }

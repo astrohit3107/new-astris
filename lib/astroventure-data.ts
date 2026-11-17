@@ -178,6 +178,8 @@ export interface Destination {
   categoryLabel?: string
   /** e.g. '2 Days · 1 Night'. */
   durationLabel?: string
+  /** One-night Saturday stay booked and paid online (Sambhar). */
+  weekendStay?: boolean
   /** Fixed per-person departure pricing (enables the pricing section + card price). */
   pricing?: DeparturePricing[]
   /** Seats per departure (drives the capacity messaging). */
@@ -448,102 +450,87 @@ export const destinations: Destination[] = [
     image: IMAGES.sambhar,
     imageMobile: IMAGES.sambharMobile,
     heroImage: IMAGES.sambhar,
-    categoryLabel: 'Weekend Astronomy Escape',
-    durationLabel: '2 Days · 1 Night',
+    /**
+     * From 17 Nov 2026 Sambhar runs as a one-night stay, every Saturday:
+     * arrive in the evening, dinner, 4–5 hours of stargazing, the night at
+     * the property, a short morning hike, breakfast, check out by 11.
+     * Return travel is NOT included. Booked and paid online (Cashfree)
+     * through the weekend booking section rather than the enquiry form.
+     */
+    weekendStay: true,
+    categoryLabel: 'Saturday Night Stargazing Stay',
+    durationLabel: '1 Night · Every Saturday',
     heroStats: [
       { label: 'Location', value: 'Sambhar, Rajasthan' },
-      { label: 'Duration', value: '2D · 1N (Sat–Sun)' },
-      { label: 'Departs', value: 'Delhi / Jaipur' },
+      { label: 'When', value: 'Every Saturday' },
+      { label: 'Stargazing', value: '4–5 hours' },
       { label: 'Dark Sky', value: 'Bortle 4' },
     ],
-    capacity: 30,
     collegeGroups: true,
     overview:
-      'Sambhar is India’s largest inland salt lake — a 200-square-kilometre sheet of white that empties of people the moment the sun goes down. Roughly two hours from Jaipur and an overnight run from Delhi, it trades the honking, floodlit city for a horizon so low and so dark that the stars come down to meet the salt. This is not a sightseeing tour with a telescope bolted on. The night sky is the reason we go; everything else is built around it.',
+      'Sambhar is India’s largest inland salt lake — a 200-square-kilometre sheet of white that empties of people the moment the sun goes down, about two hours from Jaipur. Every Saturday we run one night there, built around the sky: arrive in the evening, eat, then spend four to five hours at the telescope under a horizon so low and so dark that the stars come down to meet the salt. You stay the night, walk out at dawn, have breakfast, and head home by late morning.',
     highlights: [
-      'Naked-eye Milky Way over the open salt flats',
-      'Guided telescope observation — Moon, planets, clusters & nebulae',
-      'Beginner astrophotography with camera and mobile',
-      'A dedicated Sambhar Lake sunrise',
-      'Shakambhari temple & the heritage salt works',
-      'A weekend that runs on astronomy, not itineraries',
+      'Four to five hours of guided stargazing under a rural Bortle 4 sky',
+      'Telescope observation — the Moon, planets, clusters and nebulae',
+      'The naked-eye Milky Way on clear, moonless nights',
+      'Dinner, a night at the property and breakfast',
+      'A short hike nearby in the morning',
+      'Every Saturday, so you can pick the darkest one',
     ],
     audience: [
-      'College students',
-      'Young professionals',
+      'Couples and friends',
+      'Families',
       'Beginners in astronomy',
       'Photography enthusiasts',
-      'Astronomy, physics & science clubs',
-      'College & university societies',
+      'College groups and societies',
+      'Anyone who has never seen the Milky Way',
     ],
     inclusions: [
-      'Return travel from your chosen departure city (Delhi or Jaipur)',
-      'One night’s accommodation on a double-sharing basis',
-      'All guided stargazing and telescope observation sessions',
-      'Beginner astrophotography guidance — camera and mobile',
-      'A dedicated Sambhar Lake sunrise session',
-      'Night-sky orientation and constellation tours with expert astronomers',
+      'Accommodation for Saturday night',
+      'Dinner on Saturday',
+      'Four to five hours of guided stargazing and telescope observation',
+      'A short hike nearby on Sunday morning',
+      'Breakfast on Sunday',
     ],
     exclusions: [
-      'Meals and beverages not specified in your booking confirmation',
-      'Personal expenses, shopping and tips',
-      'Travel insurance and any permits',
-      'Anything not explicitly listed under Inclusions',
+      'Travel to and from Sambhar — you make your own way there and back',
+      'Meals other than Saturday dinner and Sunday breakfast',
+      'Personal expenses and tips',
+      'Anything not listed under Inclusions',
       'Observation is always subject to weather and sky conditions',
-    ],
-    pricing: [
-      {
-        route: 'Jaipur → Sambhar Lake → Jaipur',
-        fromCity: 'Jaipur',
-        amount: 3500,
-        amountLabel: '₹3,500',
-        accommodation: 'Double sharing',
-      },
-      {
-        route: 'Delhi → Sambhar Lake → Delhi',
-        fromCity: 'Delhi',
-        amount: 4500,
-        amountLabel: '₹4,500',
-        accommodation: 'Double sharing',
-        featured: true,
-      },
     ],
     itinerary: [
       {
         day: 'Saturday',
-        title: 'Out of the City, Into the Salt',
-        summary: 'Travel, explore the lake, then let the sky take over after sunset.',
+        title: 'Into the Night',
+        summary: 'Arrive in the evening, eat, then hand the night over to the sky.',
         events: [
-          { time: 'Morning', title: 'Departure from Delhi', detail: 'Set off from Delhi and travel towards Sambhar Lake. Jaipur departures join the same day.' },
-          { time: 'Afternoon', title: 'Arrival & Settling In', detail: 'Reach Sambhar, check in and settle before the light goes.' },
-          { time: 'Afternoon', title: 'Sambhar Exploration', detail: 'A lightweight look around the region — the Shakambhari Devi temple, the heritage salt works and the vast white lakebed. Kept short so the sky stays the point.' },
-          { time: 'Sunset', title: 'First Light on the Sky', detail: 'As the sun drops, telescopes go up: the visible planets and the brightest objects first, with a naked-eye tour of the constellations to get you oriented.' },
-          { time: 'Night', title: 'Flagship Astronomy Night', detail: 'The main event: guided sky orientation, telescope observation of star clusters, nebulae, planets and the Moon, celestial coordinates, and how astronomers actually find objects.' },
-          { time: 'Late night', title: 'Basic Astrophotography', detail: 'Beginner-friendly night photography — tripod, ISO, aperture, shutter, focus, white balance, star trails and Milky Way basics where conditions permit, plus mobile astrophotography.' },
+          { time: 'Evening', title: 'Arrive & check in', detail: 'Make your own way to the property and settle in as the light goes.' },
+          { time: 'Evening', title: 'Dinner', detail: 'Dinner at the property before the session — the sky is darkest once you have eaten.' },
+          { time: 'Night', title: 'Stargazing — four to five hours', detail: 'A naked-eye tour of the constellations to get you oriented, then guided telescope observation: the Moon and whichever planets are up, star clusters, nebulae and galaxies as the sky allows. The calendar on this page shows what is up on each Saturday.' },
+          { time: 'Late', title: 'The night is yours', detail: 'Stay out under the sky as long as you like, then turn in at the property.' },
         ],
       },
       {
         day: 'Sunday',
-        title: 'Sunrise & Return',
-        summary: 'A quiet dawn over the salt, then the road home.',
+        title: 'Morning & Check-out',
+        summary: 'A short walk, breakfast, and home by late morning.',
         events: [
-          { time: 'Pre-dawn', title: 'Sambhar Sunrise', detail: 'Wake for a dedicated sunrise over the salt flats — sunrise and landscape photography in the still morning light.' },
-          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast and a last look at the lake.' },
-          { time: 'Afternoon', title: 'Lunch & Departure', detail: 'Lunch, then begin the return journey towards Delhi or Jaipur. Trip concludes.' },
+          { time: 'Morning', title: 'A short hike nearby', detail: 'A gentle morning walk in the countryside around the property.' },
+          { time: 'Morning', title: 'Breakfast', detail: 'Breakfast at the property.' },
+          { time: 'By 11:00', title: 'Check-out', detail: 'Check out by 11 am and make your own way home.' },
         ],
       },
     ],
     faqs: [
-      { question: 'What is included in the Sambhar Lake Astroventure?', answer: 'Return travel from your chosen departure city (Delhi or Jaipur), one night’s stay on a double-sharing basis, all guided stargazing and telescope sessions, beginner astrophotography guidance, a dedicated sunrise session, and expert astronomy mentoring throughout the weekend.' },
-      { question: 'Where does the trip start — Delhi or Jaipur?', answer: 'Both. You choose your departure city when you book: Delhi → Sambhar → Delhi at ₹4,500 per person, or Jaipur → Sambhar → Jaipur at ₹3,500 per person. Return travel from that city is included.' },
-      { question: 'What is the accommodation like?', answer: 'Comfortable accommodation near the lake on a double-sharing basis for one night. Share your preferences when you book and we’ll do our best to accommodate them.' },
-      { question: 'Is telescope observation included?', answer: 'Yes. Guided telescope observation is the heart of the weekend — the Moon, planets, star clusters, nebulae and deep-sky objects, led by expert astronomers who teach you how to navigate the sky yourself.' },
-      { question: 'Is astrophotography included?', answer: 'Yes — a beginner-friendly introduction to night-sky photography with both camera and mobile: tripod technique, ISO, aperture, shutter, focus and Milky Way basics where conditions permit. It is included as part of the experience, not a separate professional workshop.' },
-      { question: 'Is this suitable for complete beginners?', answer: 'Completely. The weekend is designed for first-timers, students and young professionals. No equipment or prior knowledge is needed — just curiosity and warm layers.' },
-      { question: 'What happens if it is cloudy?', answer: 'Astronomy depends on the sky, so observation is always subject to weather and cloud cover. We track the forecast and work the clearest windows of the night; if clouds move in we shift to sky talks, telescope demonstrations and astrophotography theory, and make the most of any clearing.' },
-      { question: 'How many participants are on each trip?', answer: 'Up to 30 participants per departure, so the group stays social while everyone still gets real time at the telescope.' },
-      { question: 'Can college groups or societies join?', answer: 'Yes — Sambhar is deliberately priced for students. Astronomy clubs, physics and science societies, photography clubs and college communities can book a dedicated group departure. Use “Plan a College Astronomy Trip” to talk to us.' },
-      { question: 'What should I bring?', answer: 'Warm layered clothing (desert nights get cold in winter), comfortable shoes, a head-torch (red light preferred), any personal medication, and a camera or phone if you’d like to try astrophotography. A full checklist is shared on booking.' },
+      { question: 'What is included?', answer: 'Your accommodation for Saturday night, dinner, four to five hours of guided stargazing and telescope observation, a short hike nearby on Sunday morning, and breakfast. Check-out is by 11 am.' },
+      { question: 'Is travel included?', answer: 'No. You make your own way to Sambhar and back. Sambhar is about two hours from Jaipur by road.' },
+      { question: 'Which days does it run?', answer: 'Every Saturday. You arrive on Saturday evening and leave on Sunday morning. The sky calendar on this page shows the Moon, the planets and the deep-sky objects that are up during the session on each Saturday, so you can pick the darkest night.' },
+      { question: 'What is the accommodation like?', answer: 'The property has rooms, traditional mud-walled rooms and tents, set around a courtyard with a pool. You choose the type when you book.' },
+      { question: 'Is this suitable for complete beginners?', answer: 'Completely. No equipment or prior knowledge is needed — we bring the telescopes and show you how to find your way around the sky.' },
+      { question: 'What happens if it is cloudy?', answer: 'Astronomy depends on the sky, so observation is always subject to weather and cloud cover. We work the clearest windows of the night; if clouds move in we shift to sky talks and telescope demonstrations and make the most of any clearing. See our cancellation policy for what happens if we have to call a night off.' },
+      { question: 'Can college groups or societies come?', answer: 'Yes — astronomy clubs, physics and science societies, photography clubs and college communities can book a dedicated Saturday. Use “Plan a College Astronomy Trip” to talk to us.' },
+      { question: 'What should I bring?', answer: 'Warm layered clothing (desert nights get cold in winter), comfortable shoes for the morning walk, a head-torch (red light preferred), any personal medication, and a camera or phone if you would like to try night photography.' },
     ],
   },
 

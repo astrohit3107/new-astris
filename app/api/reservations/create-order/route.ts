@@ -4,7 +4,8 @@ import { reservationSchema, quoteFor, friendlyIssue, dateProblem } from '@/lib/r
 import { createOrder, isCashfreeConfigured, bookingHash, cashfreeEnv } from '@/lib/cashfree'
 import { availabilityFor, canAccept, availabilityLabel } from '@/lib/availability'
 import { SITE_URL } from '@/lib/site-config'
-import { NAKSHATRAALAY, getExperience } from '@/lib/nakshatraalay-data'
+import { getBookable } from '@/lib/bookables'
+import { roomsNeeded } from '@/lib/nakshatraalay-data'
 
 export const runtime = 'nodejs'
 
@@ -67,17 +68,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, skipped: true })
   }
 
-  // A closed venue takes no money, however the request arrived.
-  if (getExperience(data.experienceSlug) && !NAKSHATRAALAY.bookingsOpen) {
-    return NextResponse.json(
-      { error: 'Nakshatraalay is closed while we move to a new location. Bookings will reopen soon.' },
-      { status: 409 }
-    )
+  // Nothing is charged for something that is not open for booking — a closed
+  // venue, or Sambhar before its rates are set — however the request arrived.
+  const bookable = getBookable(data.experienceSlug)
+  if (!bookable) {
+    return NextResponse.json({ error: 'That option is no longer available.' }, { status: 400 })
+  }
+  if (!bookable.open) {
+    return NextResponse.json({ error: bookable.closedMessage }, { status: 409 })
   }
 
   // Refuse the date before pricing it: no order should exist for a night we
   // cannot honour.
-  const badDate = dateProblem(data.date)
+  const badDate = dateProblem(data.date, new Date(), data.experienceSlug)
   if (badDate) return NextResponse.json({ error: badDate }, { status: 400 })
 
   const quote = quoteFor(data)
@@ -88,8 +91,10 @@ export async function POST(request: Request) {
   // Is there room? `unknown` (the ledger could not be read) is permissive —
   // see lib/availability. A spreadsheet outage must not stop every sale, but
   // it is recorded on the booking so a human can check it.
-  const availability = await availabilityFor(data.experienceSlug, data.date)
-  if (!canAccept(availability, data.guests)) {
+  const availability = await availabilityFor(data.experienceSlug, data.date, data.tierLabel)
+  const need =
+    availability.unit === 'rooms' ? roomsNeeded(quote.tier, data.guests) ?? 1 : data.guests
+  if (!canAccept(availability, need)) {
     return NextResponse.json(
       {
         error:

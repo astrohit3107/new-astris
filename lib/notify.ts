@@ -30,7 +30,7 @@ export async function sendNotification(input: {
   fromName?: string
 }): Promise<{ sent: boolean; reason?: string }> {
   const recipients = input.to?.length ? input.to : NOTIFY_RECIPIENTS
-  const fromName = input.fromName || 'Nakshatraalay reservations'
+  const fromName = input.fromName || 'Astris Space bookings'
   const text = input.rows.map(([k, v]) => `${k}: ${v}`).join('\n')
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;color:#0b0b14">
@@ -159,7 +159,10 @@ export interface BookingConfirmation {
   bring?: string[]
   /** Set for the workshops that send a guest home with a print. */
   souvenir?: boolean
-  directionsUrl: string
+  /** Shown as a button when the venue has a public location; otherwise we say it follows. */
+  directionsUrl?: string
+  /** Where it happens — the email's heading. */
+  venue: string
   siteUrl: string
 }
 
@@ -200,7 +203,7 @@ export function confirmationHtml(c: BookingConfirmation): string {
 
       <div style="background:#0b0b14;padding:28px 30px">
         <p style="margin:0;color:#e8b44a;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700">
-          Nakshatraalay Gurgaon
+          ${e(c.venue)}
         </p>
         <h1 style="margin:10px 0 0;color:#ffffff;font-size:24px;font-weight:500;line-height:1.25">
           You&rsquo;re booked, ${e(c.firstName)}.
@@ -223,12 +226,18 @@ export function confirmationHtml(c: BookingConfirmation): string {
             .join('')}
         </table>
 
-        <a href="${e(c.directionsUrl)}"
-           style="display:block;margin:24px 0 0;background:#e8b44a;color:#0b0b14;text-decoration:none;text-align:center;padding:14px 20px;border-radius:999px;font-weight:700;font-size:14px">
-          Get directions
-        </a>
+        ${
+          c.directionsUrl
+            ? `<a href="${e(c.directionsUrl)}"
+                 style="display:block;margin:24px 0 0;background:#e8b44a;color:#0b0b14;text-decoration:none;text-align:center;padding:14px 20px;border-radius:999px;font-weight:700;font-size:14px">
+                Get directions
+              </a>`
+            : `<p style="margin:24px 0 0;padding:14px 18px;background:#fdf6e8;border-radius:12px;color:#7a5a12;font-size:13px;line-height:1.6">
+                 We will message you the exact location and arrival details on WhatsApp before your night.
+               </p>`
+        }
         <p style="margin:10px 0 0;text-align:center;color:#9a9aab;font-size:12px">
-          Sessions start at dusk. The sky doesn&rsquo;t wait, so please don&rsquo;t be late.
+          Sessions start once it is dark. The sky doesn&rsquo;t wait, so please don&rsquo;t be late.
         </p>
 
         ${
@@ -267,7 +276,7 @@ export function confirmationHtml(c: BookingConfirmation): string {
 
       <div style="padding:16px 30px 24px;border-top:1px solid #eeeef2">
         <p style="margin:0;color:#9a9aab;font-size:11px;line-height:1.7">
-          Nakshatraalay Gurgaon by Astris Space · This is your booking record — keep it.
+          ${e(c.venue)} · Astris Space · This is your booking record — keep it.
         </p>
       </div>
     </div>
@@ -283,8 +292,8 @@ export function confirmationText(c: BookingConfirmation): string {
     `Paid ${c.amountLabel} (${c.breakdown})`,
     `Payment ID: ${c.paymentId}`,
     '',
-    `Directions: ${c.directionsUrl}`,
-    'Sessions start at dusk — please do not be late.',
+    c.directionsUrl ? `Directions: ${c.directionsUrl}` : 'We will message you the exact location on WhatsApp before your night.',
+    'Sessions start once it is dark — please do not be late.',
     c.souvenir ? 'Before you leave we will print one of your own photographs to take home.' : '',
     c.bring?.length ? `\nWhat to bring:\n${c.bring.map((b) => `- ${b}`).join('\n')}` : '',
     '',

@@ -4,15 +4,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { CreditCard, Check, AlertCircle, Loader2, ShieldCheck, MessageCircle, Wrench } from 'lucide-react'
 
 import {
-  getExperience,
+  priceFor,
   formatINR,
   isClosed,
   POLICIES,
   earliestBookableDate,
-  MAPS,
   type PriceTier,
 } from '@/lib/nakshatraalay-data'
 import { GEAR_OPTIONS, asksForGear } from '@/lib/reservations'
+import { getBookable, SAMBHAR_SLUG } from '@/lib/bookables'
 import { whatsappHref, CONTACT } from '@/lib/site-config'
 
 /**
@@ -68,7 +68,7 @@ export default function ReservationForm({
   /** The venue itself is closed — nothing can be booked at all. */
   closed?: boolean
 }) {
-  const experience = getExperience(experienceSlug)
+  const experience = getBookable(experienceSlug)
   const tiers: PriceTier[] = useMemo(() => experience?.priceTiers ?? [], [experience])
   const scriptReady = useCashfreeScript()
   const wantsGear = asksForGear(experienceSlug)
@@ -115,10 +115,28 @@ export default function ReservationForm({
     slots?.state === 'open' && slots.remaining !== null && slots.remaining < guests
 
   const tier = tiers.find((t) => t.label === tierLabel)
-  const preview = tier ? (tier.perPerson ? tier.amount * guests : tier.amount) : 0
+  const preview = tier ? priceFor(tier, guests) : 0
   // Opening day, or today once opening has passed. Booking a night before the
   // property opens would take real money for a date that cannot happen.
   const earliest = earliestBookableDate()
+
+  // Saturday-only stays offer the next twelve Saturdays as a list rather than
+  // a free date picker; the server enforces the same rule regardless.
+  const saturdays = useMemo(() => {
+    if (!experience?.saturdaysOnly) return [] as string[]
+    const today = new Date(Date.now() + 5.5 * 3600_000)
+    const d = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 12))
+    while (d.getUTCDay() !== 6) d.setUTCDate(d.getUTCDate() + 1)
+    return Array.from({ length: 12 }, (_, i) => new Date(d.getTime() + i * 7 * 86400_000).toISOString().slice(0, 10))
+  }, [experience?.saturdaysOnly])
+
+  // "Book this Saturday" on the sky calendar passes ?saturday=YYYY-MM-DD.
+  useEffect(() => {
+    if (!experience?.saturdaysOnly) return
+    const wanted = new URLSearchParams(window.location.search).get('saturday')
+    if (wanted && saturdays.includes(wanted)) setDate(wanted)
+    else if (!date && saturdays[0]) setDate(saturdays[0])
+  }, [saturdays]) // eslint-disable-line react-hooks/exhaustive-deps
   const dateClosed = date !== '' && isClosed(date)
   const busy = status === 'starting' || status === 'paying' || status === 'confirming'
 
@@ -219,14 +237,18 @@ export default function ReservationForm({
             <p className="mt-1.5 text-xs text-white/40">
               Keep this — it identifies your booking if you need to change the date.
             </p>
-            <a
-              href={MAPS.directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-medium text-white/85 transition hover:border-white/40 hover:bg-white/5"
-            >
-              Get directions
-            </a>
+            {experience.directionsUrl ? (
+              <a
+                href={experience.directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-medium text-white/85 transition hover:border-white/40 hover:bg-white/5"
+              >
+                Get directions
+              </a>
+            ) : (
+              <p className="mt-4 text-xs text-white/45">We will message you the exact location on WhatsApp before your night.</p>
+            )}
           </>
         )}
       </div>
@@ -246,30 +268,41 @@ export default function ReservationForm({
    *  answers "what does this cost", and the WhatsApp message arrives
    *  pre-written with the experience already named.
    * ---------------------------------------------------------------- */
-  if (closed) {
+  if (closed || !experience.open) {
+    const sambhar = experience.slug === SAMBHAR_SLUG
     return (
       <div className="rounded-3xl border border-white/12 bg-white/[0.03] p-6 sm:p-8">
         <span className="inline-flex rounded-full bg-[var(--av-gold)]/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--av-gold)] ring-1 ring-[var(--av-gold)]/25">
-          Coming soon
+          {sambhar ? 'Rates coming shortly' : 'Coming soon'}
         </span>
-        <h3 className="font-display mt-4 text-xl font-semibold text-white">We are moving to a new location</h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/60">
-          Nakshatraalay is closed while we set up somewhere new. Bookings will reopen here as soon as
-          the new location is ready — nothing can be booked or paid for in the meantime.
-        </p>
-        <a
-          href="/astroventure-nights/sambhar-lake"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
-        >
-          Stargaze at Sambhar Lake this weekend
-        </a>
+        <h3 className="font-display mt-4 text-xl font-semibold text-white">
+          {sambhar ? 'Hold your Saturday' : 'We are moving to a new location'}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-white/60">{experience.closedMessage}</p>
+        {sambhar ? (
+          <a
+            href={whatsappHref('Hi Astris Space — I would like to book a Saturday night at Sambhar Lake.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+          >
+            Message us on WhatsApp
+          </a>
+        ) : (
+          <a
+            href="/astroventure-nights/sambhar-lake"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+          >
+            Stargaze at Sambhar Lake this Saturday
+          </a>
+        )}
       </div>
     )
   }
 
   if (maintenance) {
     const enquiry = whatsappHref(
-      `Hi Nakshatraalay — I'd like to book ${experience.title}. ` +
+      `Hi Astris Space — I'd like to book ${experience.title}. ` +
         `(Your website says online payment is temporarily unavailable.)`
     )
     return (
@@ -304,7 +337,7 @@ export default function ReservationForm({
                 <span className="shrink-0 text-sm font-semibold text-white">
                   {formatINR(t.amount)}
                   <span className="ml-1 text-[10px] font-normal uppercase text-white/40">
-                    {t.perPerson ? 'pp' : 'total'}
+                    {t.perPerson ? 'pp' : t.occupancy ? 'per room' : 'total'}
                   </span>
                 </span>
               </div>
@@ -383,7 +416,7 @@ export default function ReservationForm({
                   <span className="shrink-0 text-sm font-semibold text-white">
                     {formatINR(t.amount)}
                     <span className="ml-1 text-[10px] font-normal uppercase text-white/40">
-                      {t.perPerson ? 'pp' : 'total'}
+                      {t.perPerson ? 'pp' : t.occupancy ? 'per room' : 'total'}
                     </span>
                   </span>
                 </button>
@@ -395,8 +428,19 @@ export default function ReservationForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={label} htmlFor="rf-date">Date</label>
-            <input id="rf-date" type="date" min={earliest} required value={date}
-              onChange={(e) => setDate(e.target.value)} className={`${field} [color-scheme:dark]`} />
+            {experience.saturdaysOnly ? (
+              <select id="rf-date" required value={date} onChange={(e) => setDate(e.target.value)}
+                className={`${field} appearance-none [color-scheme:dark]`}>
+                {saturdays.map((d) => (
+                  <option key={d} value={d} className="bg-[#0b0b14]">
+                    {new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input id="rf-date" type="date" min={earliest} required value={date}
+                onChange={(e) => setDate(e.target.value)} className={`${field} [color-scheme:dark]`} />
+            )}
             {dateClosed ? (
               <p className="mt-1.5 text-xs text-amber-200/90">That night is full — please pick another.</p>
             ) : slotsLoading ? (
