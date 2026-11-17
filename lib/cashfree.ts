@@ -130,6 +130,16 @@ export function bookingHash(b: BookingIdentity): string {
  *  Orders
  * -------------------------------------------------------------------------- */
 
+/** A tag value Cashfree will accept: plain letters, digits and a few separators. */
+export function tagValue(v: string): string {
+  return v
+    .normalize('NFKD')
+    .replace(/[^A-Za-z0-9 _.,@:\-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 200)
+}
+
 export interface CreatedOrder {
   orderId: string
   paymentSessionId: string
@@ -166,9 +176,12 @@ export async function createOrder(input: {
         ...(input.returnUrl ? { return_url: input.returnUrl } : {}),
         ...(input.notifyUrl ? { notify_url: input.notifyUrl } : {}),
       },
-      // Max 15 pairs, values must be strings.
+      // Cashfree rejects tag values containing characters such as "·", "—" or
+      // "₹" (order_tags_invalid), which Sambhar's room names contain. Values
+      // are reduced to plain characters; the booking hash is hex and passes
+      // through unchanged.
       order_tags: Object.fromEntries(
-        Object.entries(input.tags).slice(0, 15).map(([k, v]) => [k, String(v).slice(0, 255)])
+        Object.entries(input.tags).slice(0, 10).map(([k, v]) => [k, tagValue(String(v))])
       ),
     }),
   })

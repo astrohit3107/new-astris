@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import { verifyWebhookSignature, fetchOrder } from '@/lib/cashfree'
+import { verifyWebhookSignature, fetchOrder, tagValue } from '@/lib/cashfree'
+import { getBookable } from '@/lib/bookables'
 import { sendNotification } from '@/lib/notify'
 import { appendBooking, readBookings } from '@/lib/sheets'
 
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     status: 'CONFIRMED',
     experience: t.experience || '',
     experienceSlug: t.slug || '',
-    packageLabel: t.tier || '',
+    packageLabel: getBookable(t.slug || '')?.priceTiers.find((x) => tagValue(x.label) === t.tier)?.label ?? t.tier ?? '',
     date: t.date || '',
     guests,
     name: t.name || event.data?.customer_details?.customer_name || '',
