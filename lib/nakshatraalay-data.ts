@@ -116,7 +116,14 @@ export const NAKSHATRAALAY = {
    * if the opening is meant to land at a different hour.
    */
   opensAt: '2026-09-15T18:00:00+05:30' as string | null,
-  status: 'announced' as 'announced' | 'open',
+  status: 'relocating' as 'announced' | 'open' | 'relocating',
+  /**
+   * Closed while Nakshatraalay moves to a new location (from 17 Nov 2026).
+   * While this is false NO Nakshatraalay experience can be booked or paid
+   * for — enforced in the order API, not just hidden in the page — because
+   * Cashfree is live and a hidden button is not a control.
+   */
+  bookingsOpen: false,
 
   roomsPlanned: 5,
   tentsExpandable: true,

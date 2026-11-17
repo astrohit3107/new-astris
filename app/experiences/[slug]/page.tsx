@@ -244,7 +244,11 @@ export default async function ExperiencePage({ params }: { params: Promise<Param
 
           {/* Enquiry */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <ReservationForm experienceSlug={exp.slug} maintenance={paymentsUnderMaintenance()} />
+            <ReservationForm
+              experienceSlug={exp.slug}
+              maintenance={paymentsUnderMaintenance()}
+              closed={!NAKSHATRAALAY.bookingsOpen}
+            />
           </div>
         </div>
       </section>

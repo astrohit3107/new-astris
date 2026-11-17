@@ -60,10 +60,13 @@ type Status = 'idle' | 'starting' | 'paying' | 'confirming' | 'done' | 'error'
 export default function ReservationForm({
   experienceSlug,
   maintenance = false,
+  closed = false,
 }: {
   experienceSlug: string
   /** Card payments are unavailable — show the WhatsApp route instead. */
   maintenance?: boolean
+  /** The venue itself is closed — nothing can be booked at all. */
+  closed?: boolean
 }) {
   const experience = getExperience(experienceSlug)
   const tiers: PriceTier[] = useMemo(() => experience?.priceTiers ?? [], [experience])
@@ -243,6 +246,27 @@ export default function ReservationForm({
    *  answers "what does this cost", and the WhatsApp message arrives
    *  pre-written with the experience already named.
    * ---------------------------------------------------------------- */
+  if (closed) {
+    return (
+      <div className="rounded-3xl border border-white/12 bg-white/[0.03] p-6 sm:p-8">
+        <span className="inline-flex rounded-full bg-[var(--av-gold)]/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--av-gold)] ring-1 ring-[var(--av-gold)]/25">
+          Coming soon
+        </span>
+        <h3 className="font-display mt-4 text-xl font-semibold text-white">We are moving to a new location</h3>
+        <p className="mt-2 text-sm leading-relaxed text-white/60">
+          Nakshatraalay is closed while we set up somewhere new. Bookings will reopen here as soon as
+          the new location is ready — nothing can be booked or paid for in the meantime.
+        </p>
+        <a
+          href="/astroventure-nights/sambhar-lake"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--av-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+        >
+          Stargaze at Sambhar Lake this weekend
+        </a>
+      </div>
+    )
+  }
+
   if (maintenance) {
     const enquiry = whatsappHref(
       `Hi Nakshatraalay — I'd like to book ${experience.title}. ` +

@@ -4,6 +4,7 @@ import { reservationSchema, quoteFor, friendlyIssue, dateProblem } from '@/lib/r
 import { createOrder, isCashfreeConfigured, bookingHash, cashfreeEnv } from '@/lib/cashfree'
 import { availabilityFor, canAccept, availabilityLabel } from '@/lib/availability'
 import { SITE_URL } from '@/lib/site-config'
+import { NAKSHATRAALAY, getExperience } from '@/lib/nakshatraalay-data'
 
 export const runtime = 'nodejs'
 
@@ -64,6 +65,14 @@ export async function POST(request: Request) {
   if (data.refCode) {
     console.error('[reservations] honeypot tripped', { ip, email: data.email })
     return NextResponse.json({ ok: true, skipped: true })
+  }
+
+  // A closed venue takes no money, however the request arrived.
+  if (getExperience(data.experienceSlug) && !NAKSHATRAALAY.bookingsOpen) {
+    return NextResponse.json(
+      { error: 'Nakshatraalay is closed while we move to a new location. Bookings will reopen soon.' },
+      { status: 409 }
+    )
   }
 
   // Refuse the date before pricing it: no order should exist for a night we
