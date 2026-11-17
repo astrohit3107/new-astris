@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SITE } from '@/lib/astroventure-data'
@@ -16,6 +17,10 @@ const links = [
 
 export default function AstroNav() {
   const [open, setOpen] = useState(false)
+  // Sambhar is booked and paid on its own page (#book); everywhere else
+  // Reserve goes to the enquiry form on the listing page.
+  const pathname = usePathname()
+  const reserveHref = pathname === '/astroventure-nights/sambhar-lake' ? '#book' : '/astroventure-nights#register'
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -69,7 +74,7 @@ export default function AstroNav() {
             <span className="hidden xl:inline">{SITE.phone}</span>
           </a>
           <a
-            href="/astroventure-nights#register"
+            href={reserveHref}
             className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition-all duration-300 hover:bg-[var(--av-gold)] hover:shadow-[0_8px_30px_-8px_var(--av-gold)]"
           >
             Reserve Your Spot
@@ -105,7 +110,7 @@ export default function AstroNav() {
             </a>
           ))}
           <a
-            href="/astroventure-nights#register"
+            href={reserveHref}
             onClick={() => setOpen(false)}
             className="mt-2 rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-black"
           >

@@ -167,6 +167,10 @@ export default async function DestinationPage({ params }: { params: Promise<Para
           <PropertyGallery photos={SAMBHAR_PROPERTY_PHOTOS} />
           <SambharMenu />
           <section id="book" className="scroll-mt-20 px-5 py-20 sm:px-6">
+            {/* The hero and closing "Reserve Your Spot" buttons are shared with
+                every destination and point at #register; on a weekend stay that
+                anchor has to be the booking form, or the buttons go nowhere. */}
+            <span id="register" className="block scroll-mt-20" aria-hidden="true" />
             <div className="mx-auto max-w-2xl">
               <h2 className="font-display text-balance text-3xl font-light text-white sm:text-4xl">Book your Saturday</h2>
               <p className="mt-3 text-sm leading-relaxed text-white/60">

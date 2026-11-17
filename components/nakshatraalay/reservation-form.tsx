@@ -403,7 +403,7 @@ export default function ReservationForm({
                 <button
                   key={t.label}
                   type="button"
-                  onClick={() => { setTierLabel(t.label); if (!t.perPerson) setGuests(2) }}
+                  onClick={() => { setTierLabel(t.label); if (t.occupancy) setGuests(t.occupancy); else if (!t.perPerson) setGuests(2) }}
                   aria-pressed={active}
                   className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition ${
                     active ? 'border-[var(--av-gold)] bg-[var(--av-gold)]/10' : 'border-white/12 hover:border-white/30'
@@ -462,7 +462,7 @@ export default function ReservationForm({
           <div>
             <label className={label} htmlFor="rf-guests">Guests</label>
             <input id="rf-guests" type="number" min={1} max={30} required value={guests}
-              disabled={tier ? !tier.perPerson : false}
+              disabled={tier ? !tier.perPerson && !tier.occupancy : false}
               onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
               className={`${field} disabled:opacity-50`} />
             {tier && !tier.perPerson && (
