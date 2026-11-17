@@ -14,6 +14,10 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET() {
   const payments = isCashfreeConfigured()
+  // Cashfree sandbox App IDs start with "TEST". Using one with
+  // CASHFREE_ENV=production is the commonest reason orders are refused.
+  const appId = process.env.CASHFREE_APP_ID ?? ''
+  const keyKind = !appId ? 'missing' : /^TEST/i.test(appId) ? 'sandbox' : 'production'
   const mode = cashfreeEnv()
 
   const sheetsConfigured = isSheetsConfigured()
@@ -42,6 +46,8 @@ export async function GET() {
     ok: payments && sheetReadable && guestEmail,
     payments,
     mode: mode ?? 'NOT SET',
+    keyKind,
+    keyModeMismatch: Boolean(mode && keyKind !== 'missing' && keyKind !== mode),
     sheet: {
       configured: sheetsConfigured,
       readable: sheetReadable,

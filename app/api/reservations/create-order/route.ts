@@ -158,8 +158,13 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('[reservations] order creation failed', error)
+    // Cashfree's own reason (e.g. "authentication Failed", "order_amount is
+    // invalid") is returned alongside the friendly message so a failure can be
+    // diagnosed from the browser. It never contains credentials. The form shows
+    // only the friendly message.
+    const reason = error instanceof Error ? error.message.replace(/^cashfree-create-order:/, '').slice(0, 300) : 'unknown'
     return NextResponse.json(
-      { error: 'We could not start the payment. Please try again shortly.' },
+      { error: 'We could not start the payment. Please try again shortly.', reason },
       { status: 502 }
     )
   }
