@@ -2,11 +2,13 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
-import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 import { POLICY_UPDATED } from '@/lib/policies'
 import { LEGAL_ENTITY, CONTACT, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 
-/** Shared chrome for the three policy pages, so they read as one document. */
+/**
+ * Shared chrome for the site-wide policy pages — terms, cancellation,
+ * rescheduling, privacy and contact — so they read as one document set.
+ */
 export default function LegalPage({
   title,
   standfirst,
@@ -18,12 +20,12 @@ export default function LegalPage({
 }) {
   return (
     <main className="dark min-h-screen bg-[#05060a] text-white">
-      <NakshatraalayNav backHref="/nakshatraalay/gurgaon" backLabel="Nakshatraalay" />
+      <NakshatraalayNav backHref="/" backLabel="Astris Space" />
 
       <section className="border-b border-white/10 px-5 pb-12 pt-36 sm:px-6">
         <div className="mx-auto max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
-            {NAKSHATRAALAY.name}
+            Astris Space
           </p>
           <h1 className="font-display mt-5 text-balance text-4xl font-light leading-tight sm:text-5xl">
             {title}
@@ -46,20 +48,26 @@ export default function LegalPage({
 
       <section className="border-t border-white/10 px-5 py-12 sm:px-6">
         <div className="mx-auto flex max-w-3xl flex-wrap gap-x-6 gap-y-2 text-xs text-white/45">
-          <span className="text-white/60">Other policies:</span>
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/cancellation">
+          <span className="text-white/60">Our policies:</span>
+          <Link className="underline hover:text-white" href="/terms">
+            Terms &amp; conditions
+          </Link>
+          <Link className="underline hover:text-white" href="/cancellation-policy">
             Cancellation &amp; refunds
           </Link>
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/rescheduling">
+          <Link className="underline hover:text-white" href="/rescheduling-policy">
             Rescheduling
           </Link>
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/privacy">
+          <Link className="underline hover:text-white" href="/privacy-policy">
             Privacy
+          </Link>
+          <Link className="underline hover:text-white" href="/contact">
+            Contact us
           </Link>
         </div>
         <p className="mx-auto mt-6 max-w-3xl text-xs leading-relaxed text-white/35">
-          These terms are between you and {LEGAL_ENTITY}, the company trading as Astris Space and
-          operating Nakshatraalay Gurgaon, with its registered office at {REGISTERED_OFFICE_LINE}.
+          These policies are between you and {LEGAL_ENTITY}, the company trading as Astris Space,
+          with its registered office at {REGISTERED_OFFICE_LINE}.
           Contact {CONTACT.email} or {CONTACT.phone}.
         </p>
       </section>

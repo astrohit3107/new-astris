@@ -13,7 +13,7 @@ import NakshatraalayNav from '@/components/nakshatraalay/nav'
 const PATH = '/sky-calendar'
 const TITLE = 'Sky Calendar — The Best Nights to Look Up near Delhi'
 const DESCRIPTION =
-  'The sky over Nakshatraalay Gurgaon any night: moon phase, which planets are up and which deep-sky objects are well placed. Pick a night, then come and look.'
+  'The sky over Delhi NCR any night: moon phase, which planets are up and which deep-sky objects are well placed. Pick a night, then come and look.'
 
 export const metadata: Metadata = {
   title: TITLE,

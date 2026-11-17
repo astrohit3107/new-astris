@@ -20,9 +20,9 @@ import NakshatraalayNav from '@/components/nakshatraalay/nav'
  */
 
 const PATH = '/first-light'
-const TITLE = 'Nakshatraalay First Light — Delhi NCR, Look Up'
+const TITLE = 'Nakshatraalay — Get Notified When We Reopen'
 const DESCRIPTION =
-  'Nakshatraalay Gurgaon is opening in Delhi NCR: telescopes, dark-sky nights, astrophotography and a place to stay under the stars. Join the First Light list.'
+  'Nakshatraalay is moving to a new location. Leave your details and we will tell you first when telescope nights, workshops and stays reopen.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -30,7 +30,6 @@ export const metadata: Metadata = {
   alternates: { canonical: PATH },
   keywords: [
     'stargazing near Delhi',
-    'stargazing near Gurgaon',
     'astronomy experience Delhi NCR',
     'astrophotography workshop Delhi',
     'weekend getaway near Delhi',

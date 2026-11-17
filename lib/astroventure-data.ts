@@ -80,8 +80,6 @@ export const IMAGES = {
   // Tijara: the Aravalli range in Alwar, where Tijara sits (CC BY 3.0, Onef9day).
   sambhar: `${A}/rajasthan/sambhar-lake.jpg`,
   sambharMobile: `${A}/rajasthan/sambhar-lake.jpg`,
-  tijara: `${A}/rajasthan/tijara.jpg`,
-  tijaraMobile: `${A}/rajasthan/tijara.jpg`,
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -130,7 +128,6 @@ export type DestinationSlug =
   | 'chitkul'
   | 'kasol'
   | 'sambhar-lake'
-  | 'tijara'
 
 /**
  * A single fixed-price departure option (used by the Rajasthan weekend
@@ -549,121 +546,7 @@ export const destinations: Destination[] = [
       { question: 'What should I bring?', answer: 'Warm layered clothing (desert nights get cold in winter), comfortable shoes, a head-torch (red light preferred), any personal medication, and a camera or phone if you’d like to try astrophotography. A full checklist is shared on booking.' },
     ],
   },
-  {
-    slug: 'tijara',
-    name: 'Tijara',
-    valley: 'Alwar, Rajasthan',
-    locationLabel: 'Tijara, Alwar · Rajasthan',
-    tagline: 'A Delhi weekend where the Aravallis swallow the city glow.',
-    altitude: '320 m',
-    darkSkyRating: 3,
-    darkSkyLabel: 'Aravalli rural sky',
-    bortle: 'Bortle 4',
-    region: 'Rajasthan',
-    bestSeason: 'October – March',
-    observationConditions:
-      'Tucked into the Aravalli country of Alwar, the low ridgelines block a slice of the Delhi-NCR light dome to the north-east. It is an honest rural Bortle 4 — not a remote desert, but a dramatic step down from Delhi’s washed-out Bortle 8–9 sky, with the Milky Way and hundreds of stars back in view on clear winter nights.',
-    image: IMAGES.tijara,
-    imageMobile: IMAGES.tijaraMobile,
-    heroImage: IMAGES.tijara,
-    categoryLabel: 'Weekend Astronomy Escape',
-    durationLabel: '2 Days · 1 Night',
-    heroStats: [
-      { label: 'Location', value: 'Tijara, Alwar · Rajasthan' },
-      { label: 'Duration', value: '2D · 1N (Sat–Sun)' },
-      { label: 'Departs', value: 'Delhi / Jaipur' },
-      { label: 'Dark Sky', value: 'Bortle 4' },
-    ],
-    capacity: 30,
-    collegeGroups: true,
-    overview:
-      'Tijara is the closest a Delhi student can get to a real dark sky on a student budget. A couple of hours south of the city in the Aravalli hills of Alwar, it swaps the NCR’s permanent orange haze for quiet heritage country — the restored Tijara Fort-Palace on one ridge, a Jain pilgrimage temple down the road, and above it all a sky that actually has stars in it. The weekend is built around the telescope and the night, with just enough of the region by day to stretch your legs.',
-    highlights: [
-      'A real dark-ish sky within reach of Delhi',
-      'Guided telescope observation of planets, clusters & nebulae',
-      'Beginner astrophotography with camera and mobile',
-      'Sunrise over the Aravalli country',
-      'Tijara Fort-Palace & heritage surroundings',
-      'Built for college groups and first-time stargazers',
-    ],
-    audience: [
-      'College students',
-      'Young professionals',
-      'Beginners in astronomy',
-      'Photography enthusiasts',
-      'Astronomy, physics & science clubs',
-      'Delhi-NCR student communities',
-    ],
-    inclusions: [
-      'Return travel from your chosen departure city (Delhi or Jaipur)',
-      'One night’s accommodation on a double-sharing basis',
-      'All guided stargazing and telescope observation sessions',
-      'Beginner astrophotography guidance — camera and mobile',
-      'A dedicated Aravalli sunrise session',
-      'Night-sky orientation and constellation tours with expert astronomers',
-    ],
-    exclusions: [
-      'Meals and beverages not specified in your booking confirmation',
-      'Personal expenses, shopping and tips',
-      'Travel insurance and any permits',
-      'Anything not explicitly listed under Inclusions',
-      'Observation is always subject to weather and sky conditions',
-    ],
-    pricing: [
-      {
-        route: 'Delhi → Tijara → Delhi',
-        fromCity: 'Delhi',
-        amount: 3500,
-        amountLabel: '₹3,500',
-        accommodation: 'Double sharing',
-        featured: true,
-      },
-      {
-        route: 'Jaipur → Tijara → Jaipur',
-        fromCity: 'Jaipur',
-        amount: 4500,
-        amountLabel: '₹4,500',
-        accommodation: 'Double sharing',
-      },
-    ],
-    itinerary: [
-      {
-        day: 'Saturday',
-        title: 'Out of the City, Into the Dark',
-        summary: 'A short run from Delhi, a little Alwar heritage, then the sky.',
-        events: [
-          { time: 'Morning', title: 'Departure from Delhi', detail: 'Leave Delhi and drive into the Aravalli country around Tijara. Jaipur departures join the same day.' },
-          { time: 'Afternoon', title: 'Arrival & Check-in', detail: 'Reach Tijara and settle in before the light goes.' },
-          { time: 'Afternoon', title: 'Local Sightseeing', detail: 'A lightweight visit to the heritage Tijara Fort-Palace and the nearby Tijara Jain temple — kept short so the astronomy stays the focus.' },
-          { time: 'Sunset', title: 'First Light on the Sky', detail: 'Telescopes go up as the sun drops: the visible planets and brightest objects first, with naked-eye constellation identification and seasonal sky orientation.' },
-          { time: 'Night', title: 'Flagship Astronomy Night', detail: 'Guided stargazing, telescope observation of clusters, nebulae, planets and the Moon, astronomy storytelling, and hands-on practical telescope use.' },
-          { time: 'Late night', title: 'Basic Astrophotography', detail: 'Camera set-up and manual controls — ISO, shutter, aperture, manual focus, tripod technique and Milky Way basics where conditions permit, plus simple mobile astrophotography.' },
-        ],
-      },
-      {
-        day: 'Sunday',
-        title: 'Sunrise & Return',
-        summary: 'A calm Aravalli dawn before the drive back.',
-        events: [
-          { time: 'Pre-dawn', title: 'Aravalli Sunrise', detail: 'A dedicated sunrise session with landscape and sunrise photography in the quiet morning light.' },
-          { time: '08:00 – 09:00', title: 'Breakfast', detail: 'A warm breakfast before wrapping up.' },
-          { time: 'Afternoon', title: 'Lunch & Departure', detail: 'Lunch, then depart for Delhi or Jaipur. Trip concludes.' },
-        ],
-      },
-    ],
-    faqs: [
-      { question: 'What is included in the Tijara Astroventure?', answer: 'Return travel from your chosen departure city (Delhi or Jaipur), one night’s stay on a double-sharing basis, all guided stargazing and telescope sessions, beginner astrophotography guidance, a dedicated sunrise session, and expert astronomy mentoring across the weekend.' },
-      { question: 'Can I join from Delhi?', answer: 'Yes — Tijara is positioned as a Delhi weekend getaway. Delhi → Tijara → Delhi is ₹3,500 per person. You can also join from Jaipur (Jaipur → Tijara → Jaipur) at ₹4,500 per person. Return travel from your chosen city is included.' },
-      { question: 'How dark is the sky, really?', answer: 'Tijara is an honest rural Bortle 4 — not a remote desert, but a dramatic improvement on Delhi’s Bortle 8–9 city sky. On a clear, moonless winter night the Milky Way and hundreds of stars come back into view. We never promise a specific rating on a given night; conditions depend on weather and the Moon.' },
-      { question: 'What is the accommodation?', answer: 'Comfortable accommodation in the Tijara area on a double-sharing basis for one night. Tell us your preferences when booking and we’ll try to match them.' },
-      { question: 'Is telescope observation and astrophotography included?', answer: 'Both are included. Guided telescope observation of planets, clusters and nebulae is the centrepiece, alongside a beginner-friendly introduction to night-sky photography with camera and mobile. It’s an included experience, not a separate professional workshop.' },
-      { question: 'Is this suitable for beginners?', answer: 'Yes — it’s designed for first-timers, students and young professionals. No prior experience or equipment is required.' },
-      { question: 'What happens if the weather is cloudy?', answer: 'Observation is always subject to weather and cloud cover. We follow the forecast and use the clearest windows; if it clouds over we move to sky talks, telescope demos and astrophotography theory, and make the most of any break in the clouds.' },
-      { question: 'How many people come along?', answer: 'Up to 30 participants per departure — sociable, but small enough that everyone gets real time at the eyepiece.' },
-      { question: 'Can college groups join?', answer: 'Absolutely. Tijara is priced for students, and astronomy clubs, physics and science societies and photography clubs can book a dedicated group departure. Use “Plan a College Astronomy Trip” to reach us.' },
-      { question: 'What should I bring?', answer: 'Warm layers (winter nights get cold), comfortable shoes, a red-light head-torch, personal medication, and a camera or phone for astrophotography. A full checklist is shared on booking.' },
-    ],
-  },
+
 ]
 
 export function getDestination(slug: string): Destination | undefined {
@@ -1003,7 +886,6 @@ export const events: SlotEvent[] = [
 
   // --- Rajasthan weekend escapes — every weekend of the season ------------
   ...weekendSlots({ slug: 'sambhar-lake', idPrefix: 'sl', batchName: 'Sambhar Lake Weekend' }),
-  ...weekendSlots({ slug: 'tijara', idPrefix: 'tj', batchName: 'Tijara Weekend' }),
 ]
 
 export function eventsForDestination(slug: DestinationSlug): SlotEvent[] {

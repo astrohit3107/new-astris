@@ -2,17 +2,16 @@ import type { Metadata } from 'next'
 
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
 import { REFUND_BANDS, POLICY } from '@/lib/policies'
-import { experiences, NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 import { CONTACT, LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
 
-const TITLE = 'Cancellation & Refund Policy — Nakshatraalay Gurgaon'
+const TITLE = 'Cancellation & Refund Policy — Astris Space'
 const DESCRIPTION =
-  'How cancellations and refunds work for stargazing experiences, astrophotography workshops and overnight stays at Nakshatraalay Gurgaon.'
+  'How cancellations and refunds work for Astris Space bookings — stargazing nights, astrophotography workshops and overnight stays.'
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: '/nakshatraalay/gurgaon/cancellation' },
+  alternates: { canonical: '/cancellation-policy' },
   openGraph: { type: 'article', title: TITLE, description: DESCRIPTION },
 }
 
@@ -24,7 +23,7 @@ export default function CancellationPolicyPage() {
     >
       <Clause heading="Who you are booking with">
         <p>
-          Bookings at Nakshatraalay Gurgaon are made with {LEGAL_ENTITY}, the company trading as
+          Bookings with Astris Space are made with {LEGAL_ENTITY}, the company trading as
           Astris Space, registered office {REGISTERED_OFFICE_LINE}. Payments are collected by, and
           refunds are issued by, that company.
         </p>
@@ -77,15 +76,9 @@ export default function CancellationPolicyPage() {
       </Clause>
 
       <Clause heading="Which bookings this covers">
-        <p>Every experience bookable at {NAKSHATRAALAY.name}:</p>
-        <ul className="mt-2 space-y-1.5">
-          {experiences.map((e) => (
-            <li key={e.slug} className="text-white/70">
-              <span className="text-white/85">{e.title}</span>
-              <span className="text-white/40"> — {e.durationLabel}</span>
-            </li>
-          ))}
-        </ul>
+        <p>
+          This policy applies to bookings made and paid for on this website — currently the Sambhar Lake Saturday nights, and Nakshatraalay’s experiences once it reopens at its new location. Expeditions and group programmes arranged directly with us are covered by the terms in their written confirmation, where those differ.
+        </p>
       </Clause>
 
       <Clause heading="Talking to a person">

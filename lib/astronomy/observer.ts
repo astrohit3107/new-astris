@@ -65,7 +65,6 @@ export const LOCATIONS: SkyLocation[] = [
   // --- Delhi NCR and the Astris sites -------------------------------------
   { slug: 'delhi', name: 'Delhi', region: 'Delhi NCR', latitude: 28.6139, longitude: 77.2090, elevation: 216, timeZone: 'Asia/Kolkata', note: 'Heavily light-polluted, but the Moon and planets are unaffected by it.' },
   { slug: 'gurgaon', name: 'Gurgaon', region: 'Delhi NCR', latitude: 28.4595, longitude: 77.0266, elevation: 217, timeZone: 'Asia/Kolkata' },
-  { slug: 'nakshatraalay-gurgaon', name: 'Nakshatraalay Gurgaon', region: 'Delhi NCR', latitude: 28.3114065, longitude: 77.0121846, elevation: 230, timeZone: 'Asia/Kolkata', note: 'Our own site, south of the city.' },
   { slug: 'sambhar-lake', name: 'Sambhar Lake', region: 'Rajasthan', latitude: 26.9080, longitude: 75.0850, elevation: 360, timeZone: 'Asia/Kolkata', note: 'Salt flats with an unobstructed horizon in every direction.' },
   { slug: 'tijara', name: 'Tijara', region: 'Rajasthan', latitude: 27.9290, longitude: 76.8560, elevation: 320, timeZone: 'Asia/Kolkata' },
   { slug: 'chandigarh', name: 'Chandigarh', region: 'Punjab & Haryana', latitude: 30.7333, longitude: 76.7794, elevation: 321, timeZone: 'Asia/Kolkata' },
@@ -91,7 +90,8 @@ export const LOCATIONS: SkyLocation[] = [
   { slug: 'port-blair', name: 'Port Blair', region: 'Andaman & Nicobar', latitude: 11.6234, longitude: 92.7265, elevation: 15, timeZone: 'Asia/Kolkata', note: 'India’s easternmost skies — the sun sets over an hour before it does in Gujarat, despite the shared clock.' },
 ]
 
-export const DEFAULT_LOCATION_SLUG = 'nakshatraalay-gurgaon'
+/** Where we run every Saturday, so the calendar opens on a night you can book. */
+export const DEFAULT_LOCATION_SLUG = 'sambhar-lake'
 
 export function getLocation(slug: string): SkyLocation | undefined {
   return LOCATIONS.find((l) => l.slug === slug)

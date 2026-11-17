@@ -25,6 +25,8 @@ export default function NakshatraalayPopup() {
 
   useEffect(() => {
     if (opensAt && opensAt.getTime() < Date.now()) return
+    // Nothing to announce while the venue is moving.
+    if (NAKSHATRAALAY.status === 'relocating') return
 
     let seen = false
     try {

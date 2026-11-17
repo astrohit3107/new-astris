@@ -1008,10 +1008,10 @@ export const educationGuides: Guide[] = [
       ASTROED_EXPERIENCE,
       {
         label: 'Weekend escape',
-        title: 'Tijara — a dark-sky night within reach of Delhi',
+        title: 'Sambhar Lake — a night under a dark rural sky',
         detail:
-          'An honest rural Bortle 4 sky in the Aravalli country of Alwar, roughly two to three hours from the NCR. The nearest practical option for a school or college group that wants students to see the sky the city removes.',
-        href: '/astroventure-nights/tijara',
+          'An honest rural Bortle 4 sky over India’s largest salt lake, about two hours from Jaipur. Every Saturday: dinner, four to five hours at the telescope, a night’s stay and a dawn walk.',
+        href: '/astroventure-nights/sambhar-lake',
       },
     ],
     related: [
@@ -1109,9 +1109,9 @@ export const educationGuides: Guide[] = [
       ASTROED_EXPERIENCE,
       {
         label: 'Nakshatraalay',
-        title: 'Nakshatraalay Gurgaon — telescope nights near Delhi NCR',
+        title: 'Nakshatraalay — telescope nights, coming soon at a new location',
         detail:
-          'An astronomy destination on the NCR’s doorstep, built around real telescopes and guided observation — close enough for a school evening that does not need an overnight.',
+          'Astris’s own astronomy destination, built around real telescopes and guided observation. It is moving to a new location; school evenings resume when it reopens.',
         href: '/nakshatraalay/gurgaon',
       },
       {

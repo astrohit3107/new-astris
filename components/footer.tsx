@@ -124,17 +124,19 @@ export default function Footer() {
               profile URLs, the row is removed until the real handles are
               supplied — then restore it here with actual hrefs and
               rel="noopener noreferrer". */}
-          <p className="text-sm text-foreground/50">
-            <a href="/astroventure-nights/privacy" className="hover:text-foreground transition">
-              Privacy
-            </a>
-            <span aria-hidden="true" className="px-2 text-foreground/25">
-              ·
-            </span>
-            <a href="/astroventure-nights/terms" className="hover:text-foreground transition">
-              Terms
-            </a>
-          </p>
+          <nav aria-label="Policies" className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-foreground/50">
+            {[
+              ['/terms', 'Terms'],
+              ['/cancellation-policy', 'Cancellation & refunds'],
+              ['/rescheduling-policy', 'Rescheduling'],
+              ['/privacy-policy', 'Privacy'],
+              ['/contact', 'Contact'],
+            ].map(([href, label]) => (
+              <a key={href} href={href} className="hover:text-foreground transition">
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>

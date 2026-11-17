@@ -3,16 +3,15 @@ import Link from 'next/link'
 
 import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
 import { CONTACT, LEGAL_ENTITY, REGISTERED_OFFICE_LINE } from '@/lib/site-config'
-import { NAKSHATRAALAY } from '@/lib/nakshatraalay-data'
 
-const TITLE = 'Privacy Policy — Nakshatraalay Gurgaon'
+const TITLE = 'Privacy Policy — Astris Space'
 const DESCRIPTION =
-  'What Nakshatraalay Gurgaon collects when you book a stargazing experience or astrophotography workshop, why, who else sees it, and how to have it deleted.'
+  'What Astris Space collects when you book or enquire, why, who else sees it, and how to have it deleted.'
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: '/nakshatraalay/gurgaon/privacy' },
+  alternates: { canonical: '/privacy-policy' },
   openGraph: { type: 'article', title: TITLE, description: DESCRIPTION },
 }
 
@@ -24,7 +23,7 @@ export default function PrivacyPage() {
     >
       <Clause heading="Who holds your details">
         <p>
-          {LEGAL_ENTITY}, the company trading as Astris Space and operating Nakshatraalay Gurgaon,
+          {LEGAL_ENTITY}, the company trading as Astris Space,
           with its registered office at {REGISTERED_OFFICE_LINE}. &ldquo;We&rdquo; throughout this
           policy means that company.
         </p>
@@ -129,7 +128,7 @@ export default function PrivacyPage() {
 
       <Clause heading="Children">
         <p>
-          Children are welcome at {NAKSHATRAALAY.name}, but bookings are made by an adult. We do not
+          Children are welcome on many of our experiences, but bookings are made by an adult. We do not
           knowingly collect details directly from anyone under 18.
         </p>
       </Clause>
@@ -146,11 +145,11 @@ export default function PrivacyPage() {
       <Clause heading="Getting in touch">
         <p>
           Any privacy question: {CONTACT.email}, or {CONTACT.phone}. Our booking terms are on the{' '}
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/cancellation">
+          <Link className="underline hover:text-white" href="/cancellation-policy">
             cancellation
           </Link>{' '}
           and{' '}
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/rescheduling">
+          <Link className="underline hover:text-white" href="/rescheduling-policy">
             rescheduling
           </Link>{' '}
           pages.

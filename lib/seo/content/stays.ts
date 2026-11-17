@@ -21,16 +21,16 @@ const UPDATED = '2026-09-01'
 
 const NAKSHATRAALAY = {
   label: 'Nakshatraalay',
-  title: 'Nakshatraalay Gurgaon',
+  title: 'Nakshatraalay — coming soon at a new location',
   detail:
-    'An astronomy destination on the southern edge of Delhi NCR — telescope nights, guided observation and stays planned alongside. First Light is 15 September 2026.',
+    'Our astronomy destination is moving to a new location. The sky calendar and the experiences are ready — bookings reopen when the new site does.',
   href: '/nakshatraalay/gurgaon',
 }
 
 const FIRST_LIGHT = {
   label: 'First Light',
-  title: 'First Light at Nakshatraalay',
-  detail: 'The opening night, and the list for people who want to know when the doors open.',
+  title: 'Hear first when Nakshatraalay reopens',
+  detail: 'Nakshatraalay is moving to a new location. Leave your details and we will tell you as soon as it reopens.',
   href: '/first-light',
 }
 
@@ -50,19 +50,19 @@ const NIGHTS = {
   href: '/astroventure-nights',
 }
 
-const TIJARA = {
-  label: 'Weekend escape',
-  title: 'Tijara — an overnight dark-sky escape from Delhi',
+const SAMBHAR = {
+  label: 'Every Saturday',
+  title: 'Sambhar Lake — a night of stargazing on India’s largest salt lake',
   detail:
-    'An honest rural Bortle 4 sky in the Aravalli country of Alwar. Two days and a night, from ₹3,500, with departures from Delhi and Jaipur.',
-  href: '/astroventure-nights/tijara',
+    'An honest rural Bortle 4 sky over an unbroken horizon. Arrive on Saturday evening for dinner and four to five hours at the telescope, stay the night, and walk out at dawn.',
+  href: '/astroventure-nights/sambhar-lake',
 }
 
 const STAYS_CTA = {
   heading: 'A night where the sky is the reason you came',
-  body: 'Nakshatraalay is being built as an astronomy destination on Delhi NCR’s doorstep — real telescopes, a dark horizon, and people who know what they are pointing at. First Light is 15 September 2026.',
-  primary: { label: 'Nakshatraalay Gurgaon', href: '/nakshatraalay/gurgaon' },
-  secondary: { label: 'Join the First Light list', href: '/first-light' },
+  body: 'Every Saturday at Sambhar Lake: dinner, four to five hours at the telescope under an honest rural Bortle 4 sky, a night’s stay and breakfast. Nakshatraalay, our own astronomy destination, is moving to a new location and reopens soon.',
+  primary: { label: 'Book a Saturday at Sambhar', href: '/astroventure-nights/sambhar-lake' },
+  secondary: { label: 'Hear when Nakshatraalay reopens', href: '/first-light' },
 }
 
 export const staysGuides: Guide[] = [
@@ -252,9 +252,9 @@ export const staysGuides: Guide[] = [
       },
       {
         kind: 'callout',
-        title: 'Nakshatraalay Gurgaon',
+        title: 'Nakshatraalay',
         body:
-          'Astris is building Nakshatraalay as an astronomy destination on the southern edge of the NCR — close enough for a Saturday, with real telescopes, a dark horizon and guided observation, and stays planned alongside. It is announced rather than open: First Light is 15 September 2026. It does not pretend to be a Himalayan sky, and it is not intended to replace a dark-sky trip — it is intended to make a serious astronomy evening something the NCR can reach without a weekend.',
+          'Nakshatraalay is Astris’s own astronomy destination — real telescopes, a dark horizon, guided observation and stays alongside. It is moving to a new location and reopens as soon as the new site is ready. It does not pretend to be a Himalayan sky, and it is not intended to replace a dark-sky trip; until it reopens, the Sambhar Lake Saturday nights are the way to spend a night at the telescope with us.',
       },
       {
         kind: 'steps',
@@ -310,7 +310,7 @@ export const staysGuides: Guide[] = [
           'You can, though it makes for a very long day, since the sky is only properly dark for the hours you would otherwise be driving home. An overnight also gives you a second chance if the first night clouds over.',
       },
     ],
-    experiences: [NAKSHATRAALAY, TIJARA, FIRST_LIGHT],
+    experiences: [NAKSHATRAALAY, SAMBHAR, FIRST_LIGHT],
     related: [
       'astronomy-stays',
       'stargazing/near-delhi',
@@ -446,17 +446,9 @@ export const staysGuides: Guide[] = [
           'Yes, and the requirements are consistent: a usable observing site with controllable lighting, equipment specified for that site, trained resident staff, a session format, and honesty about the sky. That is precisely what AstroTrain is built to install at a property.',
       },
     ],
-    experiences: [
-      {
-        label: 'AstroTrain',
-        title: 'AstroTrain — build an astronomy experience at your property',
-        detail:
-          'Equipment specified and installed, your team trained to lead sessions, the format worked out and ongoing operational support.',
-        href: '/astrotrain',
-      },
-      NIGHTS,
-      NAKSHATRAALAY,
-    ],
+    experiences: [{
+        label: 'AstroTrain', title: 'AstroTrain — build an astronomy experience at your property', detail:
+          'Equipment specified and installed, your team trained to lead sessions, the format worked out and ongoing operational support.', href: '/astrotrain', }, NIGHTS, NAKSHATRAALAY],
     related: [
       'stargazing/india',
       'stargazing/dark-sky-places-india',

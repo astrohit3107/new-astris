@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *  CLUSTER 3 — STARGAZING  →  funnels into Astroventure Nights and
- *                              Nakshatraalay Gurgaon
+ *                              Nakshatraalay
  * ============================================================================
  *  Consumer intent, and the highest-volume cluster in the plan. The CTA is
  *  deliberately NOT the same on every page: "stargazing near Delhi" belongs
@@ -20,27 +20,20 @@ import type { Guide } from '@/lib/seo/types'
 
 const UPDATED = '2026-09-01'
 
-const TIJARA = {
-  label: 'Weekend escape',
-  title: 'Tijara — a dark-sky weekend within reach of Delhi',
-  detail:
-    'An honest rural Bortle 4 sky in the Aravalli country of Alwar, where the low ridgelines block part of the NCR light dome. Two days and a night, from ₹3,500, with departures from Delhi and Jaipur.',
-  href: '/astroventure-nights/tijara',
-}
 
 const SAMBHAR = {
-  label: 'Weekend escape',
-  title: 'Sambhar Lake — astronomy on India’s largest salt lake',
+  label: 'Every Saturday',
+  title: 'Sambhar Lake — a night of stargazing on India’s largest salt lake',
   detail:
-    'A flat, wide-open salt basin with an unobstructed horizon in almost every direction, west of Jaipur. A genuine rural Bortle 4 overhead, two days and a night, from ₹3,500.',
+    'An honest rural Bortle 4 sky over an unbroken horizon. Arrive on Saturday evening for dinner and four to five hours at the telescope, stay the night, and walk out at dawn.',
   href: '/astroventure-nights/sambhar-lake',
 }
 
 const NAKSHATRAALAY = {
   label: 'Nakshatraalay',
-  title: 'Nakshatraalay Gurgaon — an astronomy destination near Delhi NCR',
+  title: 'Nakshatraalay — coming soon at a new location',
   detail:
-    'Close enough for a Saturday: real telescopes, a dark horizon and guided observation on the NCR’s southern edge, with stays planned alongside.',
+    'Our astronomy destination is moving to a new location. The sky calendar and the experiences are ready — bookings reopen when the new site does.',
   href: '/nakshatraalay/gurgaon',
 }
 
@@ -63,7 +56,7 @@ const LADAKH = {
 const NCR_CTA = {
   heading: 'See it from a sky that has stars in it',
   body: 'Astroventure Nights runs weekend dark-sky escapes within reach of Delhi and Jaipur — real telescopes, guided observation, and an honest account of what the sky will actually do on the night.',
-  primary: { label: 'Weekend escapes near Delhi', href: '/astroventure-nights/tijara' },
+  primary: { label: 'Stargaze at Sambhar Lake', href: '/astroventure-nights/sambhar-lake' },
   secondary: { label: 'All Astroventure Nights', href: '/astroventure-nights' },
 }
 
@@ -71,7 +64,7 @@ const NIGHTS_CTA = {
   heading: 'Spend a night under a real sky',
   body: 'Astroventure Nights are guided dark-sky nights with professional telescopes and people who know what they are pointing at — from Himalayan valleys to weekend escapes from the plains.',
   primary: { label: 'Explore Astroventure Nights', href: '/astroventure-nights' },
-  secondary: { label: 'Nakshatraalay Gurgaon', href: '/nakshatraalay/gurgaon' },
+  secondary: { label: 'Nakshatraalay', href: '/nakshatraalay/gurgaon' },
 }
 
 export const stargazingGuides: Guide[] = [
@@ -337,7 +330,7 @@ export const stargazingGuides: Guide[] = [
           'A new-Moon weekend in October or early November, or between February and April. Avoid the monsoon months entirely, and be cautious of mid-November to January, when haze can make a cloudless night unusable.',
       },
     ],
-    experiences: [TIJARA, SAMBHAR, NAKSHATRAALAY],
+    experiences: [SAMBHAR, NAKSHATRAALAY],
     related: [
       'stargazing',
       'stargazing/delhi',
@@ -457,7 +450,7 @@ export const stargazingGuides: Guide[] = [
           'The Aravalli country around Tijara and Alwar, and further west at Sambhar in Rajasthan — both honest rural Bortle 4 sites, a substantial improvement on the city without being wilderness skies.',
       },
     ],
-    experiences: [NAKSHATRAALAY, TIJARA],
+    experiences: [NAKSHATRAALAY, SAMBHAR],
     related: [
       'stargazing',
       'stargazing/near-delhi',
@@ -707,7 +700,7 @@ export const stargazingGuides: Guide[] = [
           'That is the normal starting point and it is the reason guided nights exist. Knowing the sky is the part that takes years; being shown it well takes one evening with someone who does.',
       },
     ],
-    experiences: [TIJARA, SAMBHAR, NIGHTS],
+    experiences: [SAMBHAR, NIGHTS],
     related: [
       'stargazing',
       'stargazing/near-delhi',
@@ -833,7 +826,7 @@ export const stargazingGuides: Guide[] = [
           'The most practical test is the naked eye: can you see the Milky Way as a structured band, and how far down towards the horizon does it survive before city glow eats it? Light-pollution maps give a useful prediction, and a sky-quality meter reading gives a number — but the eye test is honest and free.',
       },
     ],
-    experiences: [LADAKH, TIJARA, SAMBHAR],
+    experiences: [LADAKH, SAMBHAR],
     related: [
       'stargazing',
       'stargazing/bortle-scale',
@@ -935,7 +928,7 @@ export const stargazingGuides: Guide[] = [
           'No — a telescope actively makes it worse by showing a tiny fraction of it. This is a naked-eye subject, and binoculars are the only optical aid worth using.',
       },
     ],
-    experiences: [LADAKH, TIJARA, SAMBHAR],
+    experiences: [LADAKH, SAMBHAR],
     related: [
       'stargazing',
       'stargazing/dark-sky-places-india',
@@ -1041,7 +1034,7 @@ export const stargazingGuides: Guide[] = [
           'Light-pollution maps give a good prediction from satellite data. On site, the honest test is your own eyes once dark-adapted — whether the Milky Way is visible, and how far down towards the horizon it survives.',
       },
     ],
-    experiences: [TIJARA, SAMBHAR, LADAKH],
+    experiences: [SAMBHAR, LADAKH],
     related: [
       'stargazing',
       'stargazing/dark-sky-places-india',

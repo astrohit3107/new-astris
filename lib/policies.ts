@@ -18,7 +18,7 @@
  *  customer pays against them.
  *
  *  Cashfree also requires a publicly reachable cancellation and refund policy
- *  for merchant activation, which is what /nakshatraalay/gurgaon/cancellation
+ *  for merchant activation, which is what /cancellation-policy
  *  exists to satisfy.
  * ============================================================================
  */

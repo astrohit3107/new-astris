@@ -90,11 +90,12 @@ export interface StayType {
 export const NAKSHATRAALAY = {
   brand: 'Nakshatraalay',
   slug: 'gurgaon',
-  name: 'Nakshatraalay Gurgaon',
+  /** No city in the name while the new location is being found. */
+  name: 'Nakshatraalay',
   shortName: 'Gurgaon',
   city: 'Gurgaon',
   region: 'Delhi NCR',
-  tagline: 'Delhi NCR, look up.',
+  tagline: 'Look up.',
   positioning: 'Delhi NCR’s gateway to the universe.',
 
   /** Centre of Gurgaon — the exact site is not public yet. Used only to
@@ -115,7 +116,9 @@ export const NAKSHATRAALAY = {
    * astronomy property begins at dusk, not at midnight — change the time here
    * if the opening is meant to land at a different hour.
    */
-  opensAt: '2026-09-15T18:00:00+05:30' as string | null,
+  /** The original Gurgaon opening date has passed and the venue is moving;
+   *  null renders "date to be announced" rather than a stale countdown. */
+  opensAt: null as string | null,
   status: 'relocating' as 'announced' | 'open' | 'relocating',
   /**
    * Closed while Nakshatraalay moves to a new location (from 17 Nov 2026).

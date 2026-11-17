@@ -43,23 +43,22 @@ export default function NakshatraalayFeatured() {
         <div className="max-w-xl">
           <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--av-gold)]">
             <span className="h-px w-6 bg-[var(--av-gold)]/60" />
-            {opens ? `Opening ${opens}` : 'Opening soon'}
+            Coming soon · New location
           </span>
 
           <h2 className="font-display mt-5 text-balance text-4xl font-light leading-[1.05] text-white sm:text-5xl">
-            Nakshatraalay Gurgaon
-            <span className="mt-1 block text-white/50">Delhi NCR, look up.</span>
+            Nakshatraalay
+            <span className="mt-1 block text-white/50">A new home for the night sky.</span>
           </h2>
 
           <p className="mt-5 text-pretty text-base leading-relaxed text-white/65">
-            Our first home under the stars — close enough for a Saturday, far enough that the sky
-            comes back. Telescope nights, astrophotography workshops and a room to stay in
-            afterwards.
+            Our home under the stars is moving to a new location. Telescope nights, astrophotography
+            workshops and a room to stay in afterwards — all ready, and reopening as soon as the new
+            site is. Until then, join us at Sambhar Lake every Saturday.
           </p>
 
           <ul className="mt-7 flex flex-wrap gap-2">
             {[
-              { icon: MapPin, label: 'An hour or so from Delhi' },
               { icon: Telescope, label: 'Guided telescope nights' },
               { icon: Moon, label: 'Stay under the sky' },
             ].map(({ icon: Icon, label }) => (
@@ -82,19 +81,12 @@ export default function NakshatraalayFeatured() {
               <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/sky-calendar"
+              href="/astroventure-nights/sambhar-lake"
               className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-300 hover:border-white/50 hover:bg-white/5"
             >
-              See the sky calendar
+              Sambhar this Saturday
             </Link>
           </div>
-
-          {cheapest && (
-            <p className="mt-5 text-xs text-white/40">
-              Nights from {formatINR(cheapest.amount)}{' '}
-              {cheapest.perPerson ? 'per person' : 'total'}, stay and experience included.
-            </p>
-          )}
         </div>
       </div>
     </section>

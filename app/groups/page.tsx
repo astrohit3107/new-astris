@@ -6,7 +6,7 @@ import LeadPage from '@/components/nakshatraalay/lead-page'
 const PATH = '/groups'
 const TITLE = 'Group & Corporate Astronomy Experiences near Delhi'
 const DESCRIPTION =
-  'Dedicated astronomy nights for company teams, photography communities and private groups at Nakshatraalay Gurgaon, an easy drive from Delhi NCR.'
+  'Dedicated astronomy nights for company teams, photography communities and private groups at Nakshatraalay.'
 
 export const metadata: Metadata = {
   title: TITLE,

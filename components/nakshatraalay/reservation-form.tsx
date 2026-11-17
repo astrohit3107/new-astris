@@ -326,11 +326,11 @@ export default function ReservationForm({
 
         <p className="mt-5 text-center text-[11px] leading-relaxed text-white/30">
           Our{' '}
-          <a href="/nakshatraalay/gurgaon/cancellation" className="underline hover:text-white/70">
+          <a href="/cancellation-policy" className="underline hover:text-white/70">
             cancellation &amp; refund terms
           </a>{' '}
           and{' '}
-          <a href="/nakshatraalay/gurgaon/privacy" className="underline hover:text-white/70">
+          <a href="/privacy-policy" className="underline hover:text-white/70">
             privacy policy
           </a>{' '}
           apply to bookings made this way too.
@@ -508,15 +508,15 @@ export default function ReservationForm({
             the point of payment, not buried in a footer. */}
         <p className="text-center text-[11px] leading-relaxed text-white/35">
           By paying you accept our{' '}
-          <a href="/nakshatraalay/gurgaon/cancellation" className="underline hover:text-white/70">
+          <a href="/cancellation-policy" className="underline hover:text-white/70">
             cancellation &amp; refund terms
           </a>
           ,{' '}
-          <a href="/nakshatraalay/gurgaon/rescheduling" className="underline hover:text-white/70">
+          <a href="/rescheduling-policy" className="underline hover:text-white/70">
             rescheduling policy
           </a>{' '}
           and{' '}
-          <a href="/nakshatraalay/gurgaon/privacy" className="underline hover:text-white/70">
+          <a href="/privacy-policy" className="underline hover:text-white/70">
             privacy policy
           </a>
           .

@@ -36,7 +36,6 @@ export default function WorkshopFooter() {
             <a href="/astroventure-nights" className="text-white/65 transition-colors hover:text-white">Astroventure Nights</a>
             <a href="/astroventure-astrophotography" className="text-white/65 transition-colors hover:text-white">Ladakh Astrophotography</a>
             <a href="/astroventure-nights/sambhar-lake" className="text-white/65 transition-colors hover:text-white">Sambhar Lake Weekend</a>
-            <a href="/astroventure-nights/tijara" className="text-white/65 transition-colors hover:text-white">Tijara Weekend</a>
           </nav>
         </div>
 

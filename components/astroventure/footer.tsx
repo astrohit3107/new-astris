@@ -97,13 +97,11 @@ export default function AstroFooter() {
           <p className="text-xs text-white/45">
             © {new Date().getFullYear()} {LEGAL_ENTITY}. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs text-white/45">
-            <a href="/astroventure-nights/terms" className="transition-colors hover:text-white">
-              Terms
-            </a>
-            <a href="/astroventure-nights/privacy" className="transition-colors hover:text-white">
-              Privacy Policy
-            </a>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-xs text-white/45">
+            <a href="/terms" className="transition-colors hover:text-white">Terms</a>
+            <a href="/cancellation-policy" className="transition-colors hover:text-white">Cancellation &amp; refunds</a>
+            <a href="/privacy-policy" className="transition-colors hover:text-white">Privacy Policy</a>
+            <a href="/contact" className="transition-colors hover:text-white">Contact</a>
           </div>
         </div>
       </div>

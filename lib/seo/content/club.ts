@@ -176,7 +176,7 @@ const CITIES: City[] = [
     ],
     local: [
       {
-        title: 'Nakshatraalay Gurgaon',
+        title: 'Nakshatraalay',
         detail:
           'Astris’s own telescope destination in Gurgaon, used for school visits and evening observing.',
       },

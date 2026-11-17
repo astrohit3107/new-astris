@@ -357,7 +357,7 @@ export default function RegistrationForm({
                   />
                   <span>
                     I consent to Astris SpaceEd contacting me about my enquiry and agree to the{' '}
-                    <a href="/astroventure-nights/privacy" className="text-[var(--av-gold)] underline-offset-2 hover:underline">
+                    <a href="/privacy-policy" className="text-[var(--av-gold)] underline-offset-2 hover:underline">
                       Privacy Policy
                     </a>
                     .

@@ -37,7 +37,6 @@ export const metadata: Metadata = {
     'Soldung Valley stargazing',
     'Kasol astronomy',
     'Sambhar Lake stargazing',
-    'Tijara stargazing',
     'weekend astronomy trip Rajasthan',
     'telescope observation',
     'Milky Way Himalayas',

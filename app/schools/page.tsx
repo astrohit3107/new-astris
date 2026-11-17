@@ -5,7 +5,7 @@ import { NAKSHATRAALAY, POLICIES } from '@/lib/nakshatraalay-data'
 import LeadPage from '@/components/nakshatraalay/lead-page'
 
 const PATH = '/schools'
-const TITLE = 'School Astronomy Trips near Delhi — Nakshatraalay Gurgaon'
+const TITLE = 'School Astronomy Trips — Nakshatraalay'
 const DESCRIPTION =
   'Bring your classroom under the stars. Telescope sessions, night-sky education and hands-on space science for schools and colleges across Delhi NCR.'
 

@@ -5,14 +5,14 @@ import LegalPage, { Clause } from '@/components/nakshatraalay/legal-page'
 import { POLICY, REFUND_BANDS } from '@/lib/policies'
 import { CONTACT } from '@/lib/site-config'
 
-const TITLE = 'Rescheduling Policy — Nakshatraalay Gurgaon'
+const TITLE = 'Rescheduling Policy — Astris Space'
 const DESCRIPTION =
-  'How to move your stargazing experience, astrophotography workshop or overnight stay at Nakshatraalay Gurgaon to another date.'
+  'How to move an Astris Space booking — a stargazing night, workshop or overnight stay — to another date.'
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: '/nakshatraalay/gurgaon/rescheduling' },
+  alternates: { canonical: '/rescheduling-policy' },
   openGraph: { type: 'article', title: TITLE, description: DESCRIPTION },
 }
 
@@ -62,7 +62,7 @@ export default function ReschedulingPage() {
 
       <Clause heading="If a new date costs more">
         <p>
-          Rates differ between packages and, on some experiences, between weekdays and weekends. If
+          Rates differ between packages and room types, and can differ between dates. If
           the date you move to is priced higher, we will ask you for the difference before
           confirming. If it is priced lower, we refund the difference to your original payment
           method.
@@ -77,7 +77,7 @@ export default function ReschedulingPage() {
       <Clause heading="If you would rather cancel">
         <p>
           The refund bands are set out in full on the{' '}
-          <Link className="underline hover:text-white" href="/nakshatraalay/gurgaon/cancellation">
+          <Link className="underline hover:text-white" href="/cancellation-policy">
             cancellation and refunds page
           </Link>
           . Any question at all — {CONTACT.phone}.

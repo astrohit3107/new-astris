@@ -14,9 +14,9 @@ import Reveal from '@/components/nakshatraalay/reveal'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
 
 const PATH = '/experiences'
-const TITLE = 'Astronomy Experiences near Delhi — Nakshatraalay Gurgaon'
+const TITLE = 'Astronomy Experiences — Nakshatraalay'
 const DESCRIPTION =
-  'Guided stargazing, astrophotography workshops, private telescope evenings and family astronomy nights at Nakshatraalay Gurgaon, an easy drive from Delhi NCR.'
+  'Guided stargazing, astrophotography workshops, private telescope evenings and family astronomy nights at Nakshatraalay.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -39,7 +39,7 @@ export default function ExperiencesPage() {
       {
         '@type': 'ItemList',
         '@id': `${SITE_URL}${PATH}#list`,
-        name: 'Astronomy experiences at Nakshatraalay Gurgaon',
+        name: 'Astronomy experiences at Nakshatraalay',
         itemListElement: experiences.map((e, i) => ({
           '@type': 'ListItem',
           position: i + 1,
@@ -56,7 +56,7 @@ export default function ExperiencesPage() {
           {
             '@type': 'ListItem',
             position: 2,
-            name: 'Nakshatraalay Gurgaon',
+            name: 'Nakshatraalay',
             item: `${SITE_URL}/nakshatraalay/gurgaon`,
           },
           { '@type': 'ListItem', position: 3, name: 'Experiences', item: `${SITE_URL}${PATH}` },

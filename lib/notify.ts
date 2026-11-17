@@ -260,8 +260,8 @@ export function confirmationHtml(c: BookingConfirmation): string {
 
         <p style="margin:22px 0 0;color:#6b6b7b;font-size:12px;line-height:1.75">
           Need to change your date? Reply to this email quoting your payment ID, and read the
-          <a href="${e(c.siteUrl)}/nakshatraalay/gurgaon/rescheduling" style="color:#0b0b14">rescheduling</a> and
-          <a href="${e(c.siteUrl)}/nakshatraalay/gurgaon/cancellation" style="color:#0b0b14">cancellation</a> terms.
+          <a href="${e(c.siteUrl)}/rescheduling-policy" style="color:#0b0b14">rescheduling</a> and
+          <a href="${e(c.siteUrl)}/cancellation-policy" style="color:#0b0b14">cancellation</a> terms.
         </p>
       </div>
 
@@ -289,8 +289,8 @@ export function confirmationText(c: BookingConfirmation): string {
     c.bring?.length ? `\nWhat to bring:\n${c.bring.map((b) => `- ${b}`).join('\n')}` : '',
     '',
     'If the sky clouds over we still run the session indoors.',
-    `Rescheduling: ${c.siteUrl}/nakshatraalay/gurgaon/rescheduling`,
-    `Cancellation: ${c.siteUrl}/nakshatraalay/gurgaon/cancellation`,
+    `Rescheduling: ${c.siteUrl}/rescheduling-policy`,
+    `Cancellation: ${c.siteUrl}/cancellation-policy`,
   ]
     .filter(Boolean)
     .join('\n')

@@ -20,7 +20,6 @@ import {
 } from '@/lib/nakshatraalay-data'
 import { moonPhase } from '@/lib/moon-phase'
 import NakshatraalayNav from '@/components/nakshatraalay/nav'
-import FindUs from '@/components/nakshatraalay/find-us'
 
 /**
  * Nakshatraalay Gurgaon — the destination page.
@@ -32,16 +31,15 @@ import FindUs from '@/components/nakshatraalay/find-us'
  */
 
 const PATH = '/nakshatraalay/gurgaon'
-const TITLE = 'Nakshatraalay Gurgaon: Stargazing & Astronomy Stays'
+const TITLE = 'Nakshatraalay — Coming Soon at a New Location'
 const DESCRIPTION =
-  'Delhi NCR’s gateway to the universe. Telescope nights, astrophotography workshops and stays under the stars, an easy drive from Gurgaon and Delhi.'
+  'Nakshatraalay, the Astris Space home for the night sky, is moving to a new location. Telescope nights, astrophotography workshops and stays under the stars — coming soon.'
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: PATH },
   keywords: [
-    'stargazing near Gurgaon',
     'stargazing near Delhi',
     'astronomy experience Delhi NCR',
     'astrophotography workshop Delhi',
@@ -75,22 +73,6 @@ export default function NakshatraalayGurgaonPage() {
         description: DESCRIPTION,
         url: `${SITE_URL}${PATH}`,
         touristType: 'Astronomy enthusiasts, families, photographers',
-        // The name Google holds for us, so the listing and this page resolve
-        // to a single place rather than two similarly-named ones.
-        alternateName: MAPS.placeName,
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: NAKSHATRAALAY.city,
-          addressRegion: 'Haryana',
-          addressCountry: 'IN',
-        },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: NAKSHATRAALAY.latitude,
-          longitude: NAKSHATRAALAY.longitude,
-        },
-        hasMap: MAPS.placeUrl,
-        sameAs: [MAPS.placeUrl],
         telephone: CONTACT.phone,
       },
       {
@@ -126,7 +108,7 @@ export default function NakshatraalayGurgaonPage() {
         </div>
         <div className="relative mx-auto w-full max-w-5xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
-            {NAKSHATRAALAY.brand} · {NAKSHATRAALAY.region}
+            {NAKSHATRAALAY.brand} · Coming soon at a new location
           </p>
           <h1 className="font-display mt-5 text-balance text-5xl font-light leading-[1.03] tracking-tight sm:text-7xl">
             Leave the city.
@@ -134,6 +116,14 @@ export default function NakshatraalayGurgaonPage() {
           </h1>
           <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/65">
             {NAKSHATRAALAY.intro}
+          </p>
+          {/* The venue is moving. Said plainly, above the fold, before anyone
+              reads about a night they cannot book yet. */}
+          <p className="mt-6 inline-flex max-w-xl items-start gap-2 rounded-2xl border border-[var(--av-gold)]/30 bg-[var(--av-gold)]/[0.07] px-4 py-3 text-sm text-white/80">
+            <span className="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[var(--av-gold)]" />
+            We are moving to a new location. The experiences and the sky calendar are ready —
+            bookings reopen as soon as the new site does. Until then, stargaze with us at Sambhar
+            Lake every Saturday.
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -157,7 +147,7 @@ export default function NakshatraalayGurgaonPage() {
                 href="/first-light"
                 className="rounded-full border border-white/25 px-7 py-3.5 text-center text-sm font-semibold transition hover:border-white/50"
               >
-                Join the First Light list
+                Get notified when we reopen
               </Link>
             )}
           </div>
@@ -247,8 +237,6 @@ export default function NakshatraalayGurgaonPage() {
           </div>
         </div>
       </section>
-
-      <FindUs />
 
       {/* Stay ----------------------------------------------------------- */}
       <section id="stays" className="scroll-mt-16 border-t border-white/10 px-5 py-20 sm:px-6 sm:py-28">
@@ -362,26 +350,18 @@ export default function NakshatraalayGurgaonPage() {
       {/* Booking terms — reachable from the destination page, not buried. */}
       <footer className="border-t border-white/10 px-5 py-10 sm:px-6">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
-          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/cancellation">
+          <Link className="hover:text-white/70" href="/cancellation-policy">
             Cancellation &amp; refunds
           </Link>
-          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/rescheduling">
+          <Link className="hover:text-white/70" href="/rescheduling-policy">
             Rescheduling
           </Link>
-          <Link className="hover:text-white/70" href="/nakshatraalay/gurgaon/privacy">
+          <Link className="hover:text-white/70" href="/privacy-policy">
             Privacy
           </Link>
-          <a
-            className="hover:text-white/70"
-            href={MAPS.shortUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Find us on Google Maps
-          </a>
         </div>
         <p className="mx-auto mt-6 max-w-5xl text-center text-[11px] text-white/30">
-          Nakshatraalay Gurgaon is operated by {LEGAL_ENTITY}, trading as Astris Space. Registered
+          Nakshatraalay is operated by {LEGAL_ENTITY}, trading as Astris Space. Registered
           office: {REGISTERED_OFFICE_LINE}.
         </p>
       </footer>

@@ -63,7 +63,7 @@ export default function FirstLightCountdown({ opensAt }: { opensAt: string | nul
       <div
         className="mt-4 flex items-start justify-center gap-5 sm:gap-10"
         role="timer"
-        aria-label="Time until Nakshatraalay Gurgaon opens"
+        aria-label="Time until Nakshatraalay opens"
       >
         {parts.map((p) => (
           <div key={p.label} className="min-w-[3.25rem]">
