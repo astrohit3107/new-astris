@@ -465,7 +465,11 @@ export default function ReservationForm({
               disabled={tier ? !tier.perPerson && !tier.occupancy : false}
               onChange={(e) => setGuests(Math.max(1, Number(e.target.value) || 1))}
               className={`${field} disabled:opacity-50`} />
-            {tier && !tier.perPerson && (
+            {tier && !tier.perPerson && tier.occupancy ? (
+              <p className="mt-1.5 text-xs text-white/40">
+                Priced per {/^tent/i.test(tier.label) ? 'tent' : 'room'} — {Math.ceil(guests / tier.occupancy)} for {guests} guest{guests === 1 ? '' : 's'}.
+              </p>
+            ) : tier && !tier.perPerson && (
               <p className="mt-1.5 text-xs text-white/40">This package is priced for the whole party.</p>
             )}
           </div>
