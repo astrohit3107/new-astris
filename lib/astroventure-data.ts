@@ -487,6 +487,7 @@ export const destinations: Destination[] = [
     ],
     inclusions: [
       'Accommodation for Saturday night',
+      'Evening hi-tea on arrival',
       'Dinner on Saturday',
       'Four to five hours of guided stargazing and telescope observation',
       'A short hike nearby on Sunday morning',
@@ -505,7 +506,7 @@ export const destinations: Destination[] = [
         title: 'Into the Night',
         summary: 'Arrive in the evening, eat, then hand the night over to the sky.',
         events: [
-          { time: 'Evening', title: 'Arrive & check in', detail: 'Make your own way to the property and settle in as the light goes.' },
+          { time: 'Evening', title: 'Arrive & hi-tea', detail: 'Make your own way to the property, check in, and settle in over tea, coffee, sandwiches and pakoda as the light goes.' },
           { time: 'Evening', title: 'Dinner', detail: 'Dinner at the property before the session — the sky is darkest once you have eaten.' },
           { time: 'Night', title: 'Stargazing — four to five hours', detail: 'A naked-eye tour of the constellations to get you oriented, then guided telescope observation: the Moon and whichever planets are up, star clusters, nebulae and galaxies as the sky allows. The calendar on this page shows what is up on each Saturday.' },
           { time: 'Late', title: 'The night is yours', detail: 'Stay out under the sky as long as you like, then turn in at the property.' },
@@ -526,7 +527,9 @@ export const destinations: Destination[] = [
       { question: 'What is included?', answer: 'Your accommodation for Saturday night, dinner, four to five hours of guided stargazing and telescope observation, a short hike nearby on Sunday morning, and breakfast. Check-out is by 11 am.' },
       { question: 'Is travel included?', answer: 'No. You make your own way to Sambhar and back. Sambhar is about two hours from Jaipur by road.' },
       { question: 'Which days does it run?', answer: 'Every Saturday. You arrive on Saturday evening and leave on Sunday morning. The sky calendar on this page shows the Moon, the planets and the deep-sky objects that are up during the session on each Saturday, so you can pick the darkest night.' },
-      { question: 'What is the accommodation like?', answer: 'The property has rooms, traditional mud-walled rooms and tents, set around a courtyard with a pool. You choose the type when you book.' },
+      { question: 'What does it cost?', answer: 'Per room, including the stay, hi-tea, dinner, the stargazing session and breakfast: a room for two ₹10,000 (₹5,000 per person), a room for one ₹8,400, a tent for two ₹8,000 (₹4,000 per person), a tent for one ₹7,000. Travel is not included.' },
+      { question: 'What is the accommodation like?', answer: 'The property has rooms and tents, set around a courtyard with a pool. You choose a room or a tent, shared or to yourself, when you book.' },
+      { question: 'What is on the menu?', answer: 'Hi-tea on arrival (tea, coffee, sandwiches, pakoda); dinner of paneer lababdar, aloo gobhi, dal tadka, rice, tawa chapati, salad, achar and a sweet; and breakfast of poha, poori suji, boiled egg, bread toast, tea and coffee. Tell us about any dietary needs when you book.' },
       { question: 'Is this suitable for complete beginners?', answer: 'Completely. No equipment or prior knowledge is needed — we bring the telescopes and show you how to find your way around the sky.' },
       { question: 'What happens if it is cloudy?', answer: 'Astronomy depends on the sky, so observation is always subject to weather and cloud cover. We work the clearest windows of the night; if clouds move in we shift to sky talks and telescope demonstrations and make the most of any clearing. See our cancellation policy for what happens if we have to call a night off.' },
       { question: 'Can college groups or societies come?', answer: 'Yes — astronomy clubs, physics and science societies, photography clubs and college communities can book a dedicated Saturday. Use “Plan a College Astronomy Trip” to talk to us.' },

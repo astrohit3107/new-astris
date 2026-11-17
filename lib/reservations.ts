@@ -178,7 +178,7 @@ export function quoteFor(input: {
   const breakdown = tier.perPerson
     ? `${formatINR(tier.amount)} × ${input.guests} guest${input.guests === 1 ? '' : 's'}`
     : rooms
-      ? `${formatINR(tier.amount)} × ${rooms} room${rooms === 1 ? '' : 's'}`
+      ? `${formatINR(tier.amount)} × ${rooms} ${/^tent/i.test(tier.label) ? 'tent' : 'room'}${rooms === 1 ? '' : 's'}`
       : `${formatINR(tier.amount)} for the party`
 
   return {

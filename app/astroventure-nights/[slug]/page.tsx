@@ -16,6 +16,7 @@ import Faq from '@/components/astroventure/faq'
 import RelatedDestinations from '@/components/astroventure/related-destinations'
 import FinalCta from '@/components/astroventure/final-cta'
 import SaturdaySky from '@/components/astroventure/saturday-sky'
+import SambharMenu from '@/components/astroventure/sambhar-menu'
 import PropertyGallery, { SAMBHAR_PROPERTY_PHOTOS } from '@/components/astroventure/property-gallery'
 import ReservationForm from '@/components/nakshatraalay/reservation-form'
 import { paymentsUnderMaintenance } from '@/lib/cashfree'
@@ -164,12 +165,13 @@ export default async function DestinationPage({ params }: { params: Promise<Para
               online booking — in place of departures and the enquiry form. */}
           <SaturdaySky locationSlug={destination.slug} />
           <PropertyGallery photos={SAMBHAR_PROPERTY_PHOTOS} />
+          <SambharMenu />
           <section id="book" className="scroll-mt-20 px-5 py-20 sm:px-6">
             <div className="mx-auto max-w-2xl">
               <h2 className="font-display text-balance text-3xl font-light text-white sm:text-4xl">Book your Saturday</h2>
               <p className="mt-3 text-sm leading-relaxed text-white/60">
-                Dinner, four to five hours of stargazing, the night and breakfast. Return travel is not
-                included. Check-out is by 11 am on Sunday.
+                Hi-tea, dinner, four to five hours of stargazing, the night and breakfast — priced per
+                room or tent. Return travel is not included. Check-out is by 11 am on Sunday.
               </p>
               <div className="mt-8">
                 <ReservationForm experienceSlug="sambhar-lake" maintenance={paymentsUnderMaintenance()} />

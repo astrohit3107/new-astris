@@ -64,6 +64,7 @@ export const activeExperiences: AstroventureExperience[] = [
     imageAlt: 'The salt flats of Sambhar Lake, Rajasthan, under a wide open sky',
     category: 'Weekend Escape',
     kind: 'weekend',
+    priceLabel: 'From ₹4,000',
     meta: ['Every Saturday', '1 night', 'Sambhar, Rajasthan'],
     icon: 'Moon',
     featuredHome: true,

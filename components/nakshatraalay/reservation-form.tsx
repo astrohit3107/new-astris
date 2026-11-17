@@ -332,7 +332,7 @@ export default function ReservationForm({
               >
                 <span>
                   <span className="block text-sm font-semibold text-white">{t.label}</span>
-                  {t.note && <span className="mt-0.5 block text-xs text-white/45">{t.note}</span>}
+                  {t.note && <span className="mt-0.5 block text-xs text-white/45">{t.note.replace(/\s*\(Supplied[^)]*\)/, '')}</span>}
                 </span>
                 <span className="shrink-0 text-sm font-semibold text-white">
                   {formatINR(t.amount)}
@@ -411,7 +411,7 @@ export default function ReservationForm({
                 >
                   <span>
                     <span className="block text-sm font-semibold text-white">{t.label}</span>
-                    {t.note && <span className="mt-0.5 block text-xs text-white/45">{t.note}</span>}
+                    {t.note && <span className="mt-0.5 block text-xs text-white/45">{t.note.replace(/\s*\(Supplied[^)]*\)/, '')}</span>}
                   </span>
                   <span className="shrink-0 text-sm font-semibold text-white">
                     {formatINR(t.amount)}
